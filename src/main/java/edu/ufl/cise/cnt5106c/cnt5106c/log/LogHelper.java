@@ -35,11 +35,11 @@ public class LogHelper {
     }
 
     public void severe (Throwable e) {
-        _l.log(Level.WARNING, stackTraceToString (e));
+        _l.log(Level.SEVERE, stackTraceToString (e));
     }
 
-    public void warning (Throwable e, Level l) {
-        _l.log(Level.SEVERE, stackTraceToString (e));
+    public void warning (Throwable e) {
+        _l.log(Level.WARNING, stackTraceToString (e));
     }
 
     private static String stackTraceToString (Throwable t) {
