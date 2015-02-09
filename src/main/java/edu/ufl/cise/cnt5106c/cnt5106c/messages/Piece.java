@@ -1,16 +1,32 @@
 package edu.ufl.cise.cnt5106c.cnt5106c.messages;
 
+import java.io.ByteArrayOutputStream;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+
 /**
  *
  * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
  */
 public class Piece extends Message {
-    
-    public Piece (byte[] pieceIdx, byte[] content) throws Exception {
-        super (pieceIdx.length + content.length + 1, Type.PIECE, pieceIdx);
-        if (pieceIdx.length > 4) {
-            throw new ArrayIndexOutOfBoundsException("pieceIdx max length is 4, while "
-                    + pieceIdx + "'s length is "+ pieceIdx.length);
-        }
+
+    public Piece (int pieceIdx, byte[] content) throws Exception {
+        super (Type.PIECE, join (pieceIdx, content));
+    }
+
+    public int getPieceIndex() {
+        ByteBuffer buf = ByteBuffer.wrap(Arrays.copyOfRange(_payload, 0, 3));
+        return buf.getInt();
+    }
+
+    public byte[] getContent() {
+        return Arrays.copyOfRange(_payload, 4, _payload.length-1);
+    }
+
+    private static byte[] join (int pieceIdx, byte[] second) {
+        ByteArrayOutputStream bof = new ByteArrayOutputStream (4 + second.length);
+        bof.write(pieceIdx);
+        bof.write(second, 0, second.length);
+        return bof.toByteArray();
     }
 }

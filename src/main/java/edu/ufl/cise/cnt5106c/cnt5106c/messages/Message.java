@@ -3,7 +3,6 @@ package edu.ufl.cise.cnt5106c.cnt5106c.messages;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.nio.charset.Charset;
 
 /**
  *
@@ -13,18 +12,19 @@ public class Message {
     private static final int MAX_LENGTH =  (int) Math.pow(2, 4 * 8);
     private int _length;
     private Type _type;
-    private byte[] _payload;
+    protected byte[] _payload;
 
     Message (Type type) throws Exception {
-        this (1, type, null);
+        this (type, null);
     }
 
-    Message (int length, Type type, byte[] payload) throws Exception {
-        if (length > MAX_LENGTH) {
+    Message (Type type, byte[] payload) throws Exception {
+        if (payload.length > MAX_LENGTH) {
             throw new Exception ("Messages of length greate than " + MAX_LENGTH);
         }
-        
+        _length = (payload == null ? 0 : payload.length) + 1;
         _type = type;
+        _payload = payload;
     }
 
     private void writeObject(ObjectOutputStream oos)

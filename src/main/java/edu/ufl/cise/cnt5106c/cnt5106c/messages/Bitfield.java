@@ -6,6 +6,6 @@ package edu.ufl.cise.cnt5106c.cnt5106c.messages;
  */
 public class Bitfield extends Message {
     public Bitfield (byte[] bitField) throws Exception {
-        super (bitField.length + 1, Type.BITFIELD, bitField);
+        super (Type.BITFIELD, bitField);
     }
 }
