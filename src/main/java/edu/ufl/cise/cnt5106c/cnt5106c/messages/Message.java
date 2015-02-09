@@ -9,7 +9,6 @@ import java.io.ObjectOutputStream;
  * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
  */
 public class Message {
-    private static final int MAX_LENGTH =  (int) Math.pow(2, 4 * 8);
     private int _length;
     private Type _type;
     protected byte[] _payload;
@@ -19,9 +18,6 @@ public class Message {
     }
 
     Message (Type type, byte[] payload) throws Exception {
-        if (payload.length > MAX_LENGTH) {
-            throw new Exception ("Messages of length greate than " + MAX_LENGTH);
-        }
         _length = (payload == null ? 0 : payload.length) + 1;
         _type = type;
         _payload = payload;
