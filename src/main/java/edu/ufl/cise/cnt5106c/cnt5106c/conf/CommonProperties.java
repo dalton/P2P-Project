@@ -47,7 +47,7 @@ public enum CommonProperties {
 
         // Check the config file contains all the needed properties
         for (CommonProperties prop : CommonProperties.values()) {
-            if (conf.containsKey(prop.toString())) {
+            if (!conf.containsKey(prop.toString())) {
                 throw new Exception ("config file does not contain property " + prop);
             }
         }
