@@ -22,10 +22,12 @@ public class PeerInfo {
         int i = 0;
         for (String line; (line = in.readLine()) != null;) {
             String[] tokens = line.split("\\s+");
-            if (line.length() != 3) {
+            if (tokens.length != 4) {
                 throw new ParseException (line, i);
             }
-            _peerInfoVector.add (new RemotePeerInfo(tokens[0], tokens[1], tokens[2], Boolean.parseBoolean(tokens[3])));
+            final boolean bHasFile = (tokens[3].trim().compareTo("1") == 0);
+            _peerInfoVector.add (new RemotePeerInfo(tokens[0].trim(), tokens[1].trim(),
+                    tokens[2].trim(), bHasFile));
             i++;
         }
     }

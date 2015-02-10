@@ -34,10 +34,10 @@ public enum CommonProperties {
                     // separate keys and value, while the project description
                     // requires keys and values being separated by a space.
                     String[] tokens = line.split("\\s+");
-                    if (line.length() != 2) {
+                    if (tokens.length != 2) {
                         throw new IOException (new ParseException (line, i));
                     }
-                    setProperty(tokens[0], tokens[1]);
+                    setProperty(tokens[0].trim(), tokens[1].trim());
                     i++;
                 }
             }
