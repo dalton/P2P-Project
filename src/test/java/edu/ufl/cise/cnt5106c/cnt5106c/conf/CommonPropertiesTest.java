@@ -70,7 +70,7 @@ public class CommonPropertiesTest {
         FileReader reader = null;
         try {
             System.out.println("read");
-            reader = new FileReader (CommonProperties.CONFIG_FILE_NAME);
+            reader = new FileReader (CommonProperties.CONFIG_FILE_NAME + ".test");
             Properties result = CommonProperties.read(reader);
             assertEquals(result.getProperty(CommonProperties.FileName.toString()), "TheFile.dat");
             assertEquals(result.getProperty(CommonProperties.FileSize.toString()), "10000232");
