@@ -21,4 +21,12 @@ public class RemotePeerInfo {
         _peerPort = pPort;
         _hasFile = hasFile;
     }
+
+    public int getPeerId() {
+        return Integer.parseInt(_peerId);
+    }
+
+    public int getPort() {
+        return Integer.parseInt(_peerPort);
+    }
 }
