@@ -2,9 +2,7 @@ package edu.ufl.cise.cnt5106c.cnt5106c.conf;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.util.Collection;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
@@ -16,7 +14,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author Giacomo
+ * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
  */
 public class PeerInfoTest {
     

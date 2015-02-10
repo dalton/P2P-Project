@@ -1,9 +1,7 @@
 package edu.ufl.cise.cnt5106c.cnt5106c.conf;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -12,12 +10,11 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
  *
- * @author Giacomo
+ * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
  */
 public class CommonPropertiesTest {
     
