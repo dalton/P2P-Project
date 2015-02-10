@@ -42,10 +42,7 @@ public class peerProcess implements Runnable {
         // TODO: implement this
         try {
             ServerSocket serverSocket = new ServerSocket (PORT);
-            ConnectionHandler connHandler = new ConnectionHandler (_peerId, serverSocket.accept());
-            if (addConnHandler (connHandler)) {
-                _connHandlers.add(connHandler);
-            }
+            addConnHandler (new ConnectionHandler (_peerId, serverSocket.accept()));
         }
         catch (Exception e) {
             LogHelper.getLogger().warning(e);
