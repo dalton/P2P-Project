@@ -1,9 +1,11 @@
 package edu.ufl.cise.cnt5106c.cnt5106c.messages;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
 /**
@@ -15,7 +17,14 @@ public class Handshake implements Serializable {
     private final byte[] _zeroBits = new byte[10];
     private final byte[] _peerId = new byte[4];
 
-    Handshake (byte[] peerId) {
+    private Handshake() {
+    }
+
+    public Handshake (int peerId) {
+        this (ByteBuffer.allocate(4).putInt(peerId).array());
+    }
+
+    private Handshake (byte[] peerId) {
         if (peerId.length > 4) {
             throw new ArrayIndexOutOfBoundsException("peerId max length is 4, while "
                     + peerId + "'s length is "+ peerId.length);
@@ -57,5 +66,11 @@ public class Handshake implements Serializable {
         if (ois.read(_zeroBits, 0, _peerId.length) <  _peerId.length) {
             throw new IOException("peer id bytes read are less than " + _peerId.length);
         }
+    }
+
+    public static Handshake readMessage (InputStream in) throws Exception {
+        Handshake handshake = new Handshake();
+        handshake.readObject(new ObjectInputStream (in));
+        return handshake;
     }
 }

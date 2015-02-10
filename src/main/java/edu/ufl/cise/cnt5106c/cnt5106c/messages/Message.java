@@ -1,16 +1,18 @@
 package edu.ufl.cise.cnt5106c.cnt5106c.messages;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
+import java.io.DataInputStream;
 
 /**
  *
  * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
  */
 public class Message {
+
     private int _length;
-    private Type _type;
+    private final Type _type;
     protected byte[] _payload;
 
     Message (Type type) throws Exception {
@@ -31,13 +33,42 @@ public class Message {
         oos.write(_payload, 0, _payload.length);
     }
 
-    private void readObject(ObjectInputStream ois)
-        throws ClassNotFoundException, IOException {
+    public static Message readMessage (int length, Type type, DataInputStream in) throws Exception {
+        byte[] payload = null;
+        if (length > 0) {
+            payload = new byte[length];
+            if (in.read(payload, 0, length) < length) {
+                throw new IOException("payload bytes read are less than " + length);
+            }
+        }
 
-        _length = ois.readInt();
-        _type = Type.valueOf(ois.readByte());
-        if (ois.read(_payload, 0, _length) < _length) {
-            throw new IOException("payload bytes read are less than " + _length);
+        switch (type) {
+            case CHOKE:
+                return new Choke();
+
+            case UNCHOKE:
+                return new Unchoke();
+
+            case INTERESTED:
+                return new Interested();
+
+            case NOT_INTERESTED:
+                return new NotInterested();
+
+            case HAVE:
+                return new Have (payload);
+
+            case BITFIELD:
+                return new Bitfield (payload);
+
+            case REQUEST:
+                return new Request (payload);
+
+            case PIECE:
+                return new Piece (payload);
+
+            default:
+                throw new Exception ("message type not handled: " + type.toString());
         }
     }
 }

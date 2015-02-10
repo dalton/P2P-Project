@@ -10,6 +10,10 @@ import java.util.Arrays;
  */
 public class Piece extends Message {
 
+    Piece (byte[] payload) throws Exception {
+        super (Type.PIECE, payload);
+    }
+
     public Piece (int pieceIdx, byte[] content) throws Exception {
         super (Type.PIECE, join (pieceIdx, content));
     }
@@ -24,9 +28,11 @@ public class Piece extends Message {
     }
 
     private static byte[] join (int pieceIdx, byte[] second) {
-        ByteArrayOutputStream bof = new ByteArrayOutputStream (4 + second.length);
+        ByteArrayOutputStream bof = new ByteArrayOutputStream (4 + (second == null ? 0 : second.length));
         bof.write(pieceIdx);
-        bof.write(second, 0, second.length);
+        if ((second != null) && (second.length > 0)) {
+            bof.write(second, 0, second.length);
+        }
         return bof.toByteArray();
     }
 }
