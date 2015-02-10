@@ -1,0 +1,6 @@
+NumberOfPreferredNeighbors 2
+UnchokingInterval 5
+OptimisticUnchokingInterval 15
+FileName TheFile.dat
+FileSize 10000232
+PieceSize 32768

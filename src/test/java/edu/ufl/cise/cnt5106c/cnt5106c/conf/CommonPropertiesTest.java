@@ -48,7 +48,7 @@ public class CommonPropertiesTest {
         FileReader reader = null;
         try {
             System.out.println("valueOf");
-            reader = new FileReader (CommonProperties.CONFIG_FILE_NAME);
+            reader = new FileReader (CommonProperties.CONFIG_FILE_NAME + ".test");
             Properties result = CommonProperties.read(reader);
             for (Entry<Object, Object> entry : result.entrySet()) {
                 CommonProperties.valueOf((String) entry.getKey());

@@ -48,7 +48,7 @@ public class PeerInfoTest {
         FileReader reader = null;
         try {
             System.out.println("read");
-            reader = new FileReader (PeerInfo.CONFIG_FILE_NAME);
+            reader = new FileReader (PeerInfo.CONFIG_FILE_NAME + ".test");
             PeerInfo peerInfo = new PeerInfo();
             peerInfo.read(reader);
             Collection<RemotePeerInfo> infos = peerInfo.getPeerInfo();
