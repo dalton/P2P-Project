@@ -52,7 +52,7 @@ public class peerProcess implements Runnable {
     private void connectToPeers(Collection<RemotePeerInfo> peersToConnectTo) {
         Iterator<RemotePeerInfo> iter = peersToConnectTo.iterator();
         while (iter.hasNext()) {
-            while (iter.hasNext()) {
+            do {
                 RemotePeerInfo peer = iter.next();
                 try {
                     if (addConnHandler (new ConnectionHandler (peer.getPeerId(), new Socket (peer._peerAddress, peer.getPort())))) {
@@ -63,6 +63,7 @@ public class peerProcess implements Runnable {
                     LogHelper.getLogger().warning(ex);
                 }
             }
+            while (iter.hasNext());
 
             // Keep trying until they all connect
             iter = peersToConnectTo.iterator();
