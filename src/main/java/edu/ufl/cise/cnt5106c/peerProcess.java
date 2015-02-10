@@ -64,12 +64,11 @@ public class peerProcess implements Runnable {
                 }
             }
 
-            // Keep tryiong until they all connect
+            // Keep trying until they all connect
             iter = peersToConnectTo.iterator();
             try { Thread.sleep(5000); }
             catch (InterruptedException ex) {}
         }
-
     }
 
     private synchronized boolean addConnHandler (ConnectionHandler connHandler) {
