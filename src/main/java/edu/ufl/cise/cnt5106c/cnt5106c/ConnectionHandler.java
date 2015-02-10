@@ -13,7 +13,7 @@ import java.net.Socket;
 
 /**
  *
- * @author Giacomo
+ * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
  */
 public class ConnectionHandler implements Runnable {
     private final InputStream _in;

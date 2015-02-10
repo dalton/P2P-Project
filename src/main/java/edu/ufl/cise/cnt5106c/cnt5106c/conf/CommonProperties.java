@@ -8,7 +8,7 @@ import java.util.Properties;
 
 /**
  *
- * @author Giacomo
+ * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
  */
 public enum CommonProperties {
 
