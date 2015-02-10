@@ -60,8 +60,26 @@ public class ConnectionHandler implements Runnable {
         }
     }
 
+    @Override
+    public boolean equals (Object obj) {
+        if (obj instanceof ConnectionHandler) {
+            return ((ConnectionHandler) obj)._peerId == _peerId;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 41 * hash + this._peerId;
+        return hash;
+    }
+
     private boolean check(Handshake handshake) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // TODO: implement this
+        
+        Thread.currentThread().setName ("ConnHandler-" + handshake.getPeerId());
+        return true;
     }
 
     private Message receiveMessage(DataInputStream bin) throws Exception {

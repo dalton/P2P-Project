@@ -73,4 +73,8 @@ public class Handshake implements Serializable {
         handshake.readObject(new ObjectInputStream (in));
         return handshake;
     }
+
+    public int getPeerId() {
+        return ByteBuffer.wrap(_peerId).getInt();
+    }
 }
