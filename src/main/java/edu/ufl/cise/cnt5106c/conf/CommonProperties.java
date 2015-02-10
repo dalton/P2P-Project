@@ -29,7 +29,7 @@ public enum CommonProperties {
                     throws IOException {
                 BufferedReader in = new BufferedReader(reader);
                 int i = 0;
-                for (String line; (line = in.readLine()) != null;) {
+                for (String line; (line = in.readLine()) != null; i++) {
                     // The defaul Properties class uses the '=' character to
                     // separate keys and value, while the project description
                     // requires keys and values being separated by a space.
@@ -38,7 +38,6 @@ public enum CommonProperties {
                         throw new IOException (new ParseException (line, i));
                     }
                     setProperty(tokens[0].trim(), tokens[1].trim());
-                    i++;
                 }
             }
         };
