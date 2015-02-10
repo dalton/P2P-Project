@@ -1,5 +1,7 @@
 package edu.ufl.cise.cnt5106c.cnt5106c.conf;
 
+import edu.ufl.cise.cnt5106c.conf.CommonProperties;
+import edu.ufl.cise.cnt5106c.conf.CommonProperties;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Map.Entry;
