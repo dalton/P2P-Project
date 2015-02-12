@@ -5,8 +5,10 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.net.ProtocolException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 
 /**
  *
@@ -27,7 +29,7 @@ public class Handshake implements Serializable {
     private Handshake (byte[] peerId) {
         if (peerId.length > 4) {
             throw new ArrayIndexOutOfBoundsException("peerId max length is 4, while "
-                    + peerId + "'s length is "+ peerId.length);
+                    + Arrays.toString (peerId) + "'s length is "+ peerId.length);
         }
         int i = 0;
         for (byte b : peerId) {
@@ -51,20 +53,20 @@ public class Handshake implements Serializable {
         // Read and check protocol Id
         byte[] protocolId = new byte[_protocolId.length()];
         if (ois.read(protocolId, 0, _protocolId.length()) < _protocolId.length()) {
-            throw new IOException("protocol id is " + protocolId + " instead of " + _protocolId);
+            throw new ProtocolException ("protocol id is " + Arrays.toString (protocolId) + " instead of " + _protocolId);
         }
-        if (!_protocolId.equals(new String(protocolId, "US-ASCII"))) {
-            throw new IOException("protocol id is " + protocolId + " instead of " + _protocolId);
+        if (!_protocolId.equals (new String(protocolId, "US-ASCII"))) {
+            throw new ProtocolException ("protocol id is " + Arrays.toString (protocolId) + " instead of " + _protocolId);
         }
 
         // Read and check zero bits
         if (ois.read(_zeroBits, 0, _zeroBits.length) <  _zeroBits.length) {
-            throw new IOException("zero bit bytes read are less than " + _zeroBits.length);
+            throw new ProtocolException ("zero bit bytes read are less than " + _zeroBits.length);
         }
 
         // Read and check peer id
         if (ois.read(_zeroBits, 0, _peerId.length) <  _peerId.length) {
-            throw new IOException("peer id bytes read are less than " + _peerId.length);
+            throw new ProtocolException ("peer id bytes read are less than " + _peerId.length);
         }
     }
 
