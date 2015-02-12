@@ -102,7 +102,7 @@ public class peerProcess implements Runnable {
         try {
             commReader = new FileReader (CommonProperties.CONFIG_FILE_NAME);
             peerReader = new FileReader (PeerInfo.CONFIG_FILE_NAME);
-            CommonProperties.read (commReader);
+            commProp = CommonProperties.read (commReader);
             peerInfo.read (peerReader);
             for (RemotePeerInfo peer : peerInfo.getPeerInfo()) {
                 if (peerId == peer.getPeerId()) {
