@@ -1,6 +1,9 @@
 package edu.ufl.cise.cnt5106c;
 
+import edu.ufl.cise.cnt5106c.messages.Bitfield;
+import edu.ufl.cise.cnt5106c.messages.Handshake;
 import edu.ufl.cise.cnt5106c.messages.Message;
+import java.util.BitSet;
 
 /**
  *
@@ -8,7 +11,22 @@ import edu.ufl.cise.cnt5106c.messages.Message;
  */
 public class MessageHandler {
 
-    public void handle (Message msg) {
-        
+    private final FileManager _fileMgr;
+
+    MessageHandler (FileManager fileMgr)
+    {
+        _fileMgr = fileMgr;
+    }
+
+    public Message handle (Handshake handshake) throws Exception {
+        BitSet bitset = _fileMgr.getReceivedParts();
+        if (!bitset.isEmpty()) {
+            return (new Bitfield (bitset));
+        }
+        return null;
+    }
+
+    public Message handle (Message msg) {
+        return null;
     }
 }

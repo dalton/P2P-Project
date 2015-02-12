@@ -15,8 +15,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -28,24 +26,32 @@ public class peerProcess implements Runnable {
     private final int _peerId;
     private final boolean _hasFile;
     private final Properties _conf;
+    private final FileManager _fileMgr;
     Collection<ConnectionHandler> _connHandlers = Collections.newSetFromMap(new ConcurrentHashMap<ConnectionHandler,Boolean>());
 
     private peerProcess(int peerId, boolean hasFile, Properties conf) {
         _peerId = peerId;
         _hasFile = hasFile;
         _conf = conf;
+        _fileMgr = new FileManager (_peerId, _conf);
     }
 
     @Override
     public void run() {
-        
-        // TODO: implement this
+
         try {
             ServerSocket serverSocket = new ServerSocket (PORT);
-            addConnHandler (new ConnectionHandler (_peerId, serverSocket.accept()));
+            while (true) {
+                try {
+                    addConnHandler (new ConnectionHandler (_peerId, serverSocket.accept(), _fileMgr));
+                }
+                catch (Exception e) {
+                    LogHelper.getLogger().warning(e);
+                }
+            }
         }
-        catch (Exception e) {
-            LogHelper.getLogger().warning(e);
+        catch (IOException ex) {
+            LogHelper.getLogger().warning (ex);
         }
     }
 
@@ -55,7 +61,7 @@ public class peerProcess implements Runnable {
             do {
                 RemotePeerInfo peer = iter.next();
                 try {
-                    if (addConnHandler (new ConnectionHandler (peer.getPeerId(), new Socket (peer._peerAddress, peer.getPort())))) {
+                    if (addConnHandler (new ConnectionHandler (peer.getPeerId(), new Socket (peer._peerAddress, peer.getPort()), _fileMgr))) {
                         iter.remove();
                     }
                 }

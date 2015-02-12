@@ -1,12 +1,25 @@
 package edu.ufl.cise.cnt5106c;
 
+import edu.ufl.cise.cnt5106c.conf.CommonProperties;
+import java.util.BitSet;
+import java.util.Properties;
+
 /**
  *
  * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
  */
 public class FileManager {
 
-    BitArray _receivedParts;
+    private static final String partsLocation = "";
+    private BitSet _receivedParts;
+    private final int _peerId;
+
+    FileManager (int peerId, Properties conf) {
+        this (peerId, partsLocation,
+                conf.getProperty (CommonProperties.FileName.toString()),
+                Integer.parseInt(conf.getProperty(CommonProperties.FileSize.toString())), 
+                Integer.parseInt(conf.getProperty(CommonProperties.PieceSize.toString())));
+    }
 
     /**
      *
@@ -16,27 +29,26 @@ public class FileManager {
      * @param fileSize the size of the file being downloaded
      * @param partSize the maximum size of a part
      */
-    FileManager (String peerId, String partsLocation, String fileName, int fileSize, int partSize) {
-        double dPartSize = partSize;
-        _receivedParts = new BitArray ((int) Math.ceil(fileSize/dPartSize));
+    FileManager (int peerId, String partsLocation, String fileName, int fileSize, int partSize) {
+        _peerId = peerId;
+        final double dPartSize = partSize;
+        _receivedParts = new BitSet ((int) Math.ceil(fileSize/dPartSize));
     }
-   
+
     /**
      * 
      * @param fileName
      * @param partIdx
      * @param part
-     * @return true if the added part was missing, false if it had already been
-     * received
      */
-    public synchronized boolean addPart (String fileName, int partIdx, byte[] part) {
+    public synchronized void addPart (String fileName, int partIdx, byte[] part) {
         
         // TODO: write part on file, at the specified directroy
         
-        return _receivedParts.setBit(partIdx);
+        _receivedParts.set (partIdx);
     }
 
-    public synchronized BitArray getReceivedParts () {
-        return _receivedParts.clone();
+    public synchronized BitSet getReceivedParts () {
+        return (BitSet) _receivedParts.clone();
     }
 }
