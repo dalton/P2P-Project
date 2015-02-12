@@ -41,12 +41,12 @@ public class ConnectionHandler implements Runnable {
                     send (_msgHandler.handle(receiveMessage (bin)), out);
                 }
                 catch (Exception ex) {
-                    LogHelper.getLogger().warning(ex);
+                    LogHelper.getLogger().warning(ex.toString());
                 }
             }
         }
         catch (Exception ex) {
-            LogHelper.getLogger().warning(ex);
+            LogHelper.getLogger().warning(ex.toString());
         }
         finally {
             try { _socket.close(); } catch (Exception e) {}

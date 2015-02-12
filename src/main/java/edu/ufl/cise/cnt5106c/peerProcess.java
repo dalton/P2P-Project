@@ -46,12 +46,12 @@ public class peerProcess implements Runnable {
                     addConnHandler (new ConnectionHandler (_peerId, serverSocket.accept(), _fileMgr));
                 }
                 catch (Exception e) {
-                    LogHelper.getLogger().warning(e);
+                    LogHelper.getLogger().warning(e.toString());
                 }
             }
         }
         catch (IOException ex) {
-            LogHelper.getLogger().warning (ex);
+            LogHelper.getLogger().warning (ex.toString());
         }
     }
 
@@ -66,7 +66,7 @@ public class peerProcess implements Runnable {
                     }
                 }
                 catch (IOException ex) {
-                    LogHelper.getLogger().warning(ex);
+                    LogHelper.getLogger().warning(ex.toString());
                 }
             }
             while (iter.hasNext());
