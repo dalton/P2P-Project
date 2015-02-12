@@ -28,8 +28,8 @@ public class ConnectionHandler implements Runnable {
     @Override
     public void run() {
         try {
-            DataInputStream bin = new DataInputStream(_socket.getInputStream());
-            ObjectOutputStream out = new ObjectOutputStream(_socket.getOutputStream());
+            DataInputStream bin = new DataInputStream (_socket.getInputStream());
+            ObjectOutputStream out = new ObjectOutputStream (_socket.getOutputStream());
             out.writeObject (new Handshake (_peerId));
             Handshake handshake = Handshake.readMessage (bin);
             send (_msgHandler.handle (handshake), out);
@@ -68,7 +68,7 @@ public class ConnectionHandler implements Runnable {
         return hash;
     }
 
-    private Message receiveMessage(DataInputStream bin) throws Exception {
+    private Message receiveMessage (DataInputStream bin) throws Exception {
         int length = bin.readInt();
         return Message.readMessage (length - 1, Type.valueOf(bin.readByte()), bin);
     }
