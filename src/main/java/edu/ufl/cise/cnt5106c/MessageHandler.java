@@ -27,6 +27,19 @@ public class MessageHandler {
     }
 
     public Message handle (Message msg) {
+        switch (msg.getType()) {
+            case BITFIELD: {
+                Bitfield bitfield = (Bitfield) msg;
+                BitSet bitset = bitfield.getBitSet();
+                bitset.andNot (_fileMgr.getReceivedParts());
+                if (!bitset.isEmpty()) {
+                    // the peer has parts that this peer does not have
+                    
+                }
+            }
+        }
+        // TODO: implement this
         return null;
     }
+
 }

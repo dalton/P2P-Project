@@ -25,6 +25,10 @@ public class Message {
         _payload = payload;
     }
 
+    public Type getType() {
+        return _type;
+    }
+
     private void writeObject(ObjectOutputStream oos)
         throws IOException {
 

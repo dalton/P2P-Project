@@ -16,7 +16,7 @@ public class Bitfield extends Message {
         super (Type.BITFIELD, bitfield);
     }
 
-    public BitSet getBitArray() {
+    public BitSet getBitSet() {
         return BitSet.valueOf (_payload);
     }
 }
