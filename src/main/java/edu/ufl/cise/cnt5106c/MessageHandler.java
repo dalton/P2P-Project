@@ -2,6 +2,7 @@ package edu.ufl.cise.cnt5106c;
 
 import edu.ufl.cise.cnt5106c.messages.Bitfield;
 import edu.ufl.cise.cnt5106c.messages.Handshake;
+import edu.ufl.cise.cnt5106c.messages.Interested;
 import edu.ufl.cise.cnt5106c.messages.Message;
 import java.util.BitSet;
 
@@ -26,7 +27,7 @@ public class MessageHandler {
         return null;
     }
 
-    public Message handle (Message msg) {
+    public Message handle (Message msg) throws Exception {
         switch (msg.getType()) {
             case BITFIELD: {
                 Bitfield bitfield = (Bitfield) msg;
@@ -34,8 +35,9 @@ public class MessageHandler {
                 bitset.andNot (_fileMgr.getReceivedParts());
                 if (!bitset.isEmpty()) {
                     // the peer has parts that this peer does not have
-                    
+                    return new Interested();
                 }
+                break;
             }
         }
         // TODO: implement this
