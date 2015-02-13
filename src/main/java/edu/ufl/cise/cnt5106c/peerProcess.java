@@ -5,90 +5,16 @@ import edu.ufl.cise.cnt5106c.conf.PeerInfo;
 import edu.ufl.cise.cnt5106c.conf.RemotePeerInfo;
 import edu.ufl.cise.cnt5106c.log.LogHelper;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.Reader;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
  * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
  */
-public class peerProcess implements Runnable {
-
-    private final static int PORT = 6008;
-    private final int _peerId;
-    private final boolean _hasFile;
-    private final Properties _conf;
-    private final FileManager _fileMgr;
-    private final PeerManager _peerMgr;
-    Collection<ConnectionHandler> _connHandlers = Collections.newSetFromMap(new ConcurrentHashMap<ConnectionHandler,Boolean>());
-
-    private peerProcess(int peerId, boolean hasFile, Collection<RemotePeerInfo> peerInfo, Properties conf) {
-        _peerId = peerId;
-        _hasFile = hasFile;
-        _conf = conf;
-        _fileMgr = new FileManager (_peerId, _conf);
-        _peerMgr = new PeerManager (peerInfo, _conf);
-    }
-
-    @Override
-    public void run() {
-
-        try {
-            ServerSocket serverSocket = new ServerSocket (PORT);
-            while (true) {
-                try {
-                    addConnHandler (new ConnectionHandler (_peerId,
-                            serverSocket.accept(), _fileMgr, _peerMgr));
-                }
-                catch (Exception e) {
-                    LogHelper.getLogger().warning(e.toString());
-                }
-            }
-        }
-        catch (IOException ex) {
-            LogHelper.getLogger().warning (ex.toString());
-        }
-    }
-
-    private void connectToPeers(Collection<RemotePeerInfo> peersToConnectTo) {
-        Iterator<RemotePeerInfo> iter = peersToConnectTo.iterator();
-        while (iter.hasNext()) {
-            do {
-                RemotePeerInfo peer = iter.next();
-                try {
-                    if (addConnHandler (new ConnectionHandler (peer.getPeerId(),
-                            new Socket (peer._peerAddress, peer.getPort()), _fileMgr, _peerMgr))) {
-                        iter.remove();
-                    }
-                }
-                catch (IOException ex) {
-                    LogHelper.getLogger().warning(ex.toString());
-                }
-            }
-            while (iter.hasNext());
-
-            // Keep trying until they all connect
-            iter = peersToConnectTo.iterator();
-            try { Thread.sleep(5000); }
-            catch (InterruptedException ex) {}
-        }
-    }
-
-    private synchronized boolean addConnHandler (ConnectionHandler connHandler) {
-        if (!_connHandlers.contains(connHandler)) {
-            _connHandlers.add(connHandler);
-            new Thread (connHandler).run();
-        }        
-        return true;
-    }
+public class peerProcess {
 
     public static void main (String[] args) {
         if (args.length != 2) {
@@ -128,7 +54,7 @@ public class peerProcess implements Runnable {
             catch (Exception e) {}
         }
 
-        peerProcess peerProc = new peerProcess (peerId, hasFile, peerInfo.getPeerInfo(), commProp);
+        Process peerProc = new Process (peerId, hasFile, peerInfo.getPeerInfo(), commProp);
         Thread t = new Thread (peerProc);
         t.setName ("peerProcess-" + peerId);
         t.start();
