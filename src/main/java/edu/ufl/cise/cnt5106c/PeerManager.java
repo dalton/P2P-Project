@@ -30,6 +30,10 @@ public class PeerManager implements Runnable {
                 conf.getProperty (CommonProperties.NumberOfPreferredNeighbors.toString())) * 1000;
     }
 
+    synchronized void addInterestPeer(int _remotePeerId) {
+        // TODO: implement this
+    }
+
     synchronized void receivedPart (int peerId, int size) {
         for (RemotePeerInfo peer : _peers) {
             if (peer.getPeerId() == peerId) {
