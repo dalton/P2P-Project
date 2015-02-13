@@ -2,6 +2,8 @@ package edu.ufl.cise.cnt5106c;
 
 import edu.ufl.cise.cnt5106c.conf.CommonProperties;
 import java.util.BitSet;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Properties;
 
 /**
@@ -11,8 +13,9 @@ import java.util.Properties;
 public class FileManager {
 
     private static final String partsLocation = "";
-    private BitSet _receivedParts;
     private final int _peerId;
+    private BitSet _receivedParts;
+    private final Collection<FileManagerListener> _listeners = new LinkedList<>();
 
     FileManager (int peerId, Properties conf) {
         this (peerId, partsLocation,
@@ -36,16 +39,26 @@ public class FileManager {
     }
 
     /**
-     * 
-     * @param fileName
+     *
      * @param partIdx
      * @param part
      */
-    public synchronized void addPart (String fileName, int partIdx, byte[] part) {
+    public synchronized void addPart (int partIdx, byte[] part) {
         
         // TODO: write part on file, at the specified directroy
-        
+        final boolean isNewPiece = !_receivedParts.get(partIdx);
         _receivedParts.set (partIdx);
+
+        if (isNewPiece) {
+            for (FileManagerListener listener : _listeners) {
+                listener.pieceArrived (partIdx);
+            }
+        }
+        if (isFileCompleted()) {
+            for (FileManagerListener listener : _listeners) {
+                listener.fileCompleted();
+            }
+        }
     }
 
     public synchronized BitSet getReceivedParts () {
@@ -53,6 +66,21 @@ public class FileManager {
     }
 
     byte[] getPiece(int partId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // TODO: implement this: we can decide whether to load the file in memory,
+        // or whether to read it from file each time we receive a request.
+        // The firt case may be faster, but for very large files it may not be
+        // suitable...  Open for discussion though, I don't think it really matters
+        // for the project, so we may as well implement the simpler strategy
+        // (which probably is loading the whole thing into a byte array...)
+        return null;
+    }
+
+    public void registerListener (FileManagerListener listener) {
+        _listeners.add(listener);
+    }
+
+    private boolean isFileCompleted() {
+        final int nextClearIdx = _receivedParts.nextClearBit(0);
+        return ((nextClearIdx >= _receivedParts.length()) || (nextClearIdx < 0));
     }
 }
