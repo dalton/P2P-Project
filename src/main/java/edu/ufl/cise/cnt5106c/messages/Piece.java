@@ -2,6 +2,7 @@ package edu.ufl.cise.cnt5106c.messages;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.Arrays;
 
 /**
@@ -11,16 +12,15 @@ import java.util.Arrays;
 public class Piece extends Message {
 
     Piece (byte[] payload) throws Exception {
-        super (Type.PIECE, payload);
+        super (Type.Piece, payload);
     }
 
     public Piece (int pieceIdx, byte[] content) throws Exception {
-        super (Type.PIECE, join (pieceIdx, content));
+        super (Type.Piece, join (pieceIdx, content));
     }
 
     public int getPieceIndex() {
-        ByteBuffer buf = ByteBuffer.wrap(Arrays.copyOfRange(_payload, 0, 3));
-        return buf.getInt();
+        return ByteBuffer.wrap(Arrays.copyOfRange(_payload, 0, 3)).order(ByteOrder.BIG_ENDIAN).getInt();
     }
 
     public byte[] getContent() {

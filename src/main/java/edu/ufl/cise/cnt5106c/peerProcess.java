@@ -27,13 +27,15 @@ public class peerProcess implements Runnable {
     private final boolean _hasFile;
     private final Properties _conf;
     private final FileManager _fileMgr;
+    private final PeerManager _peerMgr;
     Collection<ConnectionHandler> _connHandlers = Collections.newSetFromMap(new ConcurrentHashMap<ConnectionHandler,Boolean>());
 
-    private peerProcess(int peerId, boolean hasFile, Properties conf) {
+    private peerProcess(int peerId, boolean hasFile, Collection<RemotePeerInfo> peerInfo, Properties conf) {
         _peerId = peerId;
         _hasFile = hasFile;
         _conf = conf;
         _fileMgr = new FileManager (_peerId, _conf);
+        _peerMgr = new PeerManager (peerInfo, _conf);
     }
 
     @Override
@@ -43,7 +45,8 @@ public class peerProcess implements Runnable {
             ServerSocket serverSocket = new ServerSocket (PORT);
             while (true) {
                 try {
-                    addConnHandler (new ConnectionHandler (_peerId, serverSocket.accept(), _fileMgr));
+                    addConnHandler (new ConnectionHandler (_peerId,
+                            serverSocket.accept(), _fileMgr, _peerMgr));
                 }
                 catch (Exception e) {
                     LogHelper.getLogger().warning(e.toString());
@@ -61,7 +64,8 @@ public class peerProcess implements Runnable {
             do {
                 RemotePeerInfo peer = iter.next();
                 try {
-                    if (addConnHandler (new ConnectionHandler (peer.getPeerId(), new Socket (peer._peerAddress, peer.getPort()), _fileMgr))) {
+                    if (addConnHandler (new ConnectionHandler (peer.getPeerId(),
+                            new Socket (peer._peerAddress, peer.getPort()), _fileMgr, _peerMgr))) {
                         iter.remove();
                     }
                 }
@@ -124,7 +128,7 @@ public class peerProcess implements Runnable {
             catch (Exception e) {}
         }
 
-        peerProcess peerProc = new peerProcess(peerId, hasFile, commProp);
+        peerProcess peerProc = new peerProcess (peerId, hasFile, peerInfo.getPeerInfo(), commProp);
         Thread t = new Thread (peerProc);
         t.setName ("peerProcess-" + peerId);
         t.start();

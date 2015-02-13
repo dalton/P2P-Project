@@ -9,11 +9,11 @@ import java.util.BitSet;
 public class Bitfield extends Message {
 
     public Bitfield (BitSet bitset) throws Exception {
-        super (Type.BITFIELD, bitset.toByteArray());
+        super (Type.BitField, bitset.toByteArray());
     }
 
     public Bitfield (byte[] bitfield) throws Exception {
-        super (Type.BITFIELD, bitfield);
+        super (Type.BitField, bitfield);
     }
 
     public BitSet getBitSet() {

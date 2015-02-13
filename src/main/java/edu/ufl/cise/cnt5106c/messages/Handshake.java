@@ -7,6 +7,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.ProtocolException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
@@ -23,7 +24,7 @@ public class Handshake implements Serializable {
     }
 
     public Handshake (int peerId) {
-        this (ByteBuffer.allocate(4).putInt(peerId).array());
+        this (ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(peerId).array());
     }
 
     private Handshake (byte[] peerId) {
@@ -77,6 +78,6 @@ public class Handshake implements Serializable {
     }
 
     public int getPeerId() {
-        return ByteBuffer.wrap(_peerId).getInt();
+        return ByteBuffer.wrap(_peerId).order(ByteOrder.BIG_ENDIAN).getInt();
     }
 }

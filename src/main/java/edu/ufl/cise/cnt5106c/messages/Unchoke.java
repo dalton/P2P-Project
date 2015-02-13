@@ -7,6 +7,6 @@ package edu.ufl.cise.cnt5106c.messages;
 public class Unchoke extends Message {
 
     public Unchoke () throws Exception {
-        super (Type.UNCHOKE);
+        super (Type.Unchoke);
     }
 }

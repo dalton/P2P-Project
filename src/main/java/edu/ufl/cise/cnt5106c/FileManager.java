@@ -51,4 +51,8 @@ public class FileManager {
     public synchronized BitSet getReceivedParts () {
         return (BitSet) _receivedParts.clone();
     }
+
+    byte[] getPiece(int partId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

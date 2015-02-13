@@ -7,6 +7,6 @@ package edu.ufl.cise.cnt5106c.messages;
 public class Interested  extends Message {
 
     public Interested () throws Exception {
-        super (Type.INTERESTED);
+        super (Type.Interested);
     }
 }

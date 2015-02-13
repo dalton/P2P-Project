@@ -47,28 +47,28 @@ public class Message {
         }
 
         switch (type) {
-            case CHOKE:
+            case Choke:
                 return new Choke();
 
-            case UNCHOKE:
+            case Unchoke:
                 return new Unchoke();
 
-            case INTERESTED:
+            case Interested:
                 return new Interested();
 
-            case NOT_INTERESTED:
+            case NotInterested:
                 return new NotInterested();
 
-            case HAVE:
+            case Have:
                 return new Have (payload);
 
-            case BITFIELD:
+            case BitField:
                 return new Bitfield (payload);
 
-            case REQUEST:
+            case Request:
                 return new Request (payload);
 
-            case PIECE:
+            case Piece:
                 return new Piece (payload);
 
             default:

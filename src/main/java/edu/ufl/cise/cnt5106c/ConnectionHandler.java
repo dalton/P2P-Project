@@ -19,10 +19,10 @@ public class ConnectionHandler implements Runnable {
     private final Socket _socket;
     private final int _peerId;
 
-    public ConnectionHandler (int peerId, Socket socket, FileManager fileMgr) throws IOException {
+    public ConnectionHandler (int peerId, Socket socket, FileManager fileMgr, PeerManager peerMgr) throws IOException {
         _socket = socket;
         _peerId = peerId;
-        _msgHandler = new MessageHandler (fileMgr);
+        _msgHandler = new MessageHandler (fileMgr, peerMgr);
     }
 
     @Override
@@ -35,10 +35,11 @@ public class ConnectionHandler implements Runnable {
             send (_msgHandler.handle (handshake), out);
 
             // Handshake successful
-            Thread.currentThread().setName ("ConnHandler-" + handshake.getPeerId());
+            final int peerId = handshake.getPeerId();
+            Thread.currentThread().setName ("ConnHandler-" + peerId);
             while (true) {
                 try {
-                    send (_msgHandler.handle(receiveMessage (bin)), out);
+                    send (_msgHandler.handle (peerId, receiveMessage (bin)), out);
                 }
                 catch (Exception ex) {
                     LogHelper.getLogger().warning(ex.toString());

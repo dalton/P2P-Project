@@ -5,14 +5,14 @@ package edu.ufl.cise.cnt5106c.messages;
  * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
  */
 public enum Type {
-    CHOKE ((byte) 0),
-    UNCHOKE ((byte) 1),
-    INTERESTED ((byte) 2),
-    NOT_INTERESTED ((byte) 3),
-    HAVE ((byte) 4),
-    BITFIELD ((byte) 5),
-    REQUEST ((byte) 6),
-    PIECE ((byte) 7);
+    Choke ((byte) 0),
+    Unchoke ((byte) 1),
+    Interested ((byte) 2),
+    NotInterested ((byte) 3),
+    Have ((byte) 4),
+    BitField ((byte) 5),
+    Request ((byte) 6),
+    Piece ((byte) 7);
 
     private final byte _type;
     
