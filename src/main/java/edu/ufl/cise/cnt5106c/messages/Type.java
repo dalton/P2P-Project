@@ -6,13 +6,13 @@ package edu.ufl.cise.cnt5106c.messages;
  */
 public enum Type {
     CHOKE ((byte) 0),
-    UNCHOKE ((byte) 0),
-    INTERESTED ((byte) 0),
-    NOT_INTERESTED ((byte) 0),
-    HAVE ((byte) 0),
-    BITFIELD ((byte) 0),
-    REQUEST ((byte) 0),
-    PIECE ((byte) 0);
+    UNCHOKE ((byte) 1),
+    INTERESTED ((byte) 2),
+    NOT_INTERESTED ((byte) 3),
+    HAVE ((byte) 4),
+    BITFIELD ((byte) 5),
+    REQUEST ((byte) 6),
+    PIECE ((byte) 7);
 
     private final byte _type;
     
