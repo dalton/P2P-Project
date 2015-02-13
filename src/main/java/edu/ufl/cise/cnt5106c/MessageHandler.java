@@ -18,11 +18,13 @@ public class MessageHandler {
 
     private final FileManager _fileMgr;
     private final PeerManager _peerMgr;
+    private final int _remotePeerId;
 
-    MessageHandler (FileManager fileMgr, PeerManager peerMgr)
+    MessageHandler (int remotePeerId, FileManager fileMgr, PeerManager peerMgr)
     {
         _fileMgr = fileMgr;
         _peerMgr = peerMgr;
+        _remotePeerId = remotePeerId;
     }
 
     public Message handle (Handshake handshake) throws Exception {
@@ -33,21 +35,22 @@ public class MessageHandler {
         return null;
     }
 
-    public Message handle (int peerId, Message msg) throws Exception {
+    public Message handle (Message msg) throws Exception {
         switch (msg.getType()) {
             case Choke: {
-                
+                return null;
             }
             case Unchoke: {
-                BitSet bitset = _peerMgr.getReceivedParts (peerId);
+                BitSet bitset = _peerMgr.getReceivedParts (_remotePeerId);
                 bitset.andNot (_fileMgr.getReceivedParts());
                 if (!bitset.isEmpty()) {
-                    return new Request (RandomUtils.pickRandomSetIndexFromBitSet(bitset));
+                    return new Request (RandomUtils.pickRandomSetIndexFromBitSet (bitset));
                 }
                 break;
             }
             case Interested: {
-                
+                _peerMgr.addInterestPeer (_remotePeerId);
+                break;
             }
             case NotInterested: {
                 return null;
@@ -55,7 +58,7 @@ public class MessageHandler {
             case Have: {
                 Have have = (Have) msg;
                 int pieceId = have.getPartId();
-                _peerMgr.haveArrived (peerId, pieceId);
+                _peerMgr.haveArrived (_remotePeerId, pieceId);
 
                 if (_fileMgr.getReceivedParts().get(pieceId)) {
                     return new NotInterested();
@@ -67,7 +70,7 @@ public class MessageHandler {
             case BitField: {
                 Bitfield bitfield = (Bitfield) msg;
                 BitSet bitset = bitfield.getBitSet();
-                _peerMgr.bitfieldArrived (peerId, bitset);
+                _peerMgr.bitfieldArrived (_remotePeerId, bitset);
 
                 bitset.andNot (_fileMgr.getReceivedParts());
                 if (bitset.isEmpty()) {
@@ -80,7 +83,7 @@ public class MessageHandler {
             }
             case Request: {
                 Request request = (Request) msg;
-                if (_peerMgr.canUploadToPeer(peerId)) {
+                if (_peerMgr.canUploadToPeer (_remotePeerId)) {
                     byte[] piece = _fileMgr.getPiece (request.getPartId());
                     if (piece != null) {
                         return new Piece (request.getPartId(), piece);
@@ -89,12 +92,12 @@ public class MessageHandler {
                 break;
             }
             case Piece: {
-                
+                Piece piece = (Piece) msg;
+                _fileMgr.addPart (piece.getPieceIndex(), piece.getContent());
             }
         }
         // TODO: implement this
         return null;
     }
-
 }
 

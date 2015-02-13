@@ -15,31 +15,35 @@ import java.net.Socket;
  */
 public class ConnectionHandler implements Runnable {
 
-    private final MessageHandler _msgHandler;
-    private final Socket _socket;
     private final int _peerId;
+    private final Socket _socket;
+    private final ObjectOutputStream _out;
+    private final FileManager _fileMgr;
+    private final PeerManager _peerMgr;
 
     public ConnectionHandler (int peerId, Socket socket, FileManager fileMgr, PeerManager peerMgr) throws IOException {
         _socket = socket;
         _peerId = peerId;
-        _msgHandler = new MessageHandler (fileMgr, peerMgr);
+        _fileMgr = fileMgr;
+        _peerMgr = peerMgr;
+        _out = new ObjectOutputStream (_socket.getOutputStream());
     }
 
     @Override
     public void run() {
         try {
-            DataInputStream bin = new DataInputStream (_socket.getInputStream());
-            ObjectOutputStream out = new ObjectOutputStream (_socket.getOutputStream());
-            out.writeObject (new Handshake (_peerId));
-            Handshake handshake = Handshake.readMessage (bin);
-            send (_msgHandler.handle (handshake), out);
+            final DataInputStream bin = new DataInputStream (_socket.getInputStream());
+            _out.writeObject (new Handshake (_peerId));
+            Handshake handshake = Handshake.readAndCheckMessage (bin);
 
             // Handshake successful
             final int peerId = handshake.getPeerId();
+            final MessageHandler msgHandler = new MessageHandler (peerId, _fileMgr, _peerMgr);
             Thread.currentThread().setName ("ConnHandler-" + peerId);
+            sendInternal (msgHandler.handle (handshake));
             while (true) {
                 try {
-                    send (_msgHandler.handle (peerId, receiveMessage (bin)), out);
+                    sendInternal (msgHandler.handle (receiveMessage (bin)));
                 }
                 catch (Exception ex) {
                     LogHelper.getLogger().warning(ex.toString());
@@ -50,7 +54,8 @@ public class ConnectionHandler implements Runnable {
             LogHelper.getLogger().warning(ex.toString());
         }
         finally {
-            try { _socket.close(); } catch (Exception e) {}
+            try { _socket.close(); }
+            catch (Exception e) {}
         }
     }
 
@@ -74,9 +79,25 @@ public class ConnectionHandler implements Runnable {
         return Message.readMessage (length - 1, Type.valueOf(bin.readByte()), bin);
     }
 
-    private static void send (Message message, ObjectOutputStream out) throws IOException {
+    public void send (final Message message) throws IOException {
+        // TODO: revision this... Spawing a new thread each time may not be
+        // very efficient
+        new Thread () {
+            @Override
+            public void run() {
+                try {
+                    sendInternal (message);
+                }
+                catch (IOException ex) {
+                    LogHelper.getLogger().warning(ex);
+                }
+            }
+        }.start();
+    }
+
+    private synchronized void sendInternal (Message message) throws IOException {
         if (message != null) {
-            out.writeObject (message);
+            _out.writeObject (message);
         }
     }
 }
