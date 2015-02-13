@@ -71,7 +71,7 @@ public class Handshake implements Serializable {
         }
     }
 
-    public static Handshake readMessage (InputStream in) throws Exception {
+    public static Handshake readAndCheckMessage (InputStream in) throws Exception {
         Handshake handshake = new Handshake();
         handshake.readObject(new ObjectInputStream (in));
         return handshake;
