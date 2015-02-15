@@ -1,25 +1,26 @@
 package edu.ufl.cise.cnt5106c.messages;
 
+import edu.ufl.cise.cnt5106c.io.FlatProtocol;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 
 /**
  *
  * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
  */
-public class Message {
+public class Message implements FlatProtocol {
 
     private int _length;
     private final Type _type;
     protected byte[] _payload;
 
-    Message (Type type) throws Exception {
+    Message (Type type) {
         this (type, null);
     }
 
-    Message (Type type, byte[] payload) throws Exception {
+    Message (Type type, byte[] payload) {
         _length = (payload == null ? 0 : payload.length) + 1;
         _type = type;
         _payload = payload;
@@ -29,23 +30,26 @@ public class Message {
         return _type;
     }
 
-    private void writeObject(ObjectOutputStream oos)
-        throws IOException {
-
-        oos.write(_length);
-        oos.write(_type.getValue());
-        oos.write(_payload, 0, _payload.length);
-    }
-
-    public static Message readMessage (int length, Type type, DataInputStream in) throws Exception {
+    @Override
+    public void read (DataInputStream in) throws IOException {
         byte[] payload = null;
-        if (length > 0) {
-            payload = new byte[length];
-            if (in.read(payload, 0, length) < length) {
-                throw new IOException("payload bytes read are less than " + length);
+        if ((_length -1 )> 0) { // Subtract the length of the _type field
+            if (in.read(payload, 0, _length) < _length) {
+                throw new IOException("payload bytes read are less than " + _length);
             }
         }
+    }
 
+    @Override
+    public void write (DataOutputStream out) throws IOException {
+        out.writeInt (_length);
+        out.writeByte (_type.getValue());
+        if ((_payload != null) && (_payload.length > 0)) {
+            out.write (_payload, 0, _payload.length);
+        }
+    }
+
+    public static Message readMessage (int length, Type type) throws ClassNotFoundException, IOException {
         switch (type) {
             case Choke:
                 return new Choke();
@@ -60,19 +64,19 @@ public class Message {
                 return new NotInterested();
 
             case Have:
-                return new Have (payload);
+                return new Have (new byte[length]);
 
             case BitField:
-                return new Bitfield (payload);
+                return new Bitfield (new byte[length]);
 
             case Request:
-                return new Request (payload);
+                return new Request (new byte[length]);
 
             case Piece:
-                return new Piece (payload);
+                return new Piece (new byte[length]);
 
             default:
-                throw new Exception ("message type not handled: " + type.toString());
+                throw new ClassNotFoundException ("message type not handled: " + type.toString());
         }
     }
 }

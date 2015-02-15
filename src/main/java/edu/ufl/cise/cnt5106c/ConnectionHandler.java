@@ -1,12 +1,11 @@
 package edu.ufl.cise.cnt5106c;
 
 import edu.ufl.cise.cnt5106c.log.LogHelper;
+import edu.ufl.cise.cnt5106c.io.FlatProtocolInputStream;
+import edu.ufl.cise.cnt5106c.io.FlatProtocolOutputStream;
 import edu.ufl.cise.cnt5106c.messages.Handshake;
 import edu.ufl.cise.cnt5106c.messages.Message;
-import edu.ufl.cise.cnt5106c.messages.Type;
-import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
@@ -17,7 +16,7 @@ public class ConnectionHandler implements Runnable {
 
     private final int _peerId;
     private final Socket _socket;
-    private final ObjectOutputStream _out;
+    private final FlatProtocolOutputStream _out;
     private final FileManager _fileMgr;
     private final PeerManager _peerMgr;
 
@@ -26,15 +25,15 @@ public class ConnectionHandler implements Runnable {
         _peerId = peerId;
         _fileMgr = fileMgr;
         _peerMgr = peerMgr;
-        _out = new ObjectOutputStream (_socket.getOutputStream());
+        _out = new FlatProtocolOutputStream (_socket.getOutputStream());
     }
 
     @Override
     public void run() {
         try {
-            final DataInputStream bin = new DataInputStream (_socket.getInputStream());
-            _out.writeObject (new Handshake (_peerId));
-            Handshake handshake = Handshake.readAndCheckMessage (bin);
+            final FlatProtocolInputStream bin = new FlatProtocolInputStream (_socket.getInputStream());
+            _out.writeHandshake (new Handshake (_peerId));
+            Handshake handshake = bin.readHandshake();
 
             // Handshake successful
             final int peerId = handshake.getPeerId();
@@ -43,7 +42,7 @@ public class ConnectionHandler implements Runnable {
             sendInternal (msgHandler.handle (handshake));
             while (true) {
                 try {
-                    sendInternal (msgHandler.handle (receiveMessage (bin)));
+                    sendInternal (msgHandler.handle (bin.readMessage()));
                 }
                 catch (Exception ex) {
                     LogHelper.getLogger().warning(ex.toString());
@@ -74,11 +73,6 @@ public class ConnectionHandler implements Runnable {
         return hash;
     }
 
-    private Message receiveMessage (DataInputStream bin) throws Exception {
-        int length = bin.readInt();
-        return Message.readMessage (length - 1, Type.valueOf(bin.readByte()), bin);
-    }
-
     public void send (final Message message) throws IOException {
         // TODO: revision this... Spawing a new thread each time may not be
         // very efficient
@@ -97,7 +91,7 @@ public class ConnectionHandler implements Runnable {
 
     private synchronized void sendInternal (Message message) throws IOException {
         if (message != null) {
-            _out.writeObject (message);
+            _out.writeMessage (message);
         }
     }
 }

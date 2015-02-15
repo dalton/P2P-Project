@@ -10,11 +10,11 @@ import java.util.Arrays;
  */
 public class Request extends Message {
 
-    public Request (int pieceIdx) throws Exception {
+    public Request (int pieceIdx) {
         this (ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(pieceIdx).array());
     }
 
-    public Request (byte[] pieceIdx) throws Exception {
+    public Request (byte[] pieceIdx) {
         super (Type.Request, pieceIdx);
     }
 

@@ -6,7 +6,7 @@ package edu.ufl.cise.cnt5106c.messages;
  */
 public class Choke extends Message {
 
-    public Choke () throws Exception {
+    public Choke () {
         super (Type.Choke);
     }
 }

@@ -96,7 +96,7 @@ public class MessageHandler {
                 _fileMgr.addPart (piece.getPieceIndex(), piece.getContent());
             }
         }
-        // TODO: implement this
+
         return null;
     }
 }

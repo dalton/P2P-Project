@@ -10,11 +10,11 @@ import java.util.Arrays;
  */
 public class Have extends Message {
 
-    public Have (int pieceIdx) throws Exception {
+    public Have (int pieceIdx) {
         this (ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(pieceIdx).array());
     }
 
-    public Have (byte[] pieceIdx) throws Exception {
+    public Have (byte[] pieceIdx) {
         super (Type.Have, pieceIdx);
     }
 

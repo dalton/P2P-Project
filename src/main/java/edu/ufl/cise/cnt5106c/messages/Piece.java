@@ -11,11 +11,11 @@ import java.util.Arrays;
  */
 public class Piece extends Message {
 
-    Piece (byte[] payload) throws Exception {
+    Piece (byte[] payload) {
         super (Type.Piece, payload);
     }
 
-    public Piece (int pieceIdx, byte[] content) throws Exception {
+    public Piece (int pieceIdx, byte[] content) {
         super (Type.Piece, join (pieceIdx, content));
     }
 

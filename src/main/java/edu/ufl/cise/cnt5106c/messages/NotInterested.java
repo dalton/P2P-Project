@@ -6,7 +6,7 @@ package edu.ufl.cise.cnt5106c.messages;
  */
 public class NotInterested  extends Message {
 
-    public NotInterested () throws Exception {
+    public NotInterested() {
         super (Type.NotInterested);
     }
 }
