@@ -41,9 +41,12 @@ public class peerProcess {
                     address = peer.getPeerAddress();
                     port = peer.getPort();
                     hasFile = peer.hasFile();
+                    // A peer connects only to the previously defined peers,
+                    // therefore I can stop parsing here.
+                    break;
                 }
                 else {
-                    peersToConnectTo.add(peer);
+                    peersToConnectTo.add (peer);
                 }
             }
         }
