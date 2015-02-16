@@ -15,17 +15,25 @@ import java.net.Socket;
  */
 public class ConnectionHandler implements Runnable {
 
-    private final int _peerId;
+    private final int _localPeerId;
     private final Socket _socket;
     private final ProtocolazibleObjectOutputStream _out;
     private final FileManager _fileMgr;
     private final PeerManager _peerMgr;
     private final boolean _isConnectingPeer;
+    private final int _expectedRemotePeerId;
 
-    public ConnectionHandler (int peerId, boolean isConnectingPeer, Socket socket, FileManager fileMgr, PeerManager peerMgr) throws IOException {
+    public ConnectionHandler (int localPeerId, Socket socket, FileManager fileMgr, PeerManager peerMgr)
+            throws IOException {
+        this (localPeerId, false, -1, socket, fileMgr, peerMgr);
+    }
+
+    public ConnectionHandler (int localPeerId, boolean isConnectingPeer, int expectedRemotePeerId,
+            Socket socket, FileManager fileMgr, PeerManager peerMgr) throws IOException {
         _socket = socket;
-        _peerId = peerId;
+        _localPeerId = localPeerId;
         _isConnectingPeer = isConnectingPeer;
+        _expectedRemotePeerId = expectedRemotePeerId;
         _fileMgr = fileMgr;
         _peerMgr = peerMgr;
         _out = new ProtocolazibleObjectOutputStream (_socket.getOutputStream());
@@ -35,38 +43,50 @@ public class ConnectionHandler implements Runnable {
     public void run() {
         try {
             final ProtocolazibleObjectInputStream in = new ProtocolazibleObjectInputStream (_socket.getInputStream());
-            _out.writeObject (new Handshake (_peerId));
-            Handshake handshake = (Handshake) in.readObject();
+
+            // Send handshake
+            _out.writeObject (new Handshake (_localPeerId));
+
+            // Receive and check handshake
+            Handshake rcvdHandshake = (Handshake) in.readObject();
+            final int remotePeerId = rcvdHandshake.getPeerId();
+            Thread.currentThread().setName (getClass().getName() + "-" + remotePeerId);
+            final EventLogger eventLogger = new EventLogger (_localPeerId);
+            final MessageHandler msgHandler = new MessageHandler (remotePeerId, _fileMgr, _peerMgr, eventLogger);
+            if (_isConnectingPeer && (remotePeerId != _expectedRemotePeerId)) {
+                throw new Exception ("Remote peer id " + remotePeerId+ " does not match with the expected id: " + _expectedRemotePeerId);
+            }
 
             // Handshake successful
-            final int peerId = handshake.getPeerId();
-            final EventLogger eventLogger = new EventLogger (_peerId);
-            eventLogger.peerConnection (peerId, _isConnectingPeer);
-            final MessageHandler msgHandler = new MessageHandler (peerId, _fileMgr, _peerMgr, eventLogger);
-            Thread.currentThread().setName (getClass().getName() + "-" + peerId);
-            sendInternal (msgHandler.handle (handshake));
+            eventLogger.peerConnection (remotePeerId, _isConnectingPeer);
+            
+            sendInternal (msgHandler.handle (rcvdHandshake));
+            LogHelper.getLogger().debug ("received handshake.");
             while (true) {
                 try {
                     sendInternal (msgHandler.handle ((Message) in.readObject()));
                 }
                 catch (Exception ex) {
-                    LogHelper.getLogger().warning(ex.toString());
+                    LogHelper.getLogger().warning (ex);
+                    break;
                 }
             }
         }
         catch (Exception ex) {
-            LogHelper.getLogger().warning(ex.toString());
+            LogHelper.getLogger().warning (ex);
         }
         finally {
             try { _socket.close(); }
             catch (Exception e) {}
         }
+        LogHelper.getLogger().warning (Thread.currentThread().getName()
+                    + " terminating, messages will no longer be accepted.");
     }
 
     @Override
     public boolean equals (Object obj) {
         if (obj instanceof ConnectionHandler) {
-            return ((ConnectionHandler) obj)._peerId == _peerId;
+            return ((ConnectionHandler) obj)._localPeerId == _localPeerId;
         }
         return false;
     }
@@ -74,7 +94,7 @@ public class ConnectionHandler implements Runnable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 41 * hash + this._peerId;
+        hash = 41 * hash + _localPeerId;
         return hash;
     }
 
