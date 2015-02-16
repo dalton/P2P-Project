@@ -7,6 +7,7 @@ import java.util.BitSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
@@ -19,7 +20,8 @@ public class PeerManager implements Runnable {
     private final int _numberOfPreferredNeighbors;
     private final int _unchokingInterval;
     private final int _optimisticUnchokingInterval;
-    
+    private final Collection<PeerManagerListener> _listeners = new LinkedList<>();
+
     PeerManager (Collection<RemotePeerInfo> peers, Properties conf) {
         _peers.addAll (peers);
         _numberOfPreferredNeighbors = Integer.parseInt(
@@ -35,11 +37,7 @@ public class PeerManager implements Runnable {
     }
 
     synchronized void receivedPart (int peerId, int size) {
-        for (RemotePeerInfo peer : _peers) {
-            if (peer.getPeerId() == peerId) {
-                peer._bytesDownloadedFrom += size;
-            }
-        }
+        searchPeer (peerId)._bytesDownloadedFrom += size;
     }
 
     synchronized boolean canUploadToPeer (int iPeer) {
@@ -49,10 +47,12 @@ public class PeerManager implements Runnable {
 
     synchronized void bitfieldArrived (int peerId, BitSet bitfield) {
         searchPeer (peerId)._receivedParts.or (bitfield);
+        neighborsCompletedDownload();
     }
 
     synchronized void haveArrived (int peerId, int partId) {
         searchPeer (peerId)._receivedParts.set (partId);
+        neighborsCompletedDownload();
     }
 
     synchronized BitSet getReceivedParts(int peerId) {
@@ -65,7 +65,23 @@ public class PeerManager implements Runnable {
                 return peer;
             }
         }
-        throw new RuntimeException  ("Peeer " + peerId + " not found");
+        throw new RuntimeException  ("Peer " + peerId + " not found");
+    }
+
+    synchronized private void neighborsCompletedDownload() {
+        for (RemotePeerInfo peer : _peers) {
+            if (peer._receivedParts.length() > peer._receivedParts.cardinality()) {
+                // at least one neighbor has not completed
+                return;
+            }
+        }
+        for (PeerManagerListener listener : _listeners) {
+            listener.neighborsCompletedDownload();
+        }
+    }
+
+    public synchronized void registerListener (PeerManagerListener listener) {
+        _listeners.add (listener);
     }
 
     @Override

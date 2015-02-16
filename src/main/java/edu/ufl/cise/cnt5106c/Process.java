@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
  */
-public class Process implements Runnable, FileManagerListener {
+public class Process implements Runnable, FileManagerListener, PeerManagerListener {
     private final int _peerId;
     private final String _address;
     private final int _port;
@@ -46,6 +46,7 @@ public class Process implements Runnable, FileManagerListener {
 
     @Override
     public void run() {
+        Thread.currentThread().setName (getClass().getName() + "-ServerThread");
         try {
             ServerSocket serverSocket = new ServerSocket (_port);
             while (!_terminate.get()) {
@@ -60,6 +61,9 @@ public class Process implements Runnable, FileManagerListener {
         }
         catch (IOException ex) {
             LogHelper.getLogger().warning (ex.toString());
+        }
+        finally {
+            LogHelper.getLogger().warning ("Server Thread terminating, TCP connections will no longer be accepted.");
         }
     }
 
@@ -84,6 +88,15 @@ public class Process implements Runnable, FileManagerListener {
             iter = peersToConnectTo.iterator();
             try { Thread.sleep(5000); }
             catch (InterruptedException ex) {}
+        }
+    }
+
+    @Override
+    public void neighborsCompletedDownload() {
+        _peersFileCompleted.set (true);
+        if (_fileCompleted.get() && _peersFileCompleted.get()) {
+            // The process can quit
+            _terminate.set (true);
         }
     }
 

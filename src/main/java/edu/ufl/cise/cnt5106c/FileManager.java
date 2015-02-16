@@ -80,7 +80,7 @@ public class FileManager {
     }
 
     public void registerListener (FileManagerListener listener) {
-        _listeners.add(listener);
+        _listeners.add (listener);
     }
 
     private boolean isFileCompleted() {
