@@ -13,7 +13,7 @@ public class EventLogger {
     }
 
     public EventLogger (int peerId, LogHelper logHelper) {
-        _msgHeader = "%u: Peer " + peerId;
+        _msgHeader = "%d: Peer " + peerId;
         _logHelper = logHelper;
     }
 
