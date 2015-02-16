@@ -25,8 +25,11 @@ public class ProtocolazibleObjectOutputStream extends DataOutputStream implement
         if (obj instanceof Handshake) {
             ((Handshake) obj).write(this);
         }
-        else if (obj instanceof Protocolazible) {
+        else if (obj instanceof Message) {
             ((Message) obj).write (this);
+        }
+        else if (obj instanceof Protocolazible) {
+            throw new UnsupportedOperationException ("Message of type " + obj.getClass().getName() + " not yet supported.");
         }
         else {
             throw new UnsupportedOperationException ("Message of type " + obj.getClass().getName() + " not supported.");
