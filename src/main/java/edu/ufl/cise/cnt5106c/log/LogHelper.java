@@ -1,5 +1,8 @@
 package edu.ufl.cise.cnt5106c.log;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,7 +46,8 @@ public class LogHelper {
     }
 
     private static String stackTraceToString (Throwable t) {
-        // TODO: imlement this
-        return new String ();
+        final Writer sw = new StringWriter();
+        t.printStackTrace(new PrintWriter(sw));
+        return sw.toString();
     }
 }
