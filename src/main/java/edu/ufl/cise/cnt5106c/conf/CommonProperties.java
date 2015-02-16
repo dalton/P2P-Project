@@ -20,6 +20,7 @@ public enum CommonProperties {
     PieceSize;
 
     public static final String CONFIG_FILE_NAME = "Common.cfg";
+    private static final String COMMENT_CHAR = "#";
 
     public static Properties read (Reader reader) throws Exception {
 
@@ -30,6 +31,10 @@ public enum CommonProperties {
                 BufferedReader in = new BufferedReader(reader);
                 int i = 0;
                 for (String line; (line = in.readLine()) != null; i++) {
+                    line = line.trim();
+                    if ((line.length() <= 0) || (line.startsWith (COMMENT_CHAR))) {
+                        continue;
+                    }
                     // The defaul Properties class uses the '=' character to
                     // separate keys and value, while the project description
                     // requires keys and values being separated by a space.
