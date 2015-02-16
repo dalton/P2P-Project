@@ -8,6 +8,7 @@ import edu.ufl.cise.cnt5106c.messages.Message;
 import edu.ufl.cise.cnt5106c.messages.NotInterested;
 import edu.ufl.cise.cnt5106c.messages.Piece;
 import edu.ufl.cise.cnt5106c.messages.Request;
+import edu.ufl.cise.cnt5106c.log.EventLogger;
 import java.util.BitSet;
 
 /**
@@ -19,12 +20,14 @@ public class MessageHandler {
     private final FileManager _fileMgr;
     private final PeerManager _peerMgr;
     private final int _remotePeerId;
+    private final EventLogger _eventLogger;
 
     MessageHandler (int remotePeerId, FileManager fileMgr, PeerManager peerMgr)
     {
         _fileMgr = fileMgr;
         _peerMgr = peerMgr;
         _remotePeerId = remotePeerId;
+        _eventLogger = new EventLogger (remotePeerId);
     }
 
     public Message handle (Handshake handshake) {
@@ -38,9 +41,11 @@ public class MessageHandler {
     public Message handle (Message msg) {
         switch (msg.getType()) {
             case Choke: {
+                _eventLogger.chokeMessage (_remotePeerId);
                 return null;
             }
             case Unchoke: {
+                _eventLogger.unchokeMessage (_remotePeerId);
                 BitSet bitset = _peerMgr.getReceivedParts (_remotePeerId);
                 bitset.andNot (_fileMgr.getReceivedParts());
                 if (!bitset.isEmpty()) {
@@ -49,15 +54,18 @@ public class MessageHandler {
                 break;
             }
             case Interested: {
+                _eventLogger.interestedMessage (_remotePeerId);
                 _peerMgr.addInterestPeer (_remotePeerId);
                 break;
             }
             case NotInterested: {
+                _eventLogger.notInterestedMessage (_remotePeerId);
                 return null;
             }
             case Have: {
                 Have have = (Have) msg;
-                int pieceId = have.getPartId();
+                final int pieceId = have.getPartId();
+                _eventLogger.haveMessage (_remotePeerId, pieceId);
                 _peerMgr.haveArrived (_remotePeerId, pieceId);
 
                 if (_fileMgr.getReceivedParts().get(pieceId)) {
@@ -94,6 +102,7 @@ public class MessageHandler {
             case Piece: {
                 Piece piece = (Piece) msg;
                 _fileMgr.addPart (piece.getPieceIndex(), piece.getContent());
+                _eventLogger.pieceDownloadedMessage (_remotePeerId, piece.getPieceIndex(), _fileMgr.getNumberOfReceivedParts());
             }
         }
 
