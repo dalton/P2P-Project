@@ -1,6 +1,6 @@
 package edu.ufl.cise.cnt5106c.messages;
 
-import edu.ufl.cise.cnt5106c.io.FlatProtocol;
+import edu.ufl.cise.cnt5106c.io.Protocolazible;
 import java.io.IOException;
 
 import java.io.DataInputStream;
@@ -10,7 +10,7 @@ import java.io.DataOutputStream;
  *
  * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
  */
-public class Message implements FlatProtocol {
+public class Message implements Protocolazible  {
 
     private int _length;
     private final Type _type;
@@ -49,7 +49,7 @@ public class Message implements FlatProtocol {
         }
     }
 
-    public static Message readMessage (int length, Type type) throws ClassNotFoundException, IOException {
+    public static Message getInstance (int length, Type type) throws ClassNotFoundException, IOException {
         switch (type) {
             case Choke:
                 return new Choke();

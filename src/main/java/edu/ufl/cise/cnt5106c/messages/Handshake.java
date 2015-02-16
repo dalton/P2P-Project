@@ -1,6 +1,6 @@
 package edu.ufl.cise.cnt5106c.messages;
 
-import edu.ufl.cise.cnt5106c.io.FlatProtocol;
+import edu.ufl.cise.cnt5106c.io.Protocolazible;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.util.Arrays;
  *
  * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
  */
-public class Handshake implements FlatProtocol  {
+public class Handshake implements Protocolazible  {
     private final static String _protocolId = "P2PFILESHARINGPROJ";
     private final byte[] _zeroBits = new byte[10];
     private final byte[] _peerId = new byte[4];

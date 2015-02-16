@@ -1,8 +1,8 @@
 package edu.ufl.cise.cnt5106c;
 
 import edu.ufl.cise.cnt5106c.log.LogHelper;
-import edu.ufl.cise.cnt5106c.io.FlatProtocolInputStream;
-import edu.ufl.cise.cnt5106c.io.FlatProtocolOutputStream;
+import edu.ufl.cise.cnt5106c.io.ProtocolazibleObjectInputStream;
+import edu.ufl.cise.cnt5106c.io.ProtocolazibleObjectOutputStream;
 import edu.ufl.cise.cnt5106c.messages.Handshake;
 import edu.ufl.cise.cnt5106c.messages.Message;
 import java.io.IOException;
@@ -16,7 +16,7 @@ public class ConnectionHandler implements Runnable {
 
     private final int _peerId;
     private final Socket _socket;
-    private final FlatProtocolOutputStream _out;
+    private final ProtocolazibleObjectOutputStream _out;
     private final FileManager _fileMgr;
     private final PeerManager _peerMgr;
 
@@ -25,15 +25,15 @@ public class ConnectionHandler implements Runnable {
         _peerId = peerId;
         _fileMgr = fileMgr;
         _peerMgr = peerMgr;
-        _out = new FlatProtocolOutputStream (_socket.getOutputStream());
+        _out = new ProtocolazibleObjectOutputStream (_socket.getOutputStream());
     }
 
     @Override
     public void run() {
         try {
-            final FlatProtocolInputStream bin = new FlatProtocolInputStream (_socket.getInputStream());
-            _out.writeHandshake (new Handshake (_peerId));
-            Handshake handshake = bin.readHandshake();
+            final ProtocolazibleObjectInputStream bin = new ProtocolazibleObjectInputStream (_socket.getInputStream());
+            _out.writeObject (new Handshake (_peerId));
+            Handshake handshake = (Handshake) bin.readObject();
 
             // Handshake successful
             final int peerId = handshake.getPeerId();
@@ -42,7 +42,7 @@ public class ConnectionHandler implements Runnable {
             sendInternal (msgHandler.handle (handshake));
             while (true) {
                 try {
-                    sendInternal (msgHandler.handle (bin.readMessage()));
+                    sendInternal (msgHandler.handle ((Message) bin.readObject()));
                 }
                 catch (Exception ex) {
                     LogHelper.getLogger().warning(ex.toString());
@@ -91,7 +91,7 @@ public class ConnectionHandler implements Runnable {
 
     private synchronized void sendInternal (Message message) throws IOException {
         if (message != null) {
-            _out.writeMessage (message);
+            _out.writeObject (message);
         }
     }
 }
