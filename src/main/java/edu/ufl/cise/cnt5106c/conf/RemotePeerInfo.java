@@ -10,6 +10,7 @@
 package edu.ufl.cise.cnt5106c.conf;
 
 import java.util.BitSet;
+import java.util.Objects;
 
 public class RemotePeerInfo {
     public final String _peerId;
@@ -18,6 +19,10 @@ public class RemotePeerInfo {
     public final boolean _hasFile;
     public int _bytesDownloadedFrom;
     public BitSet _receivedParts;
+
+    public RemotePeerInfo (int peerId) {
+        this (Integer.toString (peerId), "127.0.0.1", "0", false);
+    }
 
     public RemotePeerInfo(String pId, String pAddress, String pPort, boolean hasFile) {
         _peerId = pId;
@@ -41,6 +46,24 @@ public class RemotePeerInfo {
 
     public boolean hasFile() {
         return _hasFile;
+    }
+
+    @Override
+    public boolean equals (Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj instanceof RemotePeerInfo) {
+            return (((RemotePeerInfo) obj)._peerId.equals (_peerId));
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 97 * hash + Objects.hashCode(this._peerId);
+        return hash;
     }
 
     @Override
