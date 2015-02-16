@@ -42,4 +42,11 @@ public class RemotePeerInfo {
     public boolean hasFile() {
         return _hasFile;
     }
+
+    @Override
+    public String toString() {
+        return new StringBuilder (_peerId)
+                .append (" address:").append (_peerAddress)
+                .append(" port: ").append(_peerPort).toString();
+    }
 }
