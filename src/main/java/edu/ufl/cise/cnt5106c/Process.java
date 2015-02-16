@@ -47,6 +47,11 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
     void init() {
         _fileMgr.registerListener (this);
         _peerMgr.registerListener (this);
+
+        // Start PeerMnager Thread
+        Thread t = new Thread (_peerMgr);
+        t.setName (_peerMgr.getClass().getName());
+        t.start();
     }
 
     @Override
