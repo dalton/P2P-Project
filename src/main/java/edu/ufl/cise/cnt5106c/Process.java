@@ -40,30 +40,32 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
         _hasFile = hasFile;
         _conf = conf;
         _fileMgr = new FileManager (_peerId, _conf);
+        _fileMgr.registerListener (this);
         _peerMgr = new PeerManager (peerInfo, _conf);
+        _peerMgr.registerListener (this);
         _eventLogger = new EventLogger (peerId);
     }
 
     @Override
     public void run() {
-        Thread.currentThread().setName (getClass().getName() + "-ServerThread");
         try {
             ServerSocket serverSocket = new ServerSocket (_port);
             while (!_terminate.get()) {
                 try {
-                    addConnHandler (new ConnectionHandler (_peerId, false,
-                            serverSocket.accept(), _fileMgr, _peerMgr));
+                    LogHelper.getLogger().debug (Thread.currentThread().getName() + ": Peer " + _peerId + " listening on port " + _port + ".");
+                    addConnHandler (new ConnectionHandler (_peerId, serverSocket.accept(), _fileMgr, _peerMgr));
                 }
                 catch (Exception e) {
-                    LogHelper.getLogger().warning(e.toString());
+                    LogHelper.getLogger().warning (e);
                 }
             }
         }
         catch (IOException ex) {
-            LogHelper.getLogger().warning (ex.toString());
+            LogHelper.getLogger().warning (ex);
         }
         finally {
-            LogHelper.getLogger().warning ("Server Thread terminating, TCP connections will no longer be accepted.");
+            LogHelper.getLogger().warning (Thread.currentThread().getName()
+                    + " terminating, TCP connections will no longer be accepted.");
         }
     }
 
@@ -73,13 +75,15 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
             do {
                 RemotePeerInfo peer = iter.next();
                 try {
-                    if (addConnHandler (new ConnectionHandler (peer.getPeerId(), true,
+                    if (addConnHandler (new ConnectionHandler (_peerId, true, peer.getPeerId(),
                             new Socket (peer._peerAddress, peer.getPort()), _fileMgr, _peerMgr))) {
                         iter.remove();
+                        LogHelper.getLogger().debug (" Connecting to peer: " + peer.getPeerId()
+                            + " (" + peer._peerAddress + ":" + peer.getPort() + ")");
                     }
                 }
                 catch (IOException ex) {
-                    LogHelper.getLogger().warning(ex.toString());
+                    LogHelper.getLogger().warning (ex);
                 }
             }
             while (iter.hasNext());
