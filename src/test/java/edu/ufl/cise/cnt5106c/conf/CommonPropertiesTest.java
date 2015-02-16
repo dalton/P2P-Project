@@ -48,12 +48,12 @@ public class CommonPropertiesTest {
             reader = new FileReader (CommonProperties.CONFIG_FILE_NAME + ".test");
             Properties result = CommonProperties.read(reader);
             for (Entry<Object, Object> entry : result.entrySet()) {
-                CommonProperties.valueOf((String) entry.getKey());
+                CommonProperties.valueOf ((String) entry.getKey());
             }
         }
         catch (Exception ex) {
-            fail(ex.getMessage());
             Logger.getLogger(CommonPropertiesTest.class.getName()).log(Level.SEVERE, null, ex);
+            fail(ex.getMessage());
         }
         finally {
             try { reader.close(); }
@@ -80,8 +80,8 @@ public class CommonPropertiesTest {
             assertEquals(result.getProperty(CommonProperties.UnchokingInterval.toString()), "5");
         }
         catch (Exception ex) {
-            fail(ex.getMessage());
             Logger.getLogger(CommonPropertiesTest.class.getName()).log(Level.SEVERE, null, ex);
+            fail(ex.getMessage());
         }
         finally {
             try { reader.close(); }
