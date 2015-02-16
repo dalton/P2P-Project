@@ -35,7 +35,7 @@ public class FileManager {
     FileManager (int peerId, String partsLocation, String fileName, int fileSize, int partSize) {
         _peerId = peerId;
         final double dPartSize = partSize;
-        _receivedParts = new BitSet ((int) Math.ceil(fileSize/dPartSize));
+        _receivedParts = new BitSet ((int) Math.ceil (fileSize/dPartSize));
     }
 
     /**
@@ -69,7 +69,7 @@ public class FileManager {
         return _receivedParts.cardinality();
     }
 
-    byte[] getPiece(int partId) {
+    byte[] getPiece (int partId) {
         // TODO: implement this: we can decide whether to load the file in memory,
         // or whether to read it from file each time we receive a request.
         // The firt case may be faster, but for very large files it may not be
