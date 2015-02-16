@@ -65,6 +65,10 @@ public class FileManager {
         return (BitSet) _receivedParts.clone();
     }
 
+    public synchronized int getNumberOfReceivedParts() {
+        return _receivedParts.cardinality();
+    }
+
     byte[] getPiece(int partId) {
         // TODO: implement this: we can decide whether to load the file in memory,
         // or whether to read it from file each time we receive a request.
