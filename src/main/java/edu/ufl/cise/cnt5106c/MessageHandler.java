@@ -27,7 +27,7 @@ public class MessageHandler {
         _remotePeerId = remotePeerId;
     }
 
-    public Message handle (Handshake handshake) throws Exception {
+    public Message handle (Handshake handshake) {
         BitSet bitset = _fileMgr.getReceivedParts();
         if (!bitset.isEmpty()) {
             return (new Bitfield (bitset));
@@ -35,7 +35,7 @@ public class MessageHandler {
         return null;
     }
 
-    public Message handle (Message msg) throws Exception {
+    public Message handle (Message msg) {
         switch (msg.getType()) {
             case Choke: {
                 return null;
