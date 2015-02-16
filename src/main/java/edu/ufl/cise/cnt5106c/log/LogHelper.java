@@ -14,7 +14,7 @@ public class LogHelper {
     }
     private final Logger _l;
 
-    private LogHelper (Logger log) {
+    LogHelper (Logger log) {
         _l = log;
     }
 
@@ -22,23 +22,23 @@ public class LogHelper {
         return _log;
     }
 
-    public void info (String msg) {
+    public synchronized void info (String msg) {
         _l.log(Level.INFO, msg);
     }
 
-    public void severe (String msg) {
+    public synchronized void severe (String msg) {
         _l.log(Level.SEVERE, msg);
     }
 
-    public void warning (String msg) {
+    public synchronized void warning (String msg) {
         _l.log(Level.WARNING, msg);
     }
 
-    public void severe (Throwable e) {
+    public synchronized void severe (Throwable e) {
         _l.log(Level.SEVERE, stackTraceToString (e));
     }
 
-    public void warning (Throwable e) {
+    public synchronized void warning (Throwable e) {
         _l.log(Level.WARNING, stackTraceToString (e));
     }
 
