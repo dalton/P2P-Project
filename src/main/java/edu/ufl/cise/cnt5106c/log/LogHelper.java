@@ -14,6 +14,7 @@ public class LogHelper {
     private static final LogHelper _log = new LogHelper (Logger.getLogger("CNT5106C"));
     static {
         // TODO: configure logger here
+        _log._l.setLevel(Level.ALL);
     }
     private final Logger _l;
 
@@ -25,8 +26,16 @@ public class LogHelper {
         return _log;
     }
 
+    public synchronized void conf (String msg) {
+        _l.log(Level.CONFIG, msg);
+    }
+
+    public synchronized void debug (String msg) {
+        _l.log(Level.FINE, msg);
+    }
+
     public synchronized void info (String msg) {
-        _l.log(Level.INFO, msg);
+        _l.log (Level.INFO, msg);
     }
 
     public synchronized void severe (String msg) {
