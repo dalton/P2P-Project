@@ -126,7 +126,11 @@ public class PeerManager implements Runnable {
 
     @Override
     public void run() {
+        // At the beginning all the neighbors are choked, because the peer has not
+        // recieved anything from anyone
+        _optUnchoker.setChokedNeighbors (_peers);
         _optUnchoker.start();
+
         while (true) {
             try { Thread.sleep (_unchokingInterval); }
             catch (InterruptedException ex) {}
