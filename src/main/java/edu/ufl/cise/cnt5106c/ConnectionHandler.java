@@ -31,9 +31,9 @@ public class ConnectionHandler implements Runnable {
     @Override
     public void run() {
         try {
-            final ProtocolazibleObjectInputStream bin = new ProtocolazibleObjectInputStream (_socket.getInputStream());
+            final ProtocolazibleObjectInputStream in = new ProtocolazibleObjectInputStream (_socket.getInputStream());
             _out.writeObject (new Handshake (_peerId));
-            Handshake handshake = (Handshake) bin.readObject();
+            Handshake handshake = (Handshake) in.readObject();
 
             // Handshake successful
             final int peerId = handshake.getPeerId();
@@ -42,7 +42,7 @@ public class ConnectionHandler implements Runnable {
             sendInternal (msgHandler.handle (handshake));
             while (true) {
                 try {
-                    sendInternal (msgHandler.handle ((Message) bin.readObject()));
+                    sendInternal (msgHandler.handle ((Message) in.readObject()));
                 }
                 catch (Exception ex) {
                     LogHelper.getLogger().warning(ex.toString());
