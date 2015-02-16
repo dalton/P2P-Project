@@ -40,10 +40,13 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
         _hasFile = hasFile;
         _conf = conf;
         _fileMgr = new FileManager (_peerId, _conf);
-        _fileMgr.registerListener (this);
         _peerMgr = new PeerManager (peerInfo, _conf);
-        _peerMgr.registerListener (this);
         _eventLogger = new EventLogger (peerId);
+    }
+
+    void init() {
+        _fileMgr.registerListener (this);
+        _peerMgr.registerListener (this);
     }
 
     @Override

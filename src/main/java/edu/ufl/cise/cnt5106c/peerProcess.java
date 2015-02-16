@@ -63,6 +63,7 @@ public class peerProcess {
         }
 
         Process peerProc = new Process (peerId, address, port, hasFile, peerInfo.getPeerInfo(), commProp);
+        peerProc.init();
         Thread t = new Thread (peerProc);
         t.setName ("peerProcess-" + peerId);
         t.start();
