@@ -45,13 +45,14 @@ public class peerProcess {
                     // therefore I can stop parsing here.
                     break;
                 }
-                else {
+                else { 
                     peersToConnectTo.add (peer);
+                    LogHelper.getLogger().conf ("Read configuration for peer: " + peer);
                 }
             }
         }
         catch (Exception ex) {
-            LogHelper.getLogger().severe(ex);
+            LogHelper.getLogger().severe (ex);
             return;
         }
         finally {
@@ -66,6 +67,7 @@ public class peerProcess {
         t.setName ("peerProcess-" + peerId);
         t.start();
 
+        LogHelper.getLogger().debug ("Connecting to " + peersToConnectTo.size() + " peeers.");
         peerProc.connectToPeers (peersToConnectTo);
     }
 }
