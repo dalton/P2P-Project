@@ -34,4 +34,12 @@ public class RemotePeerInfo {
     public int getPort() {
         return Integer.parseInt(_peerPort);
     }
+
+    public String getPeerAddress() {
+        return _peerAddress;
+    }
+
+    public boolean hasFile() {
+        return _hasFile;
+    }
 }
