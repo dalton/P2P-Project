@@ -18,8 +18,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
  */
 public class Process implements Runnable, FileManagerListener {
-    private final static int PORT = 6008;
     private final int _peerId;
+    private final String _address;
+    private final int _port;
     private final boolean _hasFile;
     private final Properties _conf;
     private final FileManager _fileMgr;
@@ -30,18 +31,21 @@ public class Process implements Runnable, FileManagerListener {
     private final Collection<ConnectionHandler> _connHandlers =
             Collections.newSetFromMap(new ConcurrentHashMap<ConnectionHandler,Boolean>());
 
-    public Process (int peerId, boolean hasFile, Collection<RemotePeerInfo> peerInfo, Properties conf) {
+    public Process (int peerId, String address, int port, boolean hasFile, Collection<RemotePeerInfo> peerInfo, Properties conf) {
         _peerId = peerId;
+        _address = address;
+        _port = port;
         _hasFile = hasFile;
         _conf = conf;
         _fileMgr = new FileManager (_peerId, _conf);
         _peerMgr = new PeerManager (peerInfo, _conf);
+
     }
 
     @Override
     public void run() {
         try {
-            ServerSocket serverSocket = new ServerSocket (PORT);
+            ServerSocket serverSocket = new ServerSocket (_port);
             while (!_terminate.get()) {
                 try {
                     addConnHandler (new ConnectionHandler (_peerId,
