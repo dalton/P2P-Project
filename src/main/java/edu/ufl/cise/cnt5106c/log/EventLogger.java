@@ -17,13 +17,8 @@ public class EventLogger {
         _logHelper = logHelper;
     }
 
-    public void connectionToPeer (int peerId) {
-        final String msg = getLogMsgHeader() + " makes a connection to Peer %d.";
-        _logHelper.info (String.format (msg, peerId));
-    }
-
-    public void connectionFromPeer (int peerId) {
-        final String msg = getLogMsgHeader() + " makes a connection to Peer %d.";
+    public void peerConnection (int peerId, boolean isConnectingPeer) {
+        final String msg = getLogMsgHeader() + (isConnectingPeer ? " makes a connection to Peer %d." : " is connected from Peer %d.");
         _logHelper.info (String.format (msg, peerId));
     }
 

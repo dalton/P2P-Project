@@ -3,6 +3,7 @@ package edu.ufl.cise.cnt5106c;
 import edu.ufl.cise.cnt5106c.log.LogHelper;
 import edu.ufl.cise.cnt5106c.io.ProtocolazibleObjectInputStream;
 import edu.ufl.cise.cnt5106c.io.ProtocolazibleObjectOutputStream;
+import edu.ufl.cise.cnt5106c.log.EventLogger;
 import edu.ufl.cise.cnt5106c.messages.Handshake;
 import edu.ufl.cise.cnt5106c.messages.Message;
 import java.io.IOException;
@@ -19,10 +20,12 @@ public class ConnectionHandler implements Runnable {
     private final ProtocolazibleObjectOutputStream _out;
     private final FileManager _fileMgr;
     private final PeerManager _peerMgr;
+    private final boolean _isConnectingPeer;
 
-    public ConnectionHandler (int peerId, Socket socket, FileManager fileMgr, PeerManager peerMgr) throws IOException {
+    public ConnectionHandler (int peerId, boolean isConnectingPeer, Socket socket, FileManager fileMgr, PeerManager peerMgr) throws IOException {
         _socket = socket;
         _peerId = peerId;
+        _isConnectingPeer = isConnectingPeer;
         _fileMgr = fileMgr;
         _peerMgr = peerMgr;
         _out = new ProtocolazibleObjectOutputStream (_socket.getOutputStream());
@@ -37,8 +40,10 @@ public class ConnectionHandler implements Runnable {
 
             // Handshake successful
             final int peerId = handshake.getPeerId();
-            final MessageHandler msgHandler = new MessageHandler (peerId, _fileMgr, _peerMgr);
-            Thread.currentThread().setName ("ConnHandler-" + peerId);
+            final EventLogger eventLogger = new EventLogger (_peerId);
+            eventLogger.peerConnection (peerId, _isConnectingPeer);
+            final MessageHandler msgHandler = new MessageHandler (peerId, _fileMgr, _peerMgr, eventLogger);
+            Thread.currentThread().setName (getClass().getName() + "-" + peerId);
             sendInternal (msgHandler.handle (handshake));
             while (true) {
                 try {

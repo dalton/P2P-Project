@@ -1,6 +1,7 @@
 package edu.ufl.cise.cnt5106c;
 
 import edu.ufl.cise.cnt5106c.conf.RemotePeerInfo;
+import edu.ufl.cise.cnt5106c.log.EventLogger;
 import edu.ufl.cise.cnt5106c.log.LogHelper;
 import edu.ufl.cise.cnt5106c.messages.Have;
 import java.io.IOException;
@@ -25,6 +26,7 @@ public class Process implements Runnable, FileManagerListener {
     private final Properties _conf;
     private final FileManager _fileMgr;
     private final PeerManager _peerMgr;
+    private final EventLogger _eventLogger;
     private final AtomicBoolean _fileCompleted = new AtomicBoolean (false);
     private final AtomicBoolean _peersFileCompleted = new AtomicBoolean (false);
     private final AtomicBoolean _terminate = new AtomicBoolean (false);
@@ -39,7 +41,7 @@ public class Process implements Runnable, FileManagerListener {
         _conf = conf;
         _fileMgr = new FileManager (_peerId, _conf);
         _peerMgr = new PeerManager (peerInfo, _conf);
-
+        _eventLogger = new EventLogger (peerId);
     }
 
     @Override
@@ -48,7 +50,7 @@ public class Process implements Runnable, FileManagerListener {
             ServerSocket serverSocket = new ServerSocket (_port);
             while (!_terminate.get()) {
                 try {
-                    addConnHandler (new ConnectionHandler (_peerId,
+                    addConnHandler (new ConnectionHandler (_peerId, false,
                             serverSocket.accept(), _fileMgr, _peerMgr));
                 }
                 catch (Exception e) {
@@ -67,7 +69,7 @@ public class Process implements Runnable, FileManagerListener {
             do {
                 RemotePeerInfo peer = iter.next();
                 try {
-                    if (addConnHandler (new ConnectionHandler (peer.getPeerId(),
+                    if (addConnHandler (new ConnectionHandler (peer.getPeerId(), true,
                             new Socket (peer._peerAddress, peer.getPort()), _fileMgr, _peerMgr))) {
                         iter.remove();
                     }

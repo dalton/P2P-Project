@@ -22,12 +22,12 @@ public class MessageHandler {
     private final int _remotePeerId;
     private final EventLogger _eventLogger;
 
-    MessageHandler (int remotePeerId, FileManager fileMgr, PeerManager peerMgr)
+    MessageHandler (int remotePeerId, FileManager fileMgr, PeerManager peerMgr, EventLogger eventLogger)
     {
         _fileMgr = fileMgr;
         _peerMgr = peerMgr;
         _remotePeerId = remotePeerId;
-        _eventLogger = new EventLogger (remotePeerId);
+        _eventLogger = eventLogger;
     }
 
     public Message handle (Handshake handshake) {
