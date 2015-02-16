@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.ufl.cise.cnt5106c.io;
 
 import edu.ufl.cise.cnt5106c.messages.Choke;
@@ -19,7 +14,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author Giacomo
+ * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
  */
 public class ProtocolazibleObjectInputStreamTest {
     

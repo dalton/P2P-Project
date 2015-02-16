@@ -1,9 +1,5 @@
 package edu.ufl.cise.cnt5106c.conf;
 
-import edu.ufl.cise.cnt5106c.conf.RemotePeerInfo;
-import edu.ufl.cise.cnt5106c.conf.PeerInfo;
-import edu.ufl.cise.cnt5106c.conf.PeerInfo;
-import edu.ufl.cise.cnt5106c.conf.RemotePeerInfo;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Collection;
