@@ -75,4 +75,8 @@ public class Message {
                 throw new Exception ("message type not handled: " + type.toString());
         }
     }
+
+    public byte[] get_payload() {
+        return _payload;
+    }
 }

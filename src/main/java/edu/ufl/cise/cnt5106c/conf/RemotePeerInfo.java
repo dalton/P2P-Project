@@ -13,6 +13,8 @@ import java.util.BitSet;
 
 public class RemotePeerInfo {
     public final String _peerId;
+
+
     public final String _peerAddress;
     public final String _peerPort;
     public final boolean _hasFile;
@@ -33,5 +35,12 @@ public class RemotePeerInfo {
 
     public int getPort() {
         return Integer.parseInt(_peerPort);
+    }
+    public String getPeerAddress() {
+        return _peerAddress;
+    }
+
+    public boolean hasFile() {
+        return _hasFile;
     }
 }

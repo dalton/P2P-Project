@@ -22,16 +22,19 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class peerProcess implements Runnable {
 
-    private final static int PORT = 6008;
     private final int _peerId;
+    private final String _address;
+    private final int _port;
     private final boolean _hasFile;
     private final Properties _conf;
     private final FileManager _fileMgr;
     private final PeerManager _peerMgr;
     Collection<ConnectionHandler> _connHandlers = Collections.newSetFromMap(new ConcurrentHashMap<ConnectionHandler,Boolean>());
 
-    private peerProcess(int peerId, boolean hasFile, Collection<RemotePeerInfo> peerInfo, Properties conf) {
+    private peerProcess(int peerId, String address, int port, boolean hasFile, Collection<RemotePeerInfo> peerInfo, Properties conf) {
         _peerId = peerId;
+        _address = address;
+        _port = port;
         _hasFile = hasFile;
         _conf = conf;
         _fileMgr = new FileManager (_peerId, _conf);
@@ -42,7 +45,7 @@ public class peerProcess implements Runnable {
     public void run() {
 
         try {
-            ServerSocket serverSocket = new ServerSocket (PORT);
+            ServerSocket serverSocket = new ServerSocket (_port);
             while (true) {
                 try {
                     addConnHandler (new ConnectionHandler (_peerId,
@@ -64,8 +67,9 @@ public class peerProcess implements Runnable {
             do {
                 RemotePeerInfo peer = iter.next();
                 try {
+                    LogHelper.getLogger().info("Connecting to: " + peer.getPeerId() + "on: " + peer.getPeerAddress()+ ":" + peer.getPort());
                     if (addConnHandler (new ConnectionHandler (peer.getPeerId(),
-                            new Socket (peer._peerAddress, peer.getPort()), _fileMgr, _peerMgr))) {
+                            new Socket (peer.getPeerAddress(), peer.getPort()), _fileMgr, _peerMgr))) {
                         iter.remove();
                     }
                 }
@@ -91,11 +95,13 @@ public class peerProcess implements Runnable {
     }
 
     public static void main (String[] args) {
-        if (args.length != 2) {
-            LogHelper.getLogger().severe("the number of arguments passed to the program is " + args.length + " while it should be 2.\nUsage: java peerProcess peerId hasPeer");
+        if (args.length != 1) {
+            LogHelper.getLogger().severe("the number of arguments passed to the program is " + args.length + " while it should be 1.\nUsage: java peerProcess peerId");
         }
-        final int peerId = Integer.parseInt (args[0]);
-        final boolean hasFile = Boolean.parseBoolean (args[1]);
+        int peerId = Integer.parseInt (args[0]);
+        String address = "localhost";
+        int port = 6008;
+        boolean hasFile = false;
 
         // Read properties
         Reader commReader = null;
@@ -110,9 +116,12 @@ public class peerProcess implements Runnable {
             peerInfo.read (peerReader);
             for (RemotePeerInfo peer : peerInfo.getPeerInfo()) {
                 if (peerId == peer.getPeerId()) {
-                    break;
+                    address = peer.getPeerAddress();
+                    port = peer.getPort();
+                    hasFile = peer.hasFile();
                 }
                 else {
+                    LogHelper.getLogger().info("Adding peer: " + peer.getPeerId());
                     peersToConnectTo.add(peer);
                 }
             }
@@ -128,10 +137,11 @@ public class peerProcess implements Runnable {
             catch (Exception e) {}
         }
 
-        peerProcess peerProc = new peerProcess (peerId, hasFile, peerInfo.getPeerInfo(), commProp);
+        peerProcess peerProc = new peerProcess (peerId, address, port, hasFile, peerInfo.getPeerInfo(), commProp);
         Thread t = new Thread (peerProc);
         t.setName ("peerProcess-" + peerId);
         t.start();
+        LogHelper.getLogger().info("STARTED: " + peerId + "on: " + address + ":" + port);
 
         peerProc.connectToPeers (peersToConnectTo);
     }

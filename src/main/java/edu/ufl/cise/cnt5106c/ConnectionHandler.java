@@ -7,7 +7,9 @@ import edu.ufl.cise.cnt5106c.messages.Type;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Arrays;
 
 /**
  *
@@ -29,9 +31,12 @@ public class ConnectionHandler implements Runnable {
     public void run() {
         try {
             DataInputStream bin = new DataInputStream (_socket.getInputStream());
-            ObjectOutputStream out = new ObjectOutputStream (_socket.getOutputStream());
-            out.writeObject (new Handshake (_peerId));
+            OutputStream out = _socket.getOutputStream();
+            LogHelper.getLogger().info("Writing handshake");
+            out.write((new Handshake(_peerId)).get_handshake_message());
+            LogHelper.getLogger().info("Waiting to read handshake");
             Handshake handshake = Handshake.readMessage (bin);
+            LogHelper.getLogger().info("Sending handshake message");
             send (_msgHandler.handle (handshake), out);
 
             // Handshake successful
@@ -74,9 +79,9 @@ public class ConnectionHandler implements Runnable {
         return Message.readMessage (length - 1, Type.valueOf(bin.readByte()), bin);
     }
 
-    private static void send (Message message, ObjectOutputStream out) throws IOException {
+    private static void send (Message message, OutputStream out) throws IOException {
         if (message != null) {
-            out.writeObject (message);
+            out.write (message.get_payload());
         }
     }
 }
