@@ -114,6 +114,7 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
 
     @Override
     public synchronized void fileCompleted() {
+        _eventLogger.fileDownloadedMessage();
         _fileCompleted.set (true);
         if (_fileCompleted.get() && _peersFileCompleted.get()) {
             // The process can quit
