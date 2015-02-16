@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author Giacomo
+ * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
  */
 public class ProtocolazibleObjectInputStreamTest {
     
