@@ -8,6 +8,9 @@ build:
 build-rel:
 	ant -f build/build.xml
 
+zip-rel: clean
+	ant -f build/build.xml zip
+
 clean:
-	rm -rf *.log *.log*
+	rm -rf *.log *.log* *.zip
 	mvn clean dependency:copy-dependencies

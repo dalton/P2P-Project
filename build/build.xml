@@ -52,4 +52,7 @@
 	<delete file="${lib.dir}/${output-jar}"/>
     </target>
 
+    <target name="zip">
+	    <zip destfile="${ant.project.name}.zip" basedir=".." excludes="**/*.log,target,nbactions.xml,**/.vagrant/**,**/*~,**/*.sh,**/.bat,**/*git*,**/Vagrantfile" />
+    </target>
 </project>
