@@ -52,9 +52,19 @@
 	<delete file="${lib.dir}/${output-jar}"/>
 	<echo message="Removing ${ant.project.name}.zip" />
 	<delete file="${ant.project.name}.zip" /> 
+	<echo message="Removing ${ant.project.name}.tar" />
+	<delete file="${ant.project.name}.tar" /> 
     </target>
 
-    <target name="zip" depends="clean">
-	    <zip destfile="${ant.project.name}.zip" basedir=".." excludes="**/*.log,**/target/**,**/nbactions.xml,**/.vagrant/**,**/*~,**/*.sh,**/*.bat,**/*git*,**/Vagrantfile,**/antcache" />
+    <target name="tar" depends="clean">
+	    <!--tar destfile="${ant.project.name}.tar" basedir=".." excludes="**/*.log,**/target/**,**/nbactions.xml,**/.vagrant/**,**/*~,**/*.sh,**/*.bat,**/*git*,**/Vagrantfile,**/antcache,src/test/**,**/*.cfg/**/pom.xml" /-->
+	    <tar destfile="${ant.project.name}.tar" excludes="**/*~" >
+		<tarfileset dir="src/main" prefix="src/main" />
+		<tarfileset dir="build" prefix="build" />
+                <tarfileset dir=".">
+			<include name="Makefile" />
+		</tarfileset>
+        </tar>
     </target>
+
 </project>
