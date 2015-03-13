@@ -50,9 +50,11 @@
         <delete dir="${build.dir}"/>
 	<echo message="Removing ${lib.dir}/${output-jar}" />
 	<delete file="${lib.dir}/${output-jar}"/>
+	<echo message="Removing ${ant.project.name}.zip" />
+	<delete file="${ant.project.name}.zip" /> 
     </target>
 
-    <target name="zip">
-	    <zip destfile="${ant.project.name}.zip" basedir=".." excludes="**/*.log,target,nbactions.xml,**/.vagrant/**,**/*~,**/*.sh,**/.bat,**/*git*,**/Vagrantfile" />
+    <target name="zip" depends="clean">
+	    <zip destfile="${ant.project.name}.zip" basedir=".." excludes="**/*.log,**/target/**,**/nbactions.xml,**/.vagrant/**,**/*~,**/*.sh,**/*.bat,**/*git*,**/Vagrantfile,**/antcache" />
     </target>
 </project>
