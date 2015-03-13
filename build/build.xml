@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<project name="CNT5106C" default="all" basedir="..">
+
+    <!-- Initialization -->
+    <target name="init">
+        <tstamp>
+            <format property="YEAR_MONTH_DAY" pattern="yyyy-MM-dd"/>
+            <format property="YEAR" pattern="yyyy"/>
+        </tstamp>
+        <property environment="env"/>
+        <property name="ant.build.javac.source" value="1.7" />
+        <property name="ant.build.javac.target" value="1.7" />
+        <property name="output-jar" value="CNT5106C-1.0.jar" />
+        <property name="build.dir" location="./build/antcache"/>
+        <property name="lib.dir" location="./target" />
+        <property name="build.compiler" value="modern" />
+        <property name="debug" value="on" />
+        <property name="optimize" value="on" />
+        <property name="deprecation" value="on" />
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${lib.dir}"/>
+    </target>
+
+    <!-- Default target -->
+    <target name="all" depends="build" description="Builds all the project"/>
+
+    <!-- Compile all the java files -->
+    <target name="compile" depends="init" description="Compile java files">
+        <echo message="Starting compilation" />
+        <javac destdir="${build.dir}" debug="${debug}" verbose="${verbose}" optimize="${optimize}" source="${ant.build.javac.source}" deprecation="${deprecation}" includeantruntime="false">
+            <src path= "./src/main/java" />
+            <include name="edu/ufl/cise/cnt5106c/**/*.java" />
+        </javac>
+    </target>
+
+    <!-- Create the jar file -->
+    <target name="build" depends="compile" description="Make the JAR file">
+        <echo message="Building JAR file" />
+        <delete file="${lib.dir}/${output-jar}" failonerror="false" />
+        <jar jarfile="${lib.dir}/${output-jar}">
+            <fileset dir="${build.dir}">
+                <include name="edu/ufl/cise/cnt5106c/**/*.class" />
+            </fileset>
+        </jar>
+        <echo message="JAR file created in ${lib.dir}" />
+    </target>
+
+    <target name="clean" depends="init" description="Cleans all the project">
+        <echo message="Removing ${build.dir}" />
+        <delete dir="${build.dir}"/>
+	<echo message="Removing ${lib.dir}/${output-jar}" />
+	<delete file="${lib.dir}/${output-jar}"/>
+    </target>
+
+</project>
