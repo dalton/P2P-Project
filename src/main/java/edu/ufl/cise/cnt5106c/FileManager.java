@@ -1,6 +1,8 @@
 package edu.ufl.cise.cnt5106c;
 
 import edu.ufl.cise.cnt5106c.conf.CommonProperties;
+import edu.ufl.cise.cnt5106c.file.Destination;
+
 import java.util.BitSet;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -12,13 +14,15 @@ import java.util.Properties;
  */
 public class FileManager {
 
-    private static final String partsLocation = "";
+
     private final int _peerId;
     private BitSet _receivedParts;
     private final Collection<FileManagerListener> _listeners = new LinkedList<>();
+    private Destination _destination;
+    final double dPartSize;
 
     FileManager (int peerId, Properties conf) {
-        this (peerId, partsLocation,
+        this (peerId,
                 conf.getProperty (CommonProperties.FileName.toString()),
                 Integer.parseInt(conf.getProperty(CommonProperties.FileSize.toString())), 
                 Integer.parseInt(conf.getProperty(CommonProperties.PieceSize.toString())));
@@ -27,15 +31,15 @@ public class FileManager {
     /**
      *
      * @param peerId the id of this peer
-     * @param partsLocation the path of where the file parts will be stored
      * @param fileName the file being downloaded
      * @param fileSize the size of the file being downloaded
      * @param partSize the maximum size of a part
      */
-    FileManager (int peerId, String partsLocation, String fileName, int fileSize, int partSize) {
+    FileManager (int peerId, String fileName, int fileSize, int partSize) {
         _peerId = peerId;
-        final double dPartSize = partSize;
+        dPartSize = partSize;
         _receivedParts = new BitSet ((int) Math.ceil (fileSize/dPartSize));
+        _destination = new Destination(fileName);
     }
 
     /**
@@ -50,6 +54,7 @@ public class FileManager {
         _receivedParts.set (partIdx);
 
         if (isNewPiece) {
+            _destination.writeByteArrayAsFilePart(part, partIdx);
             for (FileManagerListener listener : _listeners) {
                 listener.pieceArrived (partIdx);
             }
@@ -72,19 +77,34 @@ public class FileManager {
     byte[] getPiece (int partId) {
         // TODO: implement this: we can decide whether to load the file in memory,
         // or whether to read it from file each time we receive a request.
-        // The firt case may be faster, but for very large files it may not be
+        // The first case may be faster, but for very large files it may not be
         // suitable...  Open for discussion though, I don't think it really matters
         // for the project, so we may as well implement the simpler strategy
         // (which probably is loading the whole thing into a byte array...)
-        return null;
+
+        // FIXME: Adam says: I'm leaning towards getting it from the file.
+        // I don't think we're going to have a performance bottleneck and it
+        // simplifies the design (in my opinion)
+
+        byte[] piece = _destination.getPartAsByteArray(partId);
+        return piece;
     }
 
     public void registerListener (FileManagerListener listener) {
         _listeners.add (listener);
     }
 
+    public void splitFile(){
+        _destination.splitFile((int) dPartSize);
+    }
+
+    public byte[][] getAllPieces(){
+        return _destination.getAllPartsAsByteArrays();
+    }
+
     private boolean isFileCompleted() {
         final int nextClearIdx = _receivedParts.nextClearBit(0);
         return ((nextClearIdx >= _receivedParts.length()) || (nextClearIdx < 0));
     }
+
 }
