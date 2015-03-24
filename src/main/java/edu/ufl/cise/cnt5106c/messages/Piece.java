@@ -1,6 +1,5 @@
 package edu.ufl.cise.cnt5106c.messages;
 
-import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
@@ -20,19 +19,17 @@ public class Piece extends Message {
     }
 
     public int getPieceIndex() {
-        return ByteBuffer.wrap(Arrays.copyOfRange(_payload, 0, 3)).order(ByteOrder.BIG_ENDIAN).getInt();
+        return ByteBuffer.wrap(Arrays.copyOfRange(_payload, 0, 4)).order(ByteOrder.BIG_ENDIAN).getInt();
     }
 
     public byte[] getContent() {
-        return Arrays.copyOfRange(_payload, 4, _payload.length-1);
+        return Arrays.copyOfRange(_payload, 4, _payload.length);
     }
 
-    private static byte[] join (int pieceIdx, byte[] second) {
-        ByteArrayOutputStream bof = new ByteArrayOutputStream (4 + (second == null ? 0 : second.length));
-        bof.write(pieceIdx);
-        if ((second != null) && (second.length > 0)) {
-            bof.write(second, 0, second.length);
-        }
-        return bof.toByteArray();
+    private static byte[] join (int pieceIdx, byte[] second) { 
+        byte[] concat = new byte[4 + (second == null ? 0 : second.length)];
+        System.arraycopy(ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(pieceIdx).array(), 0, concat, 0, 4);
+        System.arraycopy(second, 0, concat, 4, second.length);
+        return concat;
     }
 }

@@ -25,8 +25,9 @@ public class ProtocolazibleObjectInputStream extends DataInputStream implements 
     @Override
     public Object readObject() throws ClassNotFoundException, IOException {
         if (_handshakeReceived) {
-            int length = readInt();
-            Message message = Message.getInstance (length - 1, Type.valueOf (readByte()));
+            final int length = readInt();
+            final int payloadLength = length - 1; // subtract 1 for the message type
+            Message message = Message.getInstance(payloadLength, Type.valueOf (readByte()));
             message.read(this);
             return message;
         }
