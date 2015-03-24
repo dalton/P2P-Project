@@ -3,6 +3,7 @@ package edu.ufl.cise.cnt5106c.io;
 import edu.ufl.cise.cnt5106c.messages.Choke;
 import edu.ufl.cise.cnt5106c.messages.Handshake;
 import edu.ufl.cise.cnt5106c.messages.Message;
+import edu.ufl.cise.cnt5106c.messages.Piece;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import org.junit.After;
@@ -37,8 +38,20 @@ public class ProtocolazibleObjectInputStreamTest {
     public void tearDown() {
     }
 
+    private byte[] getPayload() {
+        byte[] payload = new byte[4];
+        for (int i = 0; i < payload.length; i++) {
+            payload[i] = 'a';
+        }
+        return payload;
+    }
+
+    /**
+     * Test of readObject method, of class ProtocolazibleObjectInputStream.
+     * @throws java.lang.Exception
+     */
     @Test
-    public void readObject() throws Exception {
+    public void testReadObject() throws Exception {
         System.out.println("readObject");
         
         ByteArrayOutputStream bytes = new ByteArrayOutputStream(2048);
@@ -49,6 +62,8 @@ public class ProtocolazibleObjectInputStreamTest {
         out.writeObject (hs);
         Message choke = new Choke();
         out.writeObject (choke);
+        Piece piece = new Piece (1, getPayload());
+        out.writeObject (piece);
 
         // Read and Test
         ProtocolazibleObjectInputStream in = new ProtocolazibleObjectInputStream (new ByteArrayInputStream (bytes.toByteArray()));
@@ -56,5 +71,8 @@ public class ProtocolazibleObjectInputStreamTest {
         assertEquals(hs.getPeerId(), hResult.getPeerId());
         Message result = (Message) in.readObject();
         assertEquals (choke.getType(), result.getType());
-    } 
+        result = (Message) in.readObject();
+        assertEquals (piece.getType(), result.getType());
+        assertEquals (piece.getPieceIndex(), ((Piece) result).getPieceIndex());
+    }
 }

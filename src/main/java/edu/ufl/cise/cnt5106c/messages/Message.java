@@ -21,7 +21,8 @@ public class Message implements Protocolazible  {
     }
 
     Message (Type type, byte[] payload) {
-        _length = (payload == null ? 0 : payload.length) + 1;
+        _length = (payload == null ? 0 : payload.length)
+                + 1; // for the _type
         _type = type;
         _payload = payload;
     }
@@ -32,10 +33,9 @@ public class Message implements Protocolazible  {
 
     @Override
     public void read (DataInputStream in) throws IOException {
-        byte[] payload = null;
-        if ((_length -1 )> 0) { // Subtract the length of the _type field
-            if (in.read(payload, 0, _length) < _length) {
-                throw new IOException("payload bytes read are less than " + _length);
+        if ((_payload != null) && (_payload.length) > 0) {
+            if (in.read(_payload, 0, _payload.length) < _payload.length) {
+                throw new IOException("payload bytes read are less than " + _payload.length);
             }
         }
     }
