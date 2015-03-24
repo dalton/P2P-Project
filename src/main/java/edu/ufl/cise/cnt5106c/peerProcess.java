@@ -70,5 +70,11 @@ public class peerProcess {
 
         LogHelper.getLogger().debug ("Connecting to " + peersToConnectTo.size() + " peeers.");
         peerProc.connectToPeers (peersToConnectTo);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+//        peerProc.testStuff();
     }
 }

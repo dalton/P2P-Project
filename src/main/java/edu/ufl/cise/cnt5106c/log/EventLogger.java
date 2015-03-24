@@ -49,7 +49,7 @@ public class EventLogger {
 
     public void pieceDownloadedMessage (int peerId, int pieceIdx, int currNumberOfPieces) {
         final String msg = getLogMsgHeader() + " has downloaded the piece %d from peer %d. Now the number of pieces it has is %d.";
-        _logHelper.info (String.format (msg, peerId, peerId));
+        _logHelper.info (String.format (msg, pieceIdx, peerId, currNumberOfPieces));
     }
 
     public void fileDownloadedMessage () {

@@ -67,6 +67,7 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
                 try {
                     LogHelper.getLogger().debug(Thread.currentThread().getName() + ": Peer " + _peerId + " listening on port " + _port + ".");
                     addConnHandler(new ConnectionHandler(_peerId, serverSocket.accept(), _fileMgr, _peerMgr));
+
                 } catch (Exception e) {
                     LogHelper.getLogger().warning(e);
                 }
@@ -76,6 +77,30 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
         } finally {
             LogHelper.getLogger().warning(Thread.currentThread().getName()
                     + " terminating, TCP connections will no longer be accepted.");
+        }
+    }
+
+    public void testStuff(){
+        LogHelper.getLogger().info("done waiting");
+        // FIXME: just checking to see if we can send files
+        if (_hasFile) {
+            LogHelper.getLogger().info("has file");
+            byte[][] pieces = _fileMgr.getAllPieces();
+            for (ConnectionHandler ch : _connHandlers) {
+                LogHelper.getLogger().info("has connection handlers");
+                for (int i = 0; i < pieces.length; i++) {
+                    LogHelper.getLogger().info("sending part: " + i);
+                    try {
+                        Piece piece = new Piece(i, pieces[i]);
+                        ch.send(piece);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            LogHelper.getLogger().info("Finished");
+            LogHelper.getLogger().info("Connection Handler Count: " + _connHandlers.size());
+            LogHelper.getLogger().info("Pieces Count: " + pieces.length);
         }
     }
 
@@ -101,27 +126,11 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
             // Keep trying until they all connect
             iter = peersToConnectTo.iterator();
             try {
-                Thread.sleep(5);
+                Thread.sleep(500);
             } catch (InterruptedException ex) {
             }
         }
-        LogHelper.getLogger().debug("done waiting");
-        // FIXME: just checking to see if we can send files
-        if (_hasFile) {
-            LogHelper.getLogger().debug("has file");
-            byte[][] pieces = _fileMgr.getAllPieces();
-            for (ConnectionHandler ch : _connHandlers) {
-                LogHelper.getLogger().debug("has connection handlers");
-                for (int i = 0; i < pieces.length; i++) {
-                    LogHelper.getLogger().debug("sending part");
-                    try {
-                        ch.send(new Piece(i, pieces[i]));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
+
     }
 
     @Override

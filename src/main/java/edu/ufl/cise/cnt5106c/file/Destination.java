@@ -22,8 +22,8 @@ public class Destination {
     }
 
     public byte[][] getAllPartsAsByteArrays(){
-        FileFilter fileFilter = new NameFileFilter("^\\d+$");
-        File[] files = _partsDir.listFiles(fileFilter);
+        FileFilter fileFilter = new NameFileFilter("^.*$");
+        File[] files = _partsDir.listFiles();
         byte[][] ba = new byte[files.length][getPartAsByteArray(1).length];
         for (int i = 0; i < files.length; i++) {
             ba[Integer.parseInt(files[i].getName())] = getByteArrayFromFile(files[i]);
