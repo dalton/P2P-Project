@@ -1,9 +1,9 @@
 package edu.ufl.cise.cnt5106c.log;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
+import java.io.*;
+import java.util.Properties;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 /**
@@ -13,8 +13,18 @@ import java.util.logging.Logger;
 public class LogHelper {
     private static final LogHelper _log = new LogHelper (Logger.getLogger("CNT5106C"));
     static {
-        // TODO: configure logger here
+        // FIXME: configure logger here
         _log._l.setLevel(Level.ALL);
+        Properties _preferences=new Properties();
+        try{
+            FileInputStream _configFile=new FileInputStream("/conf/ConfigureLogger.properties");
+            _preferences.load(_configFile);
+            LogManager.getLogManager().readConfiguration(_configFile);
+        }catch (IOException _exceptionConfigure)
+        {
+            System.out.println("WARNING: Could not open configuration file");
+            System.out.println("WARNING: Logging could not configure(Console Output)");
+        }
     }
     private final Logger _l;
 

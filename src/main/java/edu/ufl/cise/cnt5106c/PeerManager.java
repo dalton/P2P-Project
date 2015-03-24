@@ -44,7 +44,7 @@ public class PeerManager implements Runnable {
                 try { Thread.sleep (_optimisticUnchokingInterval); }
                 catch (InterruptedException ex) {}
                 synchronized (this) {
-                    // Randomly shuffle the remaning neighbors, and select some to optimistically unchoke
+                    // Randomly shuffle the remaining neighbors, and select some to optimistically unchoke
                     if (!_chokedNeighbors.isEmpty()) {
                         Collections.shuffle (_chokedNeighbors);
                         _optmisticallyUnchokedPeers.addAll (_chokedNeighbors.subList (0,
