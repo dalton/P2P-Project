@@ -1,10 +1,12 @@
 package edu.ufl.cise.cnt5106c.file;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.NameFileFilter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
+
 
 /**
  * Created by adalton on 3/22/15.
@@ -22,8 +24,13 @@ public class Destination {
     }
 
     public byte[][] getAllPartsAsByteArrays(){
-        FileFilter fileFilter = new NameFileFilter("^.*$");
-        File[] files = _partsDir.listFiles();
+       // FileFilter fileFilter = new NameFileFilter("^.*$");
+        File[] files = _partsDir.listFiles (new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return true;
+            }
+        });
         byte[][] ba = new byte[files.length][getPartAsByteArray(1).length];
         for (int i = 0; i < files.length; i++) {
             ba[Integer.parseInt(files[i].getName())] = getByteArrayFromFile(files[i]);
