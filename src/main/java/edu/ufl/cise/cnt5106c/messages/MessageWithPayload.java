@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 /**
  *
- * @author Giacomo
+ * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
  */
 public class MessageWithPayload extends Message 
 {
