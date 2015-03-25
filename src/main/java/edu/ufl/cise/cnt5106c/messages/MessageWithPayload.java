@@ -10,10 +10,6 @@ import java.util.Arrays;
  */
 public class MessageWithPayload extends Message 
 {
-    MessageWithPayload (Type type) {
-        super (type);
-    }
-
     MessageWithPayload (Type type, byte[] payload) {
         super (type, payload);
     }
