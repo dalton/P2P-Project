@@ -6,11 +6,11 @@ package edu.ufl.cise.cnt5106c.messages;
  */
 public class Have extends MessageWithPayload {
 
-    public Have (int pieceIdx) {
-        this (getPieceIndexBytes (pieceIdx));
+    Have (byte[] pieceIdx) {
+        super (Type.Have, pieceIdx);
     }
 
-    public Have (byte[] pieceIdx) {
-        super (Type.Have, pieceIdx);
+    public Have (int pieceIdx) {
+        this (getPieceIndexBytes (pieceIdx));
     }
 }

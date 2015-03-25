@@ -6,11 +6,11 @@ package edu.ufl.cise.cnt5106c.messages;
  */
 public class Request extends MessageWithPayload {
 
-    public Request (int pieceIdx) {
-        this (getPieceIndexBytes (pieceIdx));
+    Request (byte[] pieceIdx) {
+        super (Type.Request, pieceIdx);
     }
 
-    public Request (byte[] pieceIdx) {
-        super (Type.Request, pieceIdx);
+    public Request (int pieceIdx) {
+        this (getPieceIndexBytes (pieceIdx));
     }
 }
