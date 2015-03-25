@@ -64,7 +64,7 @@ public class MessageHandler {
             }
             case Have: {
                 Have have = (Have) msg;
-                final int pieceId = have.getPartId();
+                final int pieceId = have.getPieceIndex();
                 _eventLogger.haveMessage (_remotePeerId, pieceId);
                 _peerMgr.haveArrived (_remotePeerId, pieceId);
 
@@ -92,9 +92,9 @@ public class MessageHandler {
             case Request: {
                 Request request = (Request) msg;
                 if (_peerMgr.canUploadToPeer (_remotePeerId)) {
-                    byte[] piece = _fileMgr.getPiece (request.getPartId());
+                    byte[] piece = _fileMgr.getPiece (request.getPieceIndex());
                     if (piece != null) {
-                        return new Piece (request.getPartId(), piece);
+                        return new Piece (request.getPieceIndex(), piece);
                     }
                 }
                 break;
