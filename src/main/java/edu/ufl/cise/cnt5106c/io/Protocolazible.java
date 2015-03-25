@@ -11,7 +11,7 @@ import java.io.IOException;
  *
  * Differently from Externalizable, Protocolazible does not even add to the
  * stream the identity of the class, since the protocol has its own mechanism
- * to recognize the type of the message.
+ * to recognize the message type.
  *
  * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
  */
