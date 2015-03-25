@@ -16,11 +16,11 @@ public class Message implements Protocolazible  {
     private final Type _type;
     protected byte[] _payload;
 
-    Message (Type type) {
+    protected Message (Type type) {
         this (type, null);
     }
 
-    Message (Type type, byte[] payload) {
+    protected Message (Type type, byte[] payload) {
         _length = (payload == null ? 0 : payload.length)
                 + 1; // for the _type
         _type = type;
