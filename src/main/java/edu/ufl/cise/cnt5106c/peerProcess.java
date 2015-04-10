@@ -75,6 +75,6 @@ public class peerProcess {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-//        peerProc.testStuff();
+        peerProc.testStuff();
     }
 }

@@ -7,6 +7,7 @@ import edu.ufl.cise.cnt5106c.messages.Have;
 import edu.ufl.cise.cnt5106c.messages.Piece;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Collection;
@@ -80,7 +81,7 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
         }
     }
 
-    public void testStuff(){
+    public void testStuff() {
         LogHelper.getLogger().info("done waiting");
         // FIXME: just checking to see if we can send files
         if (_hasFile) {
@@ -110,12 +111,15 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
             do {
                 RemotePeerInfo peer = iter.next();
                 try {
+                    LogHelper.getLogger().debug(" Connecting to peer: " + peer.getPeerId()
+                            + " (" + peer._peerAddress + ":" + peer.getPort() + ")");
                     if (addConnHandler(new ConnectionHandler(_peerId, true, peer.getPeerId(),
                             new Socket(peer._peerAddress, peer.getPort()), _fileMgr, _peerMgr))) {
                         iter.remove();
-                        LogHelper.getLogger().debug(" Connecting to peer: " + peer.getPeerId()
-                                + " (" + peer._peerAddress + ":" + peer.getPort() + ")");
-
+                    }
+                } catch (ConnectException ex) {
+                    if (ex.getMessage().equals("Connection refused")) {
+                        LogHelper.getLogger().info("Failed to connect to: " + peer.getPeerId());
                     }
                 } catch (IOException ex) {
                     LogHelper.getLogger().warning(ex);
@@ -154,9 +158,9 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
 
     @Override
     public synchronized void pieceArrived(int partIdx) {
-        for (ConnectionHandler connHanlder : _connHandlers) {
+        for (ConnectionHandler connHandler : _connHandlers) {
             try {
-                connHanlder.send(new Have(partIdx));
+                connHandler.send(new Have(partIdx));
             } catch (Exception ex) {
                 LogHelper.getLogger().warning(ex);
             }

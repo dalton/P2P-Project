@@ -36,6 +36,7 @@ public class ConnectionHandler implements Runnable {
         _expectedRemotePeerId = expectedRemotePeerId;
         _fileMgr = fileMgr;
         _peerMgr = peerMgr;
+        _peerMgr.initializeReceivedParts(_fileMgr.getReceivedParts());
         _out = new ProtocolazibleObjectOutputStream (_socket.getOutputStream());
     }
 
@@ -101,17 +102,17 @@ public class ConnectionHandler implements Runnable {
     public void send (final Message message) throws IOException {
         // TODO: revision this... Spawing a new thread each time may not be
         // very efficient
-        new Thread () {
-            @Override
-            public void run() {
+//        new Thread () {
+//            @Override
+//            public void run() {
                 try {
                     sendInternal (message);
                 }
                 catch (IOException ex) {
                     LogHelper.getLogger().warning(ex);
                 }
-            }
-        }.start();
+//            }
+//        }.start();
     }
 
     private synchronized void sendInternal (Message message) throws IOException {
