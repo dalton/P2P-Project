@@ -16,15 +16,15 @@ public class LogHelper {
         // FIXME: configure logger here
         _log._l.setLevel(Level.ALL);
         Properties _preferences=new Properties();
-        try{
-            FileInputStream _configFile=new FileInputStream("/conf/ConfigureLogger.properties");
-            _preferences.load(_configFile);
-            LogManager.getLogManager().readConfiguration(_configFile);
-        }catch (IOException _exceptionConfigure)
-        {
-            System.out.println("WARNING: Could not open configuration file");
-            System.out.println("WARNING: Logging could not configure(Console Output)");
-        }
+//        try{
+//            FileInputStream _configFile=new FileInputStream("/conf/ConfigureLogger.properties");
+//            _preferences.load(_configFile);
+//            LogManager.getLogManager().readConfiguration(_configFile);
+//        }catch (IOException _exceptionConfigure)
+//        {
+//            System.out.println("WARNING: Could not open configuration file");
+//            System.out.println("WARNING: Logging could not configure(Console Output)");
+//        }
     }
     private final Logger _l;
 

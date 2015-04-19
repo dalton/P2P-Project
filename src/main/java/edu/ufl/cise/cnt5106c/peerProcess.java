@@ -68,7 +68,7 @@ public class peerProcess {
         t.setName ("peerProcess-" + peerId);
         t.start();
 
-        LogHelper.getLogger().debug ("Connecting to " + peersToConnectTo.size() + " peeers.");
+        LogHelper.getLogger().debug ("Connecting to " + peersToConnectTo.size() + " peers.");
         peerProc.connectToPeers (peersToConnectTo);
         try {
             Thread.sleep(500);

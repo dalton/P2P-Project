@@ -51,6 +51,7 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
 
         if (_hasFile) {
             _fileMgr.splitFile();
+            _fileMgr.setHasFile(true);
         }
 
         // Start PeerMnager Thread
@@ -105,6 +106,7 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
     }
 
     void connectToPeers(Collection<RemotePeerInfo> peersToConnectTo) {
+        LogHelper.getLogger().debug ("Connecting !!!!!!!!!!!");
         Iterator<RemotePeerInfo> iter = peersToConnectTo.iterator();
         while (iter.hasNext()) {
             do {
