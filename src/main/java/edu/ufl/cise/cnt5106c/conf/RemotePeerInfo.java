@@ -30,6 +30,7 @@ public class RemotePeerInfo {
         _peerPort = pPort;
         _hasFile = hasFile;
         _bytesDownloadedFrom = 0;
+        _receivedParts = new BitSet();
     }
 
     public int getPeerId() {

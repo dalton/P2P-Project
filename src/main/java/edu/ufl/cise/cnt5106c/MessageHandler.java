@@ -82,11 +82,6 @@ public class MessageHandler {
             case BitField: {
                 Bitfield bitfield = (Bitfield) msg;
                 BitSet bitset = bitfield.getBitSet();
-                LogHelper.getLogger().info("bitset info below");
-                LogHelper.getLogger().info("bitset size: " + bitset.size());
-                for (int i = 0; i < bitset.size(); i++) {
-                    LogHelper.getLogger().info("bitset: " + i + " is " + bitset.get(i));
-                }
                 _peerMgr.bitfieldArrived(_remotePeerId, bitset);
 
                 bitset.andNot(_fileMgr.getReceivedParts());

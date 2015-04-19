@@ -90,15 +90,7 @@ public class PeerManager implements Runnable {
 
     synchronized void bitfieldArrived(int peerId, BitSet bitfield) {
         RemotePeerInfo rpi = searchPeer(peerId);
-        LogHelper.getLogger().info("Remote peer info: " + rpi.getPeerId());
-        LogHelper.getLogger().info("Remote peer info: " + rpi._peerAddress);
-        LogHelper.getLogger().info("Remote peer info: " + rpi._receivedParts);
-        LogHelper.getLogger().info("Bitfield size: " + bitfield.size());
-//        searchPeer (peerId)._receivedParts =  bitfield;
-        int i = peerIndex(peerId);
-        RemotePeerInfo peer = _peers.get(i);
-        peer._receivedParts = bitfield;
-        _peers.set(i, peer);
+        searchPeer(peerId)._receivedParts = bitfield;
 
         neighborsCompletedDownload();
     }
@@ -121,22 +113,7 @@ public class PeerManager implements Runnable {
         throw new RuntimeException("Peer " + peerId + " not found");
     }
 
-    synchronized private int peerIndex(int peerId) {
-        for (int i = 0; i < _peers.size(); i++) {
-            RemotePeerInfo peer = _peers.get(i);
-            if (peer.getPeerId() == peerId) {
-                return i;
-            }
-        }
-        throw new RuntimeException("Peer " + peerId + " not found");
-    }
-
     synchronized private void neighborsCompletedDownload() {
-        LogHelper.getLogger().info("Number of peers: " + _peers.size());
-        for (RemotePeerInfo peer : _peers) {
-            LogHelper.getLogger().info("Peer id: " + peer.getPeerId());
-        }
-
         for (RemotePeerInfo peer : _peers) {
             if (peer._receivedParts.length() > peer._receivedParts.cardinality()) {
                 // at least one neighbor has not completed
