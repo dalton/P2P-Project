@@ -4,8 +4,10 @@ import edu.ufl.cise.cnt5106c.log.LogHelper;
 import edu.ufl.cise.cnt5106c.io.ProtocolazibleObjectInputStream;
 import edu.ufl.cise.cnt5106c.io.ProtocolazibleObjectOutputStream;
 import edu.ufl.cise.cnt5106c.log.EventLogger;
+import edu.ufl.cise.cnt5106c.messages.Choke;
 import edu.ufl.cise.cnt5106c.messages.Handshake;
 import edu.ufl.cise.cnt5106c.messages.Message;
+import edu.ufl.cise.cnt5106c.messages.Unchoke;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -22,6 +24,7 @@ public class ConnectionHandler implements Runnable {
     private final PeerManager _peerMgr;
     private final boolean _isConnectingPeer;
     private final int _expectedRemotePeerId;
+    private int _remotePeerId;
 
     public ConnectionHandler (int localPeerId, Socket socket, FileManager fileMgr, PeerManager peerMgr)
             throws IOException {
@@ -37,6 +40,11 @@ public class ConnectionHandler implements Runnable {
         _fileMgr = fileMgr;
         _peerMgr = peerMgr;
         _out = new ProtocolazibleObjectOutputStream (_socket.getOutputStream());
+        _remotePeerId = -1;
+    }
+
+    public int getRemotePeerId() {
+        return _remotePeerId;
     }
 
     @Override
@@ -49,16 +57,16 @@ public class ConnectionHandler implements Runnable {
 
             // Receive and check handshake
             Handshake rcvdHandshake = (Handshake) in.readObject();
-            final int remotePeerId = rcvdHandshake.getPeerId();
-            Thread.currentThread().setName (getClass().getName() + "-" + remotePeerId);
+            _remotePeerId = rcvdHandshake.getPeerId();
+            Thread.currentThread().setName (getClass().getName() + "-" + _remotePeerId);
             final EventLogger eventLogger = new EventLogger (_localPeerId);
-            final MessageHandler msgHandler = new MessageHandler (remotePeerId, _fileMgr, _peerMgr, eventLogger);
-            if (_isConnectingPeer && (remotePeerId != _expectedRemotePeerId)) {
-                throw new Exception ("Remote peer id " + remotePeerId+ " does not match with the expected id: " + _expectedRemotePeerId);
+            final MessageHandler msgHandler = new MessageHandler (_remotePeerId, _fileMgr, _peerMgr, eventLogger);
+            if (_isConnectingPeer && (_remotePeerId != _expectedRemotePeerId)) {
+                throw new Exception ("Remote peer id " + _remotePeerId + " does not match with the expected id: " + _expectedRemotePeerId);
             }
 
             // Handshake successful
-            eventLogger.peerConnection(remotePeerId, _isConnectingPeer);
+            eventLogger.peerConnection(_remotePeerId, _isConnectingPeer);
 
             sendInternal(msgHandler.handle(rcvdHandshake));
             while (true) {
@@ -117,5 +125,33 @@ public class ConnectionHandler implements Runnable {
         if (message != null) {
             _out.writeObject (message);
         }
+    }
+
+    void choke() {
+        new Thread () {
+            @Override
+            public void run() {
+                try {
+                    sendInternal (new Choke());
+                }
+                catch (IOException ex) {
+                    LogHelper.getLogger().warning(ex);
+                }
+            }
+        }.start();
+    }
+
+    void unchoke() {
+        new Thread () {
+            @Override
+            public void run() {
+                try {
+                    sendInternal (new Unchoke());
+                }
+                catch (IOException ex) {
+                    LogHelper.getLogger().warning(ex);
+                }
+            }
+        }.start();
     }
 }
