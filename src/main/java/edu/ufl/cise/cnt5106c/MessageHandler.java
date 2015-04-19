@@ -9,6 +9,7 @@ import edu.ufl.cise.cnt5106c.messages.NotInterested;
 import edu.ufl.cise.cnt5106c.messages.Piece;
 import edu.ufl.cise.cnt5106c.messages.Request;
 import edu.ufl.cise.cnt5106c.log.EventLogger;
+import edu.ufl.cise.cnt5106c.log.LogHelper;
 
 import java.util.BitSet;
 
@@ -110,7 +111,11 @@ public class MessageHandler {
         if (_choked) {
             int partId = _fileMgr.getPartToRequest(_peerMgr.getReceivedParts(_remotePeerId));
             if (partId >= 0) {
+                LogHelper.getLogger().debug("Requestion part " + partId + " to " + _remotePeerId);
                 return new Request (partId);
+            }
+            else {
+                LogHelper.getLogger().debug("No parts can be requested to " + _remotePeerId);
             }
         }
         return null;
