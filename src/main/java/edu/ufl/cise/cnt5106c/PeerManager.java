@@ -3,6 +3,7 @@ package edu.ufl.cise.cnt5106c;
 import edu.ufl.cise.cnt5106c.conf.CommonProperties;
 import edu.ufl.cise.cnt5106c.conf.RemotePeerInfo;
 import edu.ufl.cise.cnt5106c.log.LogHelper;
+
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collection;
@@ -85,6 +86,23 @@ public class PeerManager implements Runnable {
         peer.set_interested(true);
     }
 
+    synchronized List<RemotePeerInfo> getInterestedPeers() {
+        ArrayList<RemotePeerInfo> interestedPeers = new ArrayList<RemotePeerInfo>();
+        for (RemotePeerInfo peer : _peers){
+            if(peer.isInterested()){
+                interestedPeers.add(peer);
+            }
+        }
+        return interestedPeers;
+    }
+
+    synchronized boolean isInteresting(int peerId, BitSet bitset) {
+        RemotePeerInfo peer  = searchPeer(peerId);
+        BitSet pBitset = (BitSet) peer._receivedParts.clone();
+        pBitset.andNot(bitset);
+        return ! pBitset.isEmpty();
+    }
+
     synchronized void receivedPart(int peerId, int size) {
         searchPeer(peerId)._bytesDownloadedFrom += size;
     }
@@ -152,16 +170,10 @@ public class PeerManager implements Runnable {
             } catch (InterruptedException ex) {
             }
             synchronized (this) {
-                List<RemotePeerInfo> interestedPeers = new ArrayList(_peers);
-                Iterator<RemotePeerInfo> iter = interestedPeers.iterator();
-                for (RemotePeerInfo peer = iter.next(); iter.hasNext(); peer = iter.next()) {
-                    if (!peer.isInterested()) {
-                        iter.remove();
-                    }
-                }
 
-                LogHelper.getLogger().debug (new StringBuilder ("Interested peers: ")
-                        .append (LogHelper.getPeersAsString (interestedPeers)).toString());
+                List<RemotePeerInfo> interestedPeers = getInterestedPeers();
+                LogHelper.getLogger().severe(new StringBuilder("Interested peers: ")
+                        .append(LogHelper.getPeersAsString(interestedPeers)).toString());
 
                 if (_randomlySelectPreferred.get()) {
                     // Randomly shuffle the neighbors

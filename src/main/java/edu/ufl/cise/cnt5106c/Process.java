@@ -4,6 +4,7 @@ import edu.ufl.cise.cnt5106c.conf.RemotePeerInfo;
 import edu.ufl.cise.cnt5106c.log.EventLogger;
 import edu.ufl.cise.cnt5106c.log.LogHelper;
 import edu.ufl.cise.cnt5106c.messages.Have;
+import edu.ufl.cise.cnt5106c.messages.NotInterested;
 import edu.ufl.cise.cnt5106c.messages.Piece;
 
 import java.io.IOException;
@@ -168,6 +169,9 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
         for (ConnectionHandler connHanlder : _connHandlers) {
             try {
                 connHanlder.send(new Have(partIdx));
+                if (!_peerMgr.isInteresting(connHanlder.getPeerId(), _fileMgr.getReceivedParts())) {
+                    connHanlder.send(new NotInterested());
+                }
             } catch (Exception ex) {
                 LogHelper.getLogger().warning(ex);
             }
