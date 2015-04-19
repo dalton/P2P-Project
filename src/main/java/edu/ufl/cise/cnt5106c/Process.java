@@ -9,6 +9,7 @@ import edu.ufl.cise.cnt5106c.messages.Piece;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -41,7 +42,14 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
         _hasFile = hasFile;
         _conf = conf;
         _fileMgr = new FileManager(_peerId, _conf);
-        _peerMgr = new PeerManager(peerInfo, _conf);
+        ArrayList<RemotePeerInfo> remotePeers = new ArrayList<>(peerInfo);
+        for (RemotePeerInfo ri : remotePeers) {
+            if (Integer.parseInt(ri._peerId) == peerId) {
+                remotePeers.remove(ri);
+                break;
+            }
+        }
+        _peerMgr = new PeerManager(remotePeers, _conf);
         _eventLogger = new EventLogger(peerId);
     }
 
@@ -51,7 +59,7 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
 
         if (_hasFile) {
             _fileMgr.splitFile();
-            _fileMgr.setHasFile(true);
+            _fileMgr.setHasFile();
         }
 
         // Start PeerMnager Thread
