@@ -4,6 +4,7 @@ import edu.ufl.cise.cnt5106c.conf.CommonProperties;
 import edu.ufl.cise.cnt5106c.conf.RemotePeerInfo;
 import edu.ufl.cise.cnt5106c.log.LogHelper;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collection;
@@ -75,7 +76,18 @@ public class PeerManager implements Runnable {
     }
 
     synchronized void addInterestPeer(int _remotePeerId) {
-        // TODO: implement this
+        RemotePeerInfo peer = searchPeer(_remotePeerId);
+        peer.set_interested(true);
+    }
+
+    synchronized List<RemotePeerInfo> getInterestedPeers() {
+        ArrayList<RemotePeerInfo> interestedPeers = new ArrayList<RemotePeerInfo>();
+        for (RemotePeerInfo peer : _peers){
+            if(peer.is_interested()){
+                interestedPeers.add(peer);
+            }
+        }
+        return interestedPeers;
     }
 
     synchronized void receivedPart(int peerId, int size) {

@@ -17,7 +17,7 @@ public class LogHelper {
         _log._l.setLevel(Level.ALL);
         Properties _preferences=new Properties();
 //        try{
-//            FileInputStream _configFile=new FileInputStream("/conf/ConfigureLogger.properties");
+//            FileInputStream _configFile=new FileInputStream("conf/ConfigureLogger.properties");
 //            _preferences.load(_configFile);
 //            LogManager.getLogManager().readConfiguration(_configFile);
 //        }catch (IOException _exceptionConfigure)

@@ -114,7 +114,6 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
     }
 
     void connectToPeers(Collection<RemotePeerInfo> peersToConnectTo) {
-        LogHelper.getLogger().debug ("Connecting !!!!!!!!!!!");
         Iterator<RemotePeerInfo> iter = peersToConnectTo.iterator();
         while (iter.hasNext()) {
             do {

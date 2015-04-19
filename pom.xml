@@ -12,7 +12,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>us.ihmc.cubism.CubismRunner</mainClass>
+                            <mainClass>edu.ufl.cise.cnt5106c.peerProcess</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

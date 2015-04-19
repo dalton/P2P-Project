@@ -58,9 +58,7 @@ public class ConnectionHandler implements Runnable {
             }
 
             // Handshake successful
-            LogHelper.getLogger().info ("Hi There!");
             eventLogger.peerConnection(remotePeerId, _isConnectingPeer);
-            LogHelper.getLogger().info("Bye There!");
 
             sendInternal(msgHandler.handle(rcvdHandshake));
             while (true) {

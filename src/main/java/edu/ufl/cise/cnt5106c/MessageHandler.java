@@ -31,14 +31,9 @@ public class MessageHandler {
     }
 
     public Message handle(Handshake handshake) {
-        LogHelper.getLogger().info("Hi There!  I'm getting the received parts");
         BitSet bitset = _fileMgr.getReceivedParts();
-        LogHelper.getLogger().info("Hi there! I'm thinking about sending the bitfield");
         if (!bitset.isEmpty()) {
-            LogHelper.getLogger().info("Hi there! Sending it!");
             return (new Bitfield(bitset));
-        } else {
-            LogHelper.getLogger().info("Hi there! We don't have bits");
         }
         return null;
     }

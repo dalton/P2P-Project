@@ -19,6 +19,7 @@ public class RemotePeerInfo {
     public final boolean _hasFile;
     public int _bytesDownloadedFrom;
     public BitSet _receivedParts;
+    private boolean _interested;
 
     public RemotePeerInfo (int peerId) {
         this (Integer.toString (peerId), "127.0.0.1", "0", false);
@@ -31,6 +32,7 @@ public class RemotePeerInfo {
         _hasFile = hasFile;
         _bytesDownloadedFrom = 0;
         _receivedParts = new BitSet();
+        _interested = false;
     }
 
     public int getPeerId() {
@@ -47,6 +49,14 @@ public class RemotePeerInfo {
 
     public boolean hasFile() {
         return _hasFile;
+    }
+
+    public boolean is_interested() {
+        return _interested;
+    }
+
+    public void set_interested(boolean _interested) {
+        this._interested = _interested;
     }
 
     @Override
