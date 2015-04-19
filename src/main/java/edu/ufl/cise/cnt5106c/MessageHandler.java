@@ -1,6 +1,5 @@
 package edu.ufl.cise.cnt5106c;
 
-import edu.ufl.cise.cnt5106c.log.LogHelper;
 import edu.ufl.cise.cnt5106c.messages.Bitfield;
 import edu.ufl.cise.cnt5106c.messages.Handshake;
 import edu.ufl.cise.cnt5106c.messages.Have;
