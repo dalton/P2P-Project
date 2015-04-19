@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -212,11 +211,12 @@ public class PeerManager implements Runnable {
                     listener.chockedPeers(RemotePeerInfo.toIdSet(chokedPeers));
                     listener.unchockedPeers(RemotePeerInfo.toIdSet(_preferredPeers));
                 }
-                
+
                 // Select the remaining neighbors for choking
                 if (_numberOfPreferredNeighbors >= interestedPeers.size()) {
                     _optUnchoker.setChokedNeighbors(new ArrayList<RemotePeerInfo>());
-                } else {
+                }
+                else {
                     _optUnchoker.setChokedNeighbors(interestedPeers.subList(_numberOfPreferredNeighbors, interestedPeers.size()));
                 }
             }
