@@ -70,7 +70,7 @@ public class PeerManager implements Runnable {
         _numberOfPreferredNeighbors = Integer.parseInt(
                 conf.getProperty(CommonProperties.NumberOfPreferredNeighbors.toString()));
         _unchokingInterval = Integer.parseInt(
-                conf.getProperty(CommonProperties.NumberOfPreferredNeighbors.toString())) * 1000;
+                conf.getProperty(CommonProperties.UnchokingInterval.toString())) * 1000;
         _optUnchoker = new OptimisticUnchoker(conf);
     }
 
