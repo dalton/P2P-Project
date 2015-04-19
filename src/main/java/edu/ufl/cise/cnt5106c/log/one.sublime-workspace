@@ -1,0 +1,1073 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"sore",
+				"sorted_cities"
+			],
+			[
+				"re",
+				"req_file"
+			],
+			[
+				"co",
+				"consideration"
+			],
+			[
+				"pop",
+				"population"
+			],
+			[
+				"ra",
+				"raw_input"
+			],
+			[
+				"ba",
+				"base_pop"
+			],
+			[
+				"da",
+				"data_12"
+			],
+			[
+				"sort",
+				"sorted_cities"
+			],
+			[
+				"p",
+				"print"
+			],
+			[
+				"qu",
+				"quest2"
+			],
+			[
+				"S",
+				"sorted_cities"
+			],
+			[
+				"len",
+				"len_c"
+			],
+			[
+				"sor",
+				"sorted_cities"
+			],
+			[
+				"so",
+				"sort_cons_city"
+			],
+			[
+				"po",
+				"pop_10"
+			],
+			[
+				"pr",
+				"print"
+			],
+			[
+				"print",
+				"println"
+			],
+			[
+				"d",
+				"dequeue"
+			],
+			[
+				"de",
+				"dequeue"
+			],
+			[
+				"e",
+				"equals"
+			],
+			[
+				"pa",
+				"pairwiseSwap"
+			],
+			[
+				"s",
+				"swapLinks"
+			],
+			[
+				"sw",
+				"swapData"
+			],
+			[
+				"in",
+				"inorder"
+			],
+			[
+				"insert",
+				"insertStart"
+			],
+			[
+				"queue",
+				"queued"
+			],
+			[
+				"pu",
+				"public"
+			],
+			[
+				"Li",
+				"ListNode"
+			],
+			[
+				"Lis",
+				"List"
+			],
+			[
+				"ins",
+				"insertAt"
+			],
+			[
+				"T",
+				"T"
+			],
+			[
+				"prin",
+				"println"
+			],
+			[
+				"arr",
+				"arrSize"
+			],
+			[
+				"has",
+				"hashFunc1"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"contents": "Transcript for fall 2014 will be available shortly.\n\n02/14/15-\n1. NetBoss\n2. eBay\n	http://jobs.ebaycareers.com/silicon-valley/internship/jobid5968923-software-engineer-intern-ebay-jobs\n	http://jobs.ebaycareers.com/silicon-valley/internship/jobid6229463-analytics-intern-ebay-jobs\n	http://jobs.ebaycareers.com/silicon-valley/internship/jobid5968917-software-engineering-intern-ebay-jobs\n	http://jobs.ebaycareers.com/silicon-valley/internship/jobid5972056-software-engineer-intern-ebay-jobs\n3. Symantec -?\n4. Sales Force -?\n5. HP",
+			"settings":
+			{
+				"buffer_size": 527,
+				"line_ending": "Unix",
+				"name": "Transcript for fall 2014 will be available shortly"
+			}
+		},
+		{
+			"file": "/home/shivansh/java/try/programReads.txt",
+			"settings":
+			{
+				"buffer_size": 64,
+				"line_ending": "Unix",
+				"name": "http://www.geeksforgeeks.org/longest-palindrome-su"
+			}
+		},
+		{
+			"file": "/home/shivansh/java/try1.java",
+			"settings":
+			{
+				"buffer_size": 242,
+				"line_ending": "Unix",
+				"name": "public class try1{"
+			}
+		},
+		{
+			"file": "/home/shivansh/java/ques/llar.java",
+			"settings":
+			{
+				"buffer_size": 1862,
+				"line_ending": "Unix",
+				"name": "//Reverse alt elements ll"
+			}
+		},
+		{
+			"file": "/home/shivansh/java/ques/pairwiseSwap.java",
+			"settings":
+			{
+				"buffer_size": 1551,
+				"line_ending": "Unix",
+				"name": "//PairwiseSwapping"
+			}
+		},
+		{
+			"file": "/home/shivansh/java/ucb/linkeduc.java",
+			"settings":
+			{
+				"buffer_size": 1377,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/shivansh/java/try/QueQues.java",
+			"settings":
+			{
+				"buffer_size": 849,
+				"line_ending": "Unix",
+				"name": "class que{"
+			}
+		},
+		{
+			"file": "/home/shivansh/java/try/Stacks.java",
+			"settings":
+			{
+				"buffer_size": 660,
+				"line_ending": "Unix",
+				"name": "class Stacks{"
+			}
+		},
+		{
+			"file": "/home/shivansh/java/try/BFS1.java",
+			"settings":
+			{
+				"buffer_size": 1299,
+				"line_ending": "Unix",
+				"name": "class Node<T>{"
+			}
+		},
+		{
+			"file": "/home/shivansh/java/try/BFS2.java",
+			"settings":
+			{
+				"buffer_size": 1318,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/shivansh/java/try/Trial1.java",
+			"settings":
+			{
+				"buffer_size": 260,
+				"line_ending": "Unix",
+				"name": "class Trial1{"
+			}
+		},
+		{
+			"file": "/home/shivansh/java/try/BFS3.java",
+			"settings":
+			{
+				"buffer_size": 1280,
+				"line_ending": "Unix",
+				"name": "class BFS3{"
+			}
+		},
+		{
+			"file": "/home/shivansh/java/ucb/BinTree.java",
+			"settings":
+			{
+				"buffer_size": 1247,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/shivansh/java/comp/parser.py",
+			"settings":
+			{
+				"buffer_size": 3227,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/shivansh/gitSet.txt",
+			"settings":
+			{
+				"buffer_size": 208,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "1. Iterator vs Iterable -\n\nAn Iterable is a simple representation of a series of elements that can be iterated over. It does not have any iteration state such as a \"current element\". Instead, it has one method that produces an Iterator.\nAn Iterator is the object with iteration state. It lets you check if it has more elements using hasNext() and move to the next element (if any) using next().\nTypically, an Iterable should be able to produce any number of valid Iterators.\n\nAn implementation of Iterable is one that provides an Iterator of itself:\npublic interface Iterable<T>\n{\n    Iterator<T> iterator();\n}\n\nAn iterator is a simple way of allowing some to loop through a collection of data without assignment privileges (though with ability to remove).\npublic interface Iterator<E>\n{\n    boolean hasNext();\n    E next();\n    void remove();\n}\n\nNOTE - \na. You should almost never implement both Iterable and Iterator in the same class. They do different things. An iterator is naturally stateful - as you iterate using it, it has to update its view of the world. An iterable, however, only needs to be able to create new iterators. In particular, you could have several iterators working over the same original iterable at the same time.\nb. The most important consideration is whether the item in question should be able to be traversed more than once. This is because you can always rewind an Iterable by calling iterator() again, but there is no way to rewind an Iterator.\n\nFibonacci Heap -\n\nHeap - A heap is a specialized tree-based data structure that satisfies the heap property: If A is a parent node of B then the key of node A is ordered with respect to the key of node B with the same ordering applying across the heap. Heaps can be classified further as either a \"max heap\" or a \"min heap\". In a max heap, the keys of parent nodes are always greater than or equal to those of the children and the highest key is in the root node.\n\nTree - A tree is a widely used abstract data type (ADT) or data structure implementing this ADT that simulates a hierarchical tree structure, with a root value and subtrees of children, represented as a set of linked nodes.\n\nFibonacci heap is a heap data structure consisting of a collection of trees. It has a better amortized running time than a binomial heap.\nFind-minimum is O(1) amortized time. Operations insert, decrease key, and merge (union) work in constant amortized time. Operations delete and delete minimum work in O(log n) amortized time. This means that starting from an empty data structure, any sequence of 'a' operations from the first group and 'b' operations from the second group would take O(a + b log n) time. In a binomial heap such a sequence of operations would take O((a + b) log (n)) time. A Fibonacci heap is thus better than a binomial heap when b is asymptotically smaller than a.\nUsing Fibonacci heaps for priority queues improves the asymptotic running time of important algorithms, such as Dijkstra's algorithm for computing the shortest path between two nodes in a graph.\n\nOperations - \nTo allow fast deletion and concatenation, the roots of all trees are linked using a circular, doubly linked list. The children of each node are also linked using such a list. For each node, we maintain its number of children and whether the node is marked. Moreover we maintain a pointer to the root containing the minimum key.\n>Find minimum is now trivial because we keep the pointer to the node containing it. It does not change the potential of the heap, therefore both actual and amortized cost is constant.\n>Merge is implemented simply by concatenating the lists of tree roots of the two heaps. This can be done in constant time and the potential does not change, leading again to constant amortized time.\n>Insert works by creating a new heap with one element and doing merge. This takes constant time, and the potential increases by one, because the number of trees increases. The amortized cost is thus still constant.\n>Extract minimum (same as delete minimum) operates in three phases. \n First Phase - Take the root containing the minimum element and remove it. Its children will become roots of new trees. If the number of children was d, it takes time O(d) to process all new roots and the potential increases by d−1. Therefore the amortized running time of this phase is O(d) = O(log n).\n Second Phase - Decrease the number of roots by successively linking together roots of the same degree. When two roots u and v have the same degree, we make one of them a child of the other so that the one with the smaller key remains the root. Its degree will increase by one. This is repeated until every root has a different degree. To find trees of the same degree efficiently we use an array of length O(log n) in which we keep a pointer to one root of each degree. When a second root is found of the same degree, the two are linked and the array is updated. The actual running time is O(log n + m) where m is the number of roots at the beginning of the second phase.\n Third phase - Check each of the remaining roots and find the minimum. This takes O(log n) time and the potential does not change. \nThe overall amortized running time of extract minimum is therefore O(log n).\n>Decrease key will take the node, decrease the key and if the heap property becomes violated (the new key is smaller than the key of the parent), the node is cut from its parent. If the parent is not a root, it is marked. If it has been marked already, it is cut as well and its parent is marked. We continue upwards until we reach either the root or an unmarked node. In the process we create some number, say k, of new trees. <Each of these new trees except possibly the first one was marked originally but as a root it will become unmarked - Did not get this>. The actual time to perform the cutting was O(k), therefore (again with a sufficiently large choice of c - constant) the amortized running time is constant.\n>Delete can be implemented simply by decreasing the key of the element to be deleted to minus infinity, thus turning it into the minimum of the whole heap. Then we call extract minimum to remove it. The amortized running time of this operation is O(log n).\n\nI think I am a quick learner and I can adapt easily making excellent use of my research capabilities to deliver exceptional results. I certainly possess a combination of skills and project experience that would make me a great asset to this team.\n\nAs a child I always wondered what the VISA logo on my father's credit card meant. So finally when I have the opportunity to know more about its intricacies of working I am more than excited to become a part of a global organization that handles more than 56000 transactions per second\n.",
+			"file": "/home/shivansh/java/points.txt",
+			"file_size": 6225,
+			"file_write_time": 130701463478982668,
+			"settings":
+			{
+				"buffer_size": 6759,
+				"line_ending": "Unix",
+				"name": "1. Iterator vs Iterable -"
+			}
+		},
+		{
+			"contents": "-> Broadcom\n1. SW Development BT/NFC - 32435BR - http://jobs.broadcom.com/job/San-Diego-Intern-SW-Development-BTNFC-CA-92101/221109300/ <> C/C++/Windows MFC/Perl/BT or NFC usage test cases\n2. NFC - 33103BR - http://jobs.broadcom.com/job/San-Diego-Intern-NFC-%28Summer-2015%29-CA-92101/248364600/ <> Wireless Protocols\n3. GPS - 33684BR - http://jobs.broadcom.com/job/Santa-Clara-Intern-GPS-%28Summer-2015%29-CA-95050/248364200/\n4. Bluetooth SW Testing - 33171BR - http://jobs.broadcom.com/job/San-Diego-Intern-Bluetooth-Software-Test-%28Summer-2015%29-CA-92101/248363900/\n5. Bluetooth Stack Testing - 33122BR,33760BR - http://jobs.broadcom.com/job/San-Diego-Intern-Bluetooth-Stack-Testing-%28Summer-2015%29-CA-92101/248363800/ <> C/TCL/Python/Comm protocols\n6. Software - 33508BR - http://jobs.broadcom.com/job/San-Diego-Intern-Software-%28Summer-2015%29-CA-92101/248364700/\n7. Software Dev/testing - 33393BR - http://jobs.broadcom.com/job/Sunnyvale-Intern-Software-Development-Testing-%28Summer-2015%29-CA-94085/245644600/ <> C/Linux OS Concepts/Networking protocols\n\n* KBP SW Development - 33559BR - http://jobs.broadcom.com/job/Santa-Clara-Intern-KBP-Software-Development-%28Summer-2015%29-CA-95050/242426500/ <> Python Parsing!!/Compiler design, logic design and Verilog\n\n1. IT Summer - 28240BR - http://jobs.broadcom.com/job/Irvine-Intern%2C-IT-Summer-2014-CA-92602/30424500/\n2. IT Summer - 28238BR - http://jobs.broadcom.com/job/Irvine-Intern%2C-Software-Engineer-Summer-2014-CA-92602/30425300/\n\n\nDuluth GA LOCAL ONLY - http://jobs.broadcom.com/job/Duluth-Intern-Software-Engineering-%28Summer-2015%29-GA-30026/251505000/",
+			"file": "/home/shivansh/App/CoList.txt",
+			"file_size": 1627,
+			"file_write_time": 130703947456057761,
+			"settings":
+			{
+				"buffer_size": 1626,
+				"line_ending": "Unix",
+				"name": "-> Broadcom"
+			}
+		},
+		{
+			"file": "/home/shivansh/BigIdeaCompetition/MicrosoftResources.txt",
+			"settings":
+			{
+				"buffer_size": 367,
+				"line_ending": "Unix",
+				"name": "Contact - mazer.rackham@outlookcom"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/media/shivansh/iNSaNe_iNTelLiGeNCe/Projects/Minor/Minor/MINOR PROJECT CSE/Codes/Streamcam/src/com/example/streamcam/TCPClient.java",
+		"/media/shivansh/iNSaNe_iNTelLiGeNCe/Projects/Minor/Minor/MINOR PROJECT CSE/Codes/wiro1/src/TCPServer.java",
+		"/media/shivansh/iNSaNe_iNTelLiGeNCe/Projects/Minor/Minor/MINOR PROJECT CSE/Codes/wiro1/src/ServerBoard.java",
+		"/home/shivansh/java/comp/parser.py",
+		"/home/shivansh/Downloads/parser.py",
+		"/media/shivansh/iNSaNe_iNTelLiGeNCe/Projects/ntpc/crawl/news.php",
+		"/media/shivansh/iNSaNe_iNTelLiGeNCe/Projects/ntpc/crawl/Crawler.php",
+		"/media/shivansh/iNSaNe_iNTelLiGeNCe/Projects/ntpc/crawl/homecr.php",
+		"/media/shivansh/iNSaNe_iNTelLiGeNCe/Projects/ntpc/crawl/books.php",
+		"/media/shivansh/iNSaNe_iNTelLiGeNCe/Projects/ntpc/crawl/home.html",
+		"/media/shivansh/iNSaNe_iNTelLiGeNCe/Projects/ntpc/crawl/crawl_d.php",
+		"/media/shivansh/iNSaNe_iNTelLiGeNCe/Projects/ADS/Dijikstra.java",
+		"/media/shivansh/tHe_oTHeR_tHInG/tO_sOrT/frm_the_main/SM/nono/nono_pro.c",
+		"/home/shivansh/java/try/UnChar.java",
+		"/home/shivansh/java/try/tryp.py",
+		"/home/shivansh/java/try/tryj.java",
+		"/home/shivansh/java/ucb/queued.java",
+		"/home/shivansh/java/try/Palindrome.java",
+		"/home/shivansh/java/try/LongestPSub.java",
+		"/home/shivansh/java/ucb/binarySearchTree.java",
+		"/home/shivansh/java/ucb/BinTree.java",
+		"/home/shivansh/java/ucb/DLink.java",
+		"/home/shivansh/java/ucb/linked.java",
+		"/home/shivansh/java/ucb/stacked.java",
+		"/home/shivansh/java/ucb/pascal.java",
+		"/home/shivansh/java/ques/try1.java",
+		"/media/shivansh/iNSaNe_iNTelLiGeNCe/Projects/DS Ebook/Trees/BST.C",
+		"/media/shivansh/iNSaNe_iNTelLiGeNCe/DESK/ZSM/Programs/java/infixTOpost.txt",
+		"/media/shivansh/iNSaNe_iNTelLiGeNCe/DESK/ZSM/Programs/Recursion/hannoi.c",
+		"/home/shivansh/CodeChef/tlg.py",
+		"/home/shivansh/CodeChef/tsort.py",
+		"/home/shivansh/java/CounterDemo.java",
+		"/home/shivansh/java/defaultCount/Counter.java",
+		"/home/shivansh/LetterJ.txt",
+		"/home/shivansh/java/ucb/javaSet.txt",
+		"/home/shivansh/java/ucb/linkeduc.java",
+		"/home/shivansh/java/ucb/linknode.java",
+		"/home/shivansh/java/linkeduc.java",
+		"/home/shivansh/java/linked.java",
+		"/home/shivansh/CodeCon/try11.py",
+		"/home/shivansh/CodeCon/try1.py",
+		"/home/shivansh/java/defaultCount/CounterDemo.java",
+		"/home/shivansh/java/Counter.java",
+		"/home/shivansh/try3.py",
+		"/home/shivansh/try2.py",
+		"/home/shivansh/try1.py",
+		"/home/shivansh/republicday.txt",
+		"/home/shivansh/proc/java/hash_code.java",
+		"/home/shivansh/proc/java/HashFunction.java",
+		"/media/shivansh/iNSaNe_iNTelLiGeNCe/Projects/Arduino/micro_pro2/micro_pro2.ino",
+		"/media/shivansh/iNSaNe_iNTelLiGeNCe/Projects/ntpc/source/source.htm",
+		"/media/shivansh/iNSaNe_iNTelLiGeNCe/Projects/ddos/prod.tcl",
+		"/media/shivansh/iNSaNe_iNTelLiGeNCe/Projects/ddos/help/help.tcl",
+		"/home/shivansh/nlp/outmsw.txt",
+		"/home/shivansh/nlp/temp.txt",
+		"/home/shivansh/nlp/pro.py",
+		"/home/shivansh/nlp/try.txt",
+		"/home/shivansh/nlp/outm.txt",
+		"/home/shivansh/nlp/out.txt",
+		"/home/shivansh/nlp/Makefile.make",
+		"/home/shivansh/nlp/hindi_sw.txt",
+		"/home/shivansh/proc/java/hash.java",
+		"/home/shivansh/proc/java/hello.java",
+		"/media/shivansh/tHe_oTHeR_oNE/Ol/Zu's XPS/C Drive/Desktop/source/source.htm",
+		"/home/shivansh/proc/python/hellp.py"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"crawlLinks",
+			"BinTree",
+			"updateNeighborsOfNode",
+			"dijkstra",
+			"findShortestPaths",
+			"addEdge",
+			"readInput",
+			"Graph",
+			"Graph<Integer>",
+			"readInput",
+			"graph",
+			"clear",
+			"cleanupArrays",
+			"();\n",
+			"t",
+			";\n",
+			"stack",
+			"new",
+			"T",
+			"ListNode<T>",
+			";\n",
+			"Node",
+			"file_ops",
+			"file_inp"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"BFS2",
+			"Node",
+			"int",
+			"",
+			"ListNode"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": true,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 17,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 527,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								52,
+								52
+							]
+						],
+						"settings":
+						{
+							"auto_name": "Transcript for fall 2014 will be available shortly",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/home/shivansh/java/try/programReads.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 64,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								64,
+								64
+							]
+						],
+						"settings":
+						{
+							"auto_name": "http://www.geeksforgeeks.org/longest-palindrome-su",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/home/shivansh/java/try1.java",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 242,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								79,
+								79
+							]
+						],
+						"settings":
+						{
+							"auto_name": "public class try1{",
+							"syntax": "Packages/Java/Java.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 13,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/home/shivansh/java/ques/llar.java",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1862,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								25,
+								25
+							]
+						],
+						"settings":
+						{
+							"auto_name": "//Reverse alt elements ll",
+							"syntax": "Packages/Java/Java.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 12,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/home/shivansh/java/ques/pairwiseSwap.java",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1551,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1509,
+								1509
+							]
+						],
+						"settings":
+						{
+							"auto_name": "//PairwiseSwapping",
+							"syntax": "Packages/Java/Java.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 17,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/home/shivansh/java/ucb/linkeduc.java",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1377,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								953,
+								953
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/Java.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 629.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 14,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "/home/shivansh/java/try/QueQues.java",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 849,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"auto_name": "class que{",
+							"syntax": "Packages/Java/Java.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 16,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "/home/shivansh/java/try/Stacks.java",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 660,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								385,
+								385
+							]
+						],
+						"settings":
+						{
+							"auto_name": "class Stacks{",
+							"syntax": "Packages/Java/Java.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 15,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "/home/shivansh/java/try/BFS1.java",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1299,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1219,
+								1219
+							]
+						],
+						"settings":
+						{
+							"auto_name": "class Node<T>{",
+							"syntax": "Packages/Java/Java.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 366.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 11,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "/home/shivansh/java/try/BFS2.java",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1318,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								667,
+								667
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/Java.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 510.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "/home/shivansh/java/try/Trial1.java",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 260,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								260,
+								260
+							]
+						],
+						"settings":
+						{
+							"auto_name": "class Trial1{",
+							"syntax": "Packages/Java/Java.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "/home/shivansh/java/try/BFS3.java",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1280,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								363,
+								363
+							]
+						],
+						"settings":
+						{
+							"auto_name": "class BFS3{",
+							"syntax": "Packages/Java/Java.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "/home/shivansh/java/ucb/BinTree.java",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1247,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1247,
+								1247
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/Java.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "/home/shivansh/java/comp/parser.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3227,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2721,
+								2721
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 14,
+					"file": "/home/shivansh/gitSet.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 208,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								76,
+								76
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 15,
+					"file": "/home/shivansh/java/points.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6759,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6759,
+								6759
+							]
+						],
+						"settings":
+						{
+							"auto_name": "1. Iterator vs Iterable -",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 16,
+					"file": "/home/shivansh/App/CoList.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1626,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1626,
+								1626
+							]
+						],
+						"settings":
+						{
+							"auto_name": "-> Broadcom",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 17,
+					"file": "/home/shivansh/BigIdeaCompetition/MicrosoftResources.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 367,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								107,
+								107
+							]
+						],
+						"settings":
+						{
+							"auto_name": "Contact - mazer.rackham@outlookcom",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 31.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 142.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"project": "one.sublime-project",
+	"replace":
+	{
+		"height": 72.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
