@@ -198,6 +198,7 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
     public void chockedPeers(Collection<Integer> chokedPeersIds) {
         for (ConnectionHandler ch : _connHandlers) {
             if (chokedPeersIds.contains(ch.getRemotePeerId())) {
+                LogHelper.getLogger().debug("Choking " + ch.getRemotePeerId());
                 ch.choke();
             }
         }
@@ -207,6 +208,7 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
     public void unchockedPeers(Collection<Integer> unchokedPeersIds) {
         for (ConnectionHandler ch : _connHandlers) {
             if (unchokedPeersIds.contains(ch.getRemotePeerId())) {
+                LogHelper.getLogger().debug("Unchoking " + ch.getRemotePeerId());
                 ch.unchoke();
             }
         }
