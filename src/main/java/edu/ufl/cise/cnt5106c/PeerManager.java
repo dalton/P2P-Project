@@ -3,6 +3,8 @@ package edu.ufl.cise.cnt5106c;
 import edu.ufl.cise.cnt5106c.conf.CommonProperties;
 import edu.ufl.cise.cnt5106c.conf.RemotePeerInfo;
 import edu.ufl.cise.cnt5106c.log.LogHelper;
+import edu.ufl.cise.cnt5106c.messages.Bitfield;
+
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collection;
@@ -13,7 +15,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Predicate;
 
 /**
  * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
@@ -89,6 +90,14 @@ public class PeerManager implements Runnable {
         return interestedPeers;
     }
 
+    synchronized boolean isInteresting(int peerId, BitSet bitset) {
+        RemotePeerInfo peer  = searchPeer(peerId);
+        BitSet pBitset = (BitSet) peer._receivedParts.clone();
+        pBitset.andNot(bitset);
+        return ! pBitset.isEmpty();
+    }
+
+
     synchronized void receivedPart(int peerId, int size) {
         searchPeer(peerId)._bytesDownloadedFrom += size;
     }
@@ -153,22 +162,10 @@ public class PeerManager implements Runnable {
             } catch (InterruptedException ex) {
             }
             synchronized (this) {
-                List<RemotePeerInfo> interestedPeers = new ArrayList(_peers);
+                List<RemotePeerInfo> interestedPeers = getInterestedPeers();
 
-                // Filter our uninterestreed peers                
-                interestedPeers.removeIf(new Predicate() {
-                    @Override
-                    public boolean test(Object t) {
-                        if (t instanceof RemotePeerInfo) {
-                            RemotePeerInfo peer = (RemotePeerInfo) t;
-                            return !peer.isInterested();
-                        }
-                        return false;
-                    }
-                });
-
-                LogHelper.getLogger().debug (new StringBuilder ("Interested peers: ")
-                        .append (LogHelper.getPeersAsString (interestedPeers)).toString());
+                LogHelper.getLogger().severe(new StringBuilder("Interested peers: ")
+                        .append(LogHelper.getPeersAsString(interestedPeers)).toString());
 
                 // Sort the peers in order of preference
                 Collections.sort(interestedPeers, new Comparator() {
