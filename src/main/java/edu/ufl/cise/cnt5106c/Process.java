@@ -185,4 +185,22 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
         }
         return true;
     }
+
+    @Override
+    public void chockedPeers(Collection<Integer> chokedPeersIds) {
+        for (ConnectionHandler ch : _connHandlers) {
+            if (chokedPeersIds.contains(ch.getRemotePeerId())) {
+                ch.choke();
+            }
+        }
+    }
+
+    @Override
+    public void unchockedPeers(Collection<Integer> unchokedPeersIds) {
+        for (ConnectionHandler ch : _connHandlers) {
+            if (unchokedPeersIds.contains(ch.getRemotePeerId())) {
+                ch.unchoke();
+            }
+        }
+    }
 }
