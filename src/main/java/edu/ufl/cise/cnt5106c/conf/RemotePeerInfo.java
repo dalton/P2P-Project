@@ -10,7 +10,10 @@
 package edu.ufl.cise.cnt5106c.conf;
 
 import java.util.BitSet;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class RemotePeerInfo {
     public final String _peerId;
@@ -82,5 +85,13 @@ public class RemotePeerInfo {
         return new StringBuilder (_peerId)
                 .append (" address:").append (_peerAddress)
                 .append(" port: ").append(_peerPort).toString();
+    }
+
+    public static Collection<Integer> toIdSet (Collection<RemotePeerInfo> peers) {
+        Set<Integer> ids = new HashSet<>();
+        for (RemotePeerInfo peer : peers) {
+            ids.add(peer.getPeerId());
+        }
+        return ids;
     }
 }
