@@ -124,7 +124,6 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
                             + " (" + peer._peerAddress + ":" + peer.getPort() + ")");
                     if (addConnHandler(new ConnectionHandler(_peerId, true, peer.getPeerId(),
                             new Socket(peer._peerAddress, peer.getPort()), _fileMgr, _peerMgr))) {
-
                         iter.remove();
                         LogHelper.getLogger().debug(" Connected to peer: " + peer.getPeerId()
                                 + " (" + peer._peerAddress + ":" + peer.getPort() + ")");
@@ -143,8 +142,6 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
             } catch (InterruptedException ex) {
             }
         }
-
-
     }
 
     @Override
@@ -188,7 +185,7 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
             }
 
         } else {
-            LogHelper.getLogger().severe("Peer " + connHandler.getPeerId() + " is trying to connect but a connection already exists");
+            LogHelper.getLogger().severe("Peer " + connHandler.getRemotePeerId() + " is trying to connect but a connection already exists");
         }
         return true;
     }
