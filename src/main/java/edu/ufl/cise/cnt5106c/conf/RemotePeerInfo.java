@@ -51,7 +51,7 @@ public class RemotePeerInfo {
         return _hasFile;
     }
 
-    public boolean is_interested() {
+    public boolean isInterested() {
         return _interested;
     }
 
