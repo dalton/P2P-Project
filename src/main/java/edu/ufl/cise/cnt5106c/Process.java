@@ -59,7 +59,7 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
 
         if (_hasFile) {
             _fileMgr.splitFile();
-            _fileMgr.setHasFile();
+            _fileMgr.setAllParts();
         }
 
         // Start PeerMnager Thread

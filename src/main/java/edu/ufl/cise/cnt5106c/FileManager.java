@@ -71,9 +71,9 @@ public class FileManager {
     }
 
     /**
-     * 
+     * Set all parts as received.
      */
-    public synchronized void setHasFile()
+    public synchronized void setAllParts()
     {
         for (int i = 0; i < _receivedParts.size(); i++) {
             _receivedParts.set(i,true);
