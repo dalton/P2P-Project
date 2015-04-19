@@ -68,10 +68,10 @@ public class peerProcess {
         t.setName ("peerProcess-" + peerId);
         t.start();
 
-        LogHelper.getLogger().debug ("Connecting to " + peersToConnectTo.size() + " peers.");
+        LogHelper.getLogger().severe ("Connecting to " + peersToConnectTo.size() + " peers.");
         peerProc.connectToPeers (peersToConnectTo);
         try {
-            Thread.sleep(500);
+            Thread.sleep(5);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

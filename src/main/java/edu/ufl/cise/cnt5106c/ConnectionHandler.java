@@ -43,7 +43,7 @@ public class ConnectionHandler implements Runnable {
         _remotePeerId = -1;
     }
 
-    public int getRemotePeerId() {
+    public int getRemotePeerId(){
         return _remotePeerId;
     }
 
@@ -57,6 +57,7 @@ public class ConnectionHandler implements Runnable {
 
             // Receive and check handshake
             Handshake rcvdHandshake = (Handshake) in.readObject();
+
             _remotePeerId = rcvdHandshake.getPeerId();
             Thread.currentThread().setName (getClass().getName() + "-" + _remotePeerId);
             final EventLogger eventLogger = new EventLogger (_localPeerId);
@@ -93,7 +94,7 @@ public class ConnectionHandler implements Runnable {
     @Override
     public boolean equals (Object obj) {
         if (obj instanceof ConnectionHandler) {
-            return ((ConnectionHandler) obj)._localPeerId == _localPeerId;
+            return ((ConnectionHandler) obj)._remotePeerId == _remotePeerId;
         }
         return false;
     }
