@@ -21,7 +21,7 @@ public class ConnectionHandler implements Runnable {
     private final FileManager _fileMgr;
     private final PeerManager _peerMgr;
     private final boolean _isConnectingPeer;
-    private final int _expectedRemotePeerId;
+    private int _expectedRemotePeerId;
 
     public ConnectionHandler (int localPeerId, Socket socket, FileManager fileMgr, PeerManager peerMgr)
             throws IOException {
@@ -39,6 +39,10 @@ public class ConnectionHandler implements Runnable {
         _out = new ProtocolazibleObjectOutputStream (_socket.getOutputStream());
     }
 
+    public int getPeerId(){
+        return _expectedRemotePeerId;
+    }
+
     @Override
     public void run() {
         try {
@@ -50,6 +54,7 @@ public class ConnectionHandler implements Runnable {
             // Receive and check handshake
             Handshake rcvdHandshake = (Handshake) in.readObject();
             final int remotePeerId = rcvdHandshake.getPeerId();
+            _expectedRemotePeerId = remotePeerId;
             Thread.currentThread().setName (getClass().getName() + "-" + remotePeerId);
             final EventLogger eventLogger = new EventLogger (_localPeerId);
             final MessageHandler msgHandler = new MessageHandler (remotePeerId, _fileMgr, _peerMgr, eventLogger);
@@ -85,7 +90,7 @@ public class ConnectionHandler implements Runnable {
     @Override
     public boolean equals (Object obj) {
         if (obj instanceof ConnectionHandler) {
-            return ((ConnectionHandler) obj)._localPeerId == _localPeerId;
+            return ((ConnectionHandler) obj)._expectedRemotePeerId == _expectedRemotePeerId;
         }
         return false;
     }

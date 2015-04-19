@@ -89,7 +89,7 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
         }
     }
 
-    public void testStuff(){
+    public void testStuff() {
         LogHelper.getLogger().info("done waiting");
         // FIXME: just checking to see if we can send files
         if (_hasFile) {
@@ -119,10 +119,14 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
             do {
                 RemotePeerInfo peer = iter.next();
                 try {
+
+                    LogHelper.getLogger().debug(" Connecting to peer: " + peer.getPeerId()
+                            + " (" + peer._peerAddress + ":" + peer.getPort() + ")");
                     if (addConnHandler(new ConnectionHandler(_peerId, true, peer.getPeerId(),
                             new Socket(peer._peerAddress, peer.getPort()), _fileMgr, _peerMgr))) {
+
                         iter.remove();
-                        LogHelper.getLogger().debug(" Connecting to peer: " + peer.getPeerId()
+                        LogHelper.getLogger().debug(" Connected to peer: " + peer.getPeerId()
                                 + " (" + peer._peerAddress + ":" + peer.getPort() + ")");
 
                     }
@@ -135,10 +139,11 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
             // Keep trying until they all connect
             iter = peersToConnectTo.iterator();
             try {
-                Thread.sleep(500);
+                Thread.sleep(5);
             } catch (InterruptedException ex) {
             }
         }
+
 
     }
 
@@ -175,13 +180,15 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
     private synchronized boolean addConnHandler(ConnectionHandler connHandler) {
         if (!_connHandlers.contains(connHandler)) {
             _connHandlers.add(connHandler);
-            new Thread(connHandler).run();
+            new Thread(connHandler).start();
             try {
                 wait(10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
+        } else {
+            LogHelper.getLogger().severe("Peer " + connHandler.getPeerId() + " is trying to connect but a connection already exists");
         }
         return true;
     }
