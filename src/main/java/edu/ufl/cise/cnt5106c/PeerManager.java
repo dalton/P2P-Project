@@ -55,6 +55,10 @@ public class PeerManager implements Runnable {
                                 Math.min(_numberOfOptimisticallyUnchokedNeighbors, _chokedNeighbors.size())));
                     }
                 }
+
+                for (PeerManagerListener listener : _listeners) {
+                    listener.unchockedPeers(RemotePeerInfo.toIdSet(_optmisticallyUnchokedPeers));
+                }
             }
         }
     }
@@ -188,6 +192,15 @@ public class PeerManager implements Runnable {
                 LogHelper.getLogger().debug (new StringBuilder ("Preferred peers: ")
                         .append (LogHelper.getPeersAsString (_preferredPeers)).toString());
 
+                Collection<RemotePeerInfo> chokedPeers = new LinkedList<>(interestedPeers);
+                chokedPeers.removeAll(_preferredPeers);
+
+                interestedPeers.removeAll(_preferredPeers);
+                for (PeerManagerListener listener : _listeners) {
+                    listener.chockedPeers(RemotePeerInfo.toIdSet(chokedPeers));
+                    listener.unchockedPeers(RemotePeerInfo.toIdSet(_preferredPeers));
+                }
+                
                 // Select the remaining neighbors for choking
                 if (_numberOfPreferredNeighbors >= interestedPeers.size()) {
                     _optUnchoker.setChokedNeighbors(new ArrayList<RemotePeerInfo>());
