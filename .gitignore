@@ -6,6 +6,7 @@ pom.xml.next
 release.properties
 
 files/**/*
+peer_*/**/*
 
 # NetBeans
 

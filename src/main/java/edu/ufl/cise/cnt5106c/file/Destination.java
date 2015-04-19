@@ -15,10 +15,10 @@ public class Destination {
 
     private File _file;
     private File  _partsDir;
-    private static final String partsLocation = "./files/parts/";
+    private static final String partsLocation = "files/parts/";
 
-    public Destination(String fileName){
-        _partsDir = new File(partsLocation + fileName);
+    public Destination(int peerId, String fileName){
+        _partsDir = new File("./peer_" + peerId + "/" + partsLocation + fileName);
         _partsDir.mkdirs();
         _file = new File(_partsDir.getParent() + "/../" + fileName);
     }
@@ -77,7 +77,6 @@ public class Destination {
         return fileBytes;
 
     }
-
 
     public void splitFile(int partSize){
         SplitFile sf = new SplitFile();

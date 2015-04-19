@@ -39,7 +39,7 @@ public class FileManager {
         _peerId = peerId;
         dPartSize = partSize;
         _receivedParts = new BitSet ((int) Math.ceil (fileSize/dPartSize));
-        _destination = new Destination(fileName);
+        _destination = new Destination(peerId, fileName);
     }
 
     /**
