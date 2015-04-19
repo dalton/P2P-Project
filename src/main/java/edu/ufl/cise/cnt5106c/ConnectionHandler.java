@@ -57,7 +57,6 @@ public class ConnectionHandler implements Runnable {
 
             // Receive and check handshake
             Handshake rcvdHandshake = (Handshake) in.readObject();
-
             _remotePeerId = rcvdHandshake.getPeerId();
             Thread.currentThread().setName (getClass().getName() + "-" + _remotePeerId);
             final EventLogger eventLogger = new EventLogger (_localPeerId);
