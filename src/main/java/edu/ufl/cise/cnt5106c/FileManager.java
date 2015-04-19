@@ -24,7 +24,8 @@ public class FileManager {
         this (peerId,
                 conf.getProperty (CommonProperties.FileName.toString()),
                 Integer.parseInt(conf.getProperty(CommonProperties.FileSize.toString())), 
-                Integer.parseInt(conf.getProperty(CommonProperties.PieceSize.toString())));
+                Integer.parseInt(conf.getProperty(CommonProperties.PieceSize.toString())),
+                Integer.parseInt(conf.getProperty(CommonProperties.UnchokingInterval.toString())) * 1000);
     }
 
     /**
@@ -34,11 +35,11 @@ public class FileManager {
      * @param fileSize the size of the file being downloaded
      * @param partSize the maximum size of a part
      */
-    FileManager (int peerId, String fileName, int fileSize, int partSize) {
+    FileManager (int peerId, String fileName, int fileSize, int partSize, long unchokingInterval) {
         _dPartSize = partSize;
         final int bitsetSize = (int) Math.ceil (fileSize/_dPartSize);
         _receivedParts = new BitSet (bitsetSize);
-        _partsBeingReq = new RequestedParts (bitsetSize);
+        _partsBeingReq = new RequestedParts (bitsetSize, unchokingInterval);
         _destination = new Destination(fileName);
     }
 
