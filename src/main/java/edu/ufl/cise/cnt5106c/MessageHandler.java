@@ -17,12 +17,14 @@ import java.util.BitSet;
  */
 public class MessageHandler {
 
+    private boolean _choked;
+    private final int _remotePeerId;
     private final FileManager _fileMgr;
     private final PeerManager _peerMgr;
-    private final int _remotePeerId;
     private final EventLogger _eventLogger;
 
     MessageHandler(int remotePeerId, FileManager fileMgr, PeerManager peerMgr, EventLogger eventLogger) {
+        _choked = true;
         _fileMgr = fileMgr;
         _peerMgr = peerMgr;
         _remotePeerId = remotePeerId;
@@ -40,21 +42,19 @@ public class MessageHandler {
     public Message handle(Message msg) {
         switch (msg.getType()) {
             case Choke: {
+                _choked = true;
                 _eventLogger.chokeMessage(_remotePeerId);
                 return null;
             }
             case Unchoke: {
+                _choked = false;
                 _eventLogger.unchokeMessage(_remotePeerId);                
-                int partId = _fileMgr.getPartToRequest(_peerMgr.getReceivedParts(_remotePeerId));
-                if (partId >= 0) {
-                    return new Request (partId);
-                }
-                break;
+                return requestPiece();
             }
             case Interested: {
                 _eventLogger.interestedMessage(_remotePeerId);
                 _peerMgr.addInterestPeer(_remotePeerId);
-                break;
+                return null;
             }
             case NotInterested: {
                 _eventLogger.notInterestedMessage(_remotePeerId);
@@ -93,15 +93,26 @@ public class MessageHandler {
                         return new Piece(request.getPieceIndex(), piece);
                     }
                 }
-                break;
+                return null;
             }
             case Piece: {
                 Piece piece = (Piece) msg;
                 _fileMgr.addPart(piece.getPieceIndex(), piece.getContent());
                 _eventLogger.pieceDownloadedMessage(_remotePeerId, piece.getPieceIndex(), _fileMgr.getNumberOfReceivedParts());
+                return requestPiece();
             }
         }
 
+        return null;
+    }
+
+    private Message requestPiece() {
+        if (_choked) {
+            int partId = _fileMgr.getPartToRequest(_peerMgr.getReceivedParts(_remotePeerId));
+            if (partId >= 0) {
+                return new Request (partId);
+            }
+        }
         return null;
     }
 }
