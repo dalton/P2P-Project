@@ -169,7 +169,7 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
         for (ConnectionHandler connHanlder : _connHandlers) {
             try {
                 connHanlder.send(new Have(partIdx));
-                if (!_peerMgr.isInteresting(connHanlder.getPeerId(), _fileMgr.getReceivedParts())) {
+                if (!_peerMgr.isInteresting(connHanlder.getRemotePeerId(), _fileMgr.getReceivedParts())) {
                     connHanlder.send(new NotInterested());
                 }
             } catch (Exception ex) {
