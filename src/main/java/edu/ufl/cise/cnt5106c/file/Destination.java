@@ -1,5 +1,6 @@
 package edu.ufl.cise.cnt5106c.file;
 
+import edu.ufl.cise.cnt5106c.log.LogHelper;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,8 +14,8 @@ import java.io.IOException;
  */
 public class Destination {
 
-    private File _file;
-    private File  _partsDir;
+    private final File _file;
+    private final File  _partsDir;
     private static final String partsLocation = "files/parts/";
 
     public Destination(int peerId, String fileName){
@@ -24,7 +25,6 @@ public class Destination {
     }
 
     public byte[][] getAllPartsAsByteArrays(){
-       // FileFilter fileFilter = new NameFileFilter("^.*$");
         File[] files = _partsDir.listFiles (new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
@@ -32,17 +32,15 @@ public class Destination {
             }
         });
         byte[][] ba = new byte[files.length][getPartAsByteArray(1).length];
-        for (int i = 0; i < files.length; i++) {
-            ba[Integer.parseInt(files[i].getName())] = getByteArrayFromFile(files[i]);
+        for (File file : files) {
+            ba[Integer.parseInt(file.getName())] = getByteArrayFromFile(file);
         }
         return ba;
     }
 
-    public byte[] getPartAsByteArray(int partId){
-        byte[] fileBytes = null;
+    public byte[] getPartAsByteArray(int partId) {
         File file = new File(_partsDir.getAbsolutePath() + "/" + partId);
-        fileBytes = getByteArrayFromFile(file);
-        return fileBytes;
+        return getByteArrayFromFile(file);
     }
 
     public void writeByteArrayAsFilePart(byte[] part, int partId){
@@ -54,27 +52,36 @@ public class Destination {
             fos.flush();
             fos.close();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LogHelper.getLogger().warning(e);
         } catch (IOException e) {
-            e.printStackTrace();
+            LogHelper.getLogger().warning(e);
         }
     }
 
     private byte[] getByteArrayFromFile(File file){
-        byte[] fileBytes = null;
+        FileInputStream fis = null;
         try {
-            FileInputStream fis = new FileInputStream(file);
-            fileBytes = new byte[(int) file.length()];
+            fis = new FileInputStream(file);
+            byte[] fileBytes = new byte[(int) file.length()];
             int bytesRead = fis.read(fileBytes, 0, (int) file.length());
             fis.close();
             assert (bytesRead == fileBytes.length);
             assert (bytesRead == (int) file.length());
+            return fileBytes;
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LogHelper.getLogger().warning(e);
         } catch (IOException e) {
-            e.printStackTrace();
+            LogHelper.getLogger().warning(e);
         }
-        return fileBytes;
+        finally {
+            if (fis != null) {
+                try {
+                    fis.close();
+                }
+                catch (IOException ex) {}
+            }
+        }
+        return null;
 
     }
 
@@ -82,5 +89,4 @@ public class Destination {
         SplitFile sf = new SplitFile();
         sf.process(_file, partSize);
     }
-
 }
