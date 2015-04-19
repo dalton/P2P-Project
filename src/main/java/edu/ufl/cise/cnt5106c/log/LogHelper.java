@@ -1,6 +1,8 @@
 package edu.ufl.cise.cnt5106c.log;
 
+import edu.ufl.cise.cnt5106c.conf.RemotePeerInfo;
 import java.io.*;
+import java.util.Collection;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
@@ -34,6 +36,21 @@ public class LogHelper {
 
     public static LogHelper getLogger () {
         return _log;
+    }
+
+    public static String getPeersAsString (Collection<RemotePeerInfo> peers) {
+        StringBuilder sb = new StringBuilder ("");
+        boolean isFirst = true;
+        for (RemotePeerInfo peer : peers) {
+            if (isFirst) {
+                isFirst = false;
+            }
+            else {
+                sb.append(", ");
+            }
+            sb.append(peer);
+        }
+        return sb.toString();
     }
 
     public synchronized void conf (String msg) {
