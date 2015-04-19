@@ -9,11 +9,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Predicate;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
@@ -64,6 +65,7 @@ public class PeerManager implements Runnable {
     private final Collection<RemotePeerInfo> _preferredPeers = new HashSet<>();
     private final OptimisticUnchoker _optUnchoker;
     private final Collection<PeerManagerListener> _listeners = new LinkedList<>();
+    private final AtomicBoolean _randomlySelectPreferred = new AtomicBoolean(false);
 
     PeerManager(Collection<RemotePeerInfo> peers, Properties conf) {
         _peers.addAll(peers);
@@ -79,16 +81,6 @@ public class PeerManager implements Runnable {
         peer.set_interested(true);
     }
 
-    synchronized List<RemotePeerInfo> getInterestedPeers() {
-        ArrayList<RemotePeerInfo> interestedPeers = new ArrayList<RemotePeerInfo>();
-        for (RemotePeerInfo peer : _peers){
-            if(peer.isInterested()){
-                interestedPeers.add(peer);
-            }
-        }
-        return interestedPeers;
-    }
-
     synchronized void receivedPart(int peerId, int size) {
         searchPeer(peerId)._bytesDownloadedFrom += size;
     }
@@ -99,8 +91,11 @@ public class PeerManager implements Runnable {
                 _optUnchoker._optmisticallyUnchokedPeers.contains(peerInfo));
     }
 
+    synchronized void fileCompleted() {
+        _randomlySelectPreferred.set (true);
+    }
+
     synchronized void bitfieldArrived(int peerId, BitSet bitfield) {
-        RemotePeerInfo rpi = searchPeer(peerId);
         searchPeer(peerId)._receivedParts = bitfield;
 
         neighborsCompletedDownload();
@@ -154,32 +149,33 @@ public class PeerManager implements Runnable {
             }
             synchronized (this) {
                 List<RemotePeerInfo> interestedPeers = new ArrayList(_peers);
-
-                // Filter our uninterestreed peers                
-                interestedPeers.removeIf(new Predicate() {
-                    @Override
-                    public boolean test(Object t) {
-                        if (t instanceof RemotePeerInfo) {
-                            RemotePeerInfo peer = (RemotePeerInfo) t;
-                            return !peer.isInterested();
-                        }
-                        return false;
+                Iterator<RemotePeerInfo> iter = interestedPeers.iterator();
+                for (RemotePeerInfo peer = iter.next(); iter.hasNext(); peer = iter.next()) {
+                    if (!peer.isInterested()) {
+                        iter.remove();
                     }
-                });
+                }
 
                 LogHelper.getLogger().debug (new StringBuilder ("Interested peers: ")
                         .append (LogHelper.getPeersAsString (interestedPeers)).toString());
 
-                // Sort the peers in order of preference
-                Collections.sort(interestedPeers, new Comparator() {
-                    @Override
-                    public int compare(Object o1, Object o2) {
-                        RemotePeerInfo ri1 = (RemotePeerInfo) (o1);
-                        RemotePeerInfo ri2 = (RemotePeerInfo) (o2);
-                        // Sort in decreasing order
-                        return (ri2._bytesDownloadedFrom - ri1._bytesDownloadedFrom);
-                    }
-                });
+                if (_randomlySelectPreferred.get()) {
+                    // Randomly shuffle the neighbors
+                    LogHelper.getLogger().debug("selecting preferred peers randomly");
+                    Collections.shuffle(interestedPeers);
+                }
+                else {
+                    // Sort the peers in order of preference
+                    Collections.sort(interestedPeers, new Comparator() {
+                        @Override
+                        public int compare(Object o1, Object o2) {
+                            RemotePeerInfo ri1 = (RemotePeerInfo) (o1);
+                            RemotePeerInfo ri2 = (RemotePeerInfo) (o2);
+                            // Sort in decreasing order
+                            return (ri2._bytesDownloadedFrom - ri1._bytesDownloadedFrom);
+                        }
+                    });
+                }
 
                 // Reset downloaded bytes
                 for (RemotePeerInfo peer : _peers) {
@@ -189,6 +185,8 @@ public class PeerManager implements Runnable {
                 // Select the highest ranked neighbors as "preferred"
                 _preferredPeers.clear();
                 _preferredPeers.addAll(interestedPeers.subList(0, Math.min(_numberOfPreferredNeighbors, interestedPeers.size())));
+                LogHelper.getLogger().debug (new StringBuilder ("Preferred peers: ")
+                        .append (LogHelper.getPeersAsString (_preferredPeers)).toString());
 
                 // Select the remaining neighbors for choking
                 if (_numberOfPreferredNeighbors >= interestedPeers.size()) {
