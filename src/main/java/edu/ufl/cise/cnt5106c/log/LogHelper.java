@@ -32,6 +32,7 @@ public class LogHelper {
 
     LogHelper (Logger log) {
         _l = log;
+        _l.setLevel(Level.ALL);
     }
 
     public static LogHelper getLogger () {
