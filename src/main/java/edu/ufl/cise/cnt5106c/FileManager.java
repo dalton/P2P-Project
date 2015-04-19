@@ -14,12 +14,11 @@ import java.util.Properties;
  */
 public class FileManager {
 
-
-    private final int _peerId;
     private BitSet _receivedParts;
     private final Collection<FileManagerListener> _listeners = new LinkedList<>();
     private Destination _destination;
-    final double dPartSize;
+    private final double _dPartSize;
+    private final RequestedParts _partsBeingReq;
 
     FileManager (int peerId, Properties conf) {
         this (peerId,
@@ -36,9 +35,10 @@ public class FileManager {
      * @param partSize the maximum size of a part
      */
     FileManager (int peerId, String fileName, int fileSize, int partSize) {
-        _peerId = peerId;
-        dPartSize = partSize;
-        _receivedParts = new BitSet ((int) Math.ceil (fileSize/dPartSize));
+        _dPartSize = partSize;
+        final int bitsetSize = (int) Math.ceil (fileSize/_dPartSize);
+        _receivedParts = new BitSet (bitsetSize);
+        _partsBeingReq = new RequestedParts (bitsetSize);
         _destination = new Destination(fileName);
     }
 
@@ -64,6 +64,17 @@ public class FileManager {
                 listener.fileCompleted();
             }
         }
+    }
+
+    /**
+     * @param availableParts parts that are available at the remote peer
+     * @return the ID of the part to request, if any, or a negative number in
+     * case all the missing parts are already being requested or the file is
+     * complete.
+     */
+    synchronized int getPartToRequest(BitSet availableParts) {
+        availableParts.andNot(getReceivedParts());
+        return _partsBeingReq.getPartToRequest (availableParts);
     }
 
     public synchronized BitSet getReceivedParts () {
@@ -105,7 +116,7 @@ public class FileManager {
     }
 
     public void splitFile(){
-        _destination.splitFile((int) dPartSize);
+        _destination.splitFile((int) _dPartSize);
     }
 
     public byte[][] getAllPieces(){
