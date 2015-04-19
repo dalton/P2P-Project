@@ -3,8 +3,6 @@ package edu.ufl.cise.cnt5106c;
 import edu.ufl.cise.cnt5106c.conf.CommonProperties;
 import edu.ufl.cise.cnt5106c.conf.RemotePeerInfo;
 import edu.ufl.cise.cnt5106c.log.LogHelper;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collection;
@@ -15,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 
 /**
  * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
@@ -71,7 +70,7 @@ public class PeerManager implements Runnable {
         _numberOfPreferredNeighbors = Integer.parseInt(
                 conf.getProperty(CommonProperties.NumberOfPreferredNeighbors.toString()));
         _unchokingInterval = Integer.parseInt(
-                conf.getProperty(CommonProperties.NumberOfPreferredNeighbors.toString())) * 1000;
+                conf.getProperty(CommonProperties.UnchokingInterval.toString())) * 1000;
         _optUnchoker = new OptimisticUnchoker(conf);
     }
 
@@ -83,7 +82,7 @@ public class PeerManager implements Runnable {
     synchronized List<RemotePeerInfo> getInterestedPeers() {
         ArrayList<RemotePeerInfo> interestedPeers = new ArrayList<RemotePeerInfo>();
         for (RemotePeerInfo peer : _peers){
-            if(peer.is_interested()){
+            if(peer.isInterested()){
                 interestedPeers.add(peer);
             }
         }
@@ -154,8 +153,25 @@ public class PeerManager implements Runnable {
             } catch (InterruptedException ex) {
             }
             synchronized (this) {
+                List<RemotePeerInfo> interestedPeers = new ArrayList(_peers);
+
+                // Filter our uninterestreed peers                
+                interestedPeers.removeIf(new Predicate() {
+                    @Override
+                    public boolean test(Object t) {
+                        if (t instanceof RemotePeerInfo) {
+                            RemotePeerInfo peer = (RemotePeerInfo) t;
+                            return !peer.isInterested();
+                        }
+                        return false;
+                    }
+                });
+
+                LogHelper.getLogger().debug (new StringBuilder ("Interested peers: ")
+                        .append (LogHelper.getPeersAsString (interestedPeers)).toString());
+
                 // Sort the peers in order of preference
-                Collections.sort(_peers, new Comparator() {
+                Collections.sort(interestedPeers, new Comparator() {
                     @Override
                     public int compare(Object o1, Object o2) {
                         RemotePeerInfo ri1 = (RemotePeerInfo) (o1);
@@ -172,13 +188,13 @@ public class PeerManager implements Runnable {
 
                 // Select the highest ranked neighbors as "preferred"
                 _preferredPeers.clear();
-                _preferredPeers.addAll(_peers.subList(0, Math.min(_numberOfPreferredNeighbors, _peers.size())));
+                _preferredPeers.addAll(interestedPeers.subList(0, Math.min(_numberOfPreferredNeighbors, interestedPeers.size())));
 
                 // Select the remaining neighbors for choking
-                if (_numberOfPreferredNeighbors >= _peers.size()) {
+                if (_numberOfPreferredNeighbors >= interestedPeers.size()) {
                     _optUnchoker.setChokedNeighbors(new ArrayList<RemotePeerInfo>());
                 } else {
-                    _optUnchoker.setChokedNeighbors(_peers.subList(_numberOfPreferredNeighbors, _peers.size()));
+                    _optUnchoker.setChokedNeighbors(interestedPeers.subList(_numberOfPreferredNeighbors, interestedPeers.size()));
                 }
             }
         }

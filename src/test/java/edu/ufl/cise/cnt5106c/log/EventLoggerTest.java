@@ -1,6 +1,7 @@
 package edu.ufl.cise.cnt5106c.log;
 
 import static org.junit.Assert.*;
+import org.junit.*;
 
 /**
  * Created by shivansh on 4/19/15.
@@ -27,75 +28,12 @@ public class EventLoggerTest {
     }
 
     /**
-     * Test of peerConnection method, of class EventLogger.
+     * Test all
      */
     @Test
-    public void testPeerConnection(){
-
-    }
-
-    /**
-     * Test of chokeMessage method, of class EventLogger.
-     */
-    @Test
-    public void testChokeMessage(){
-
-    }
-
-    /**
-     * Test of unchokeMessage method, of class EventLogger.
-     */
-    @Test
-    public void testUnchokeMessage(){
-
-    }
-
-    /**
-     * Test of haveMessage method, of class EventLogger.
-     */
-    @Test
-    public void testHaveMessage(){
-
-    }
-
-    /**
-     * Test of interestedMessage method, of class EventLogger.
-     */
-    @Test
-    public void testInterestedMessage(){
-
-    }
-
-    /**
-     * Test of notInterestedMessage method, of class EventLogger.
-     */
-    @Test
-    public void testNotInterestedMessage(){
-
-    }
-
-    /**
-     * Test of pieceDownloadedMessage method, of class EventLogger.
-     */
-    @Test
-    public void testPieceDownloadedMessage(){
-
-    }
-
-    /**
-     * Test of fileDownloadedMessage method, of class EventLogger.
-     */
-    @Test
-    public void testFileDownloadedMessage(){
-
-    }
-
-    /**
-     * Test of getLogMsgHeader method, of class EventLogger.
-     */
-    @Test
-    public void testGetLogMsgHeader(){
-
+    public void testAll(){
+        LogHelper.getLogger().info("somthinjpogjrehy[ot");
+        
     }
 
 }

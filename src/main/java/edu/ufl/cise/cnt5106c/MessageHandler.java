@@ -1,6 +1,5 @@
 package edu.ufl.cise.cnt5106c;
 
-import edu.ufl.cise.cnt5106c.log.LogHelper;
 import edu.ufl.cise.cnt5106c.messages.Bitfield;
 import edu.ufl.cise.cnt5106c.messages.Handshake;
 import edu.ufl.cise.cnt5106c.messages.Have;
@@ -45,11 +44,10 @@ public class MessageHandler {
                 return null;
             }
             case Unchoke: {
-                _eventLogger.unchokeMessage(_remotePeerId);
-                BitSet bitset = _peerMgr.getReceivedParts(_remotePeerId);
-                bitset.andNot(_fileMgr.getReceivedParts());
-                if (!bitset.isEmpty()) {
-                    return new Request(RandomUtils.pickRandomSetIndexFromBitSet(bitset));
+                _eventLogger.unchokeMessage(_remotePeerId);                
+                int partId = _fileMgr.getPartToRequest(_peerMgr.getReceivedParts(_remotePeerId));
+                if (partId >= 0) {
+                    return new Request (partId);
                 }
                 break;
             }
