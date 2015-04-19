@@ -69,7 +69,11 @@ public class FileManager {
     public synchronized BitSet getReceivedParts () {
         return (BitSet) _receivedParts.clone();
     }
-    public synchronized void setHasFile (boolean hasFile)
+
+    /**
+     * 
+     */
+    public synchronized void setHasFile()
     {
         for (int i = 0; i < _receivedParts.size(); i++) {
             _receivedParts.set(i,true);
