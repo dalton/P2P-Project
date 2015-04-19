@@ -21,8 +21,7 @@ public class FileManager {
     private final RequestedParts _partsBeingReq;
 
     FileManager (int peerId, Properties conf) {
-        this (peerId,
-                conf.getProperty (CommonProperties.FileName.toString()),
+        this (peerId, conf.getProperty (CommonProperties.FileName.toString()),
                 Integer.parseInt(conf.getProperty(CommonProperties.FileSize.toString())), 
                 Integer.parseInt(conf.getProperty(CommonProperties.PieceSize.toString())),
                 Integer.parseInt(conf.getProperty(CommonProperties.UnchokingInterval.toString())) * 1000);
@@ -40,7 +39,7 @@ public class FileManager {
         final int bitsetSize = (int) Math.ceil (fileSize/_dPartSize);
         _receivedParts = new BitSet (bitsetSize);
         _partsBeingReq = new RequestedParts (bitsetSize, unchokingInterval);
-        _destination = new Destination(fileName);
+        _destination = new Destination(peerId, fileName);
     }
 
     /**
