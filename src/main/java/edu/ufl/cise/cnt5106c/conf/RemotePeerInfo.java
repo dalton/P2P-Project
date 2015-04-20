@@ -58,8 +58,8 @@ public class RemotePeerInfo {
         return _interested;
     }
 
-    public void set_interested(boolean _interested) {
-        this._interested = _interested;
+    public void setInterested() {
+        _interested = true;
     }
 
     @Override
