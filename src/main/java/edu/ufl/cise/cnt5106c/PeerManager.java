@@ -2,6 +2,7 @@ package edu.ufl.cise.cnt5106c;
 
 import edu.ufl.cise.cnt5106c.conf.CommonProperties;
 import edu.ufl.cise.cnt5106c.conf.RemotePeerInfo;
+import edu.ufl.cise.cnt5106c.log.EventLogger;
 import edu.ufl.cise.cnt5106c.log.LogHelper;
 
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ public class PeerManager implements Runnable {
                     }
                 }
 
+                _eventLogger.changeOfOptimisticallyUnchokedNeighbors(LogHelper.getPeersAsString (_optmisticallyUnchokedPeers));
                 for (PeerManagerListener listener : _listeners) {
                     listener.unchockedPeers(RemotePeerInfo.toIdSet(_optmisticallyUnchokedPeers));
                 }
@@ -66,13 +68,14 @@ public class PeerManager implements Runnable {
     private final int _numberOfPreferredNeighbors;
     private final int _unchokingInterval;
     private final int _bitmapsize;
+    private final EventLogger _eventLogger;
     private final List<RemotePeerInfo> _peers = new ArrayList<>();
     private final Collection<RemotePeerInfo> _preferredPeers = new HashSet<>();
     private final OptimisticUnchoker _optUnchoker;
     private final Collection<PeerManagerListener> _listeners = new LinkedList<>();
     private final AtomicBoolean _randomlySelectPreferred = new AtomicBoolean(false);
 
-    PeerManager(Collection<RemotePeerInfo> peers, int bitmapsize, Properties conf) {
+    PeerManager(int peerId, Collection<RemotePeerInfo> peers, int bitmapsize, Properties conf) {
         _peers.addAll(peers);
         _numberOfPreferredNeighbors = Integer.parseInt(
                 conf.getProperty(CommonProperties.NumberOfPreferredNeighbors.toString()));
@@ -80,6 +83,7 @@ public class PeerManager implements Runnable {
                 conf.getProperty(CommonProperties.UnchokingInterval.toString())) * 1000;
         _optUnchoker = new OptimisticUnchoker(conf);
         _bitmapsize = bitmapsize;
+        _eventLogger = new EventLogger (peerId);
     }
 
     synchronized void addInterestPeer(int _remotePeerId) {
@@ -203,8 +207,8 @@ public class PeerManager implements Runnable {
                 // Select the highest ranked neighbors as "preferred"
                 _preferredPeers.clear();
                 _preferredPeers.addAll(interestedPeers.subList(0, Math.min(_numberOfPreferredNeighbors, interestedPeers.size())));
-                LogHelper.getLogger().debug (new StringBuilder ("Preferred peers: ")
-                        .append (LogHelper.getPeersAsString (_preferredPeers)).toString());
+
+                _eventLogger.changeOfPrefereedNeighbors(LogHelper.getPeersAsString (_preferredPeers));
 
                 Collection<RemotePeerInfo> chokedPeers = new LinkedList<>(interestedPeers);
                 chokedPeers.removeAll(_preferredPeers);
