@@ -63,6 +63,7 @@ public class FileManager {
             }
         }
         if (isFileCompleted()) {
+            _destination.mergeFile(_receivedParts.cardinality());
             for (FileManagerListener listener : _listeners) {
                 listener.fileCompleted();
             }
