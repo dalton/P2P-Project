@@ -2,6 +2,7 @@ package edu.ufl.cise.cnt5106c;
 
 import edu.ufl.cise.cnt5106c.conf.CommonProperties;
 import edu.ufl.cise.cnt5106c.file.Destination;
+import edu.ufl.cise.cnt5106c.log.LogHelper;
 
 import java.util.BitSet;
 import java.util.Collection;
@@ -18,6 +19,7 @@ public class FileManager {
     private final Collection<FileManagerListener> _listeners = new LinkedList<>();
     private Destination _destination;
     private final double _dPartSize;
+    private final int _bitsetSize;
     private final RequestedParts _partsBeingReq;
 
     FileManager (int peerId, Properties conf) {
@@ -36,9 +38,10 @@ public class FileManager {
      */
     FileManager (int peerId, String fileName, int fileSize, int partSize, long unchokingInterval) {
         _dPartSize = partSize;
-        final int bitsetSize = (int) Math.ceil (fileSize/_dPartSize);
-        _receivedParts = new BitSet (bitsetSize);
-        _partsBeingReq = new RequestedParts (bitsetSize, unchokingInterval);
+        _bitsetSize = (int) Math.ceil (fileSize/_dPartSize);
+        LogHelper.getLogger().debug ("File size set to " + fileSize +  "\tPart size set to " + _dPartSize + "\tBitset size set to " + _bitsetSize);
+        _receivedParts = new BitSet (_bitsetSize);
+        _partsBeingReq = new RequestedParts (_bitsetSize, unchokingInterval);
         _destination = new Destination(peerId, fileName);
     }
 
@@ -86,9 +89,10 @@ public class FileManager {
      */
     public synchronized void setAllParts()
     {
-        for (int i = 0; i < _receivedParts.length(); i++) {
-            _receivedParts.set(i,true);
+        for (int i = 0; i < _bitsetSize; i++) {
+            _receivedParts.set(i, true);
         }
+        LogHelper.getLogger().debug("Received parts set to: " + _receivedParts.toString());
     }
 
     public synchronized int getNumberOfReceivedParts() {
@@ -114,7 +118,7 @@ public class FileManager {
 
     private boolean isFileCompleted() {
         final int nextClearIdx = _receivedParts.nextClearBit(0);
-        return ((nextClearIdx >= _receivedParts.length()) || (nextClearIdx < 0));
+        return ((nextClearIdx >= _bitsetSize) || (nextClearIdx < 0));
     }
 
 }
