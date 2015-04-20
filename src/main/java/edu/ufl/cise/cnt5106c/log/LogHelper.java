@@ -45,7 +45,6 @@ public class LogHelper {
 
     private LogHelper (Logger log) {
         _l = log;
-        _l.setLevel(Level.ALL);
     }
 
     public static void configure(int peerId)
@@ -63,7 +62,7 @@ public class LogHelper {
         return _log;
     }
 
-    public static String getPeersAsString (Collection<RemotePeerInfo> peers) {
+    public static String getPeerIdsAsString (Collection<RemotePeerInfo> peers) {
         StringBuilder sb = new StringBuilder ("");
         boolean isFirst = true;
         for (RemotePeerInfo peer : peers) {
@@ -73,7 +72,7 @@ public class LogHelper {
             else {
                 sb.append(", ");
             }
-            sb.append(peer);
+            sb.append(peer.getPeerId());
         }
         return sb.toString();
     }
