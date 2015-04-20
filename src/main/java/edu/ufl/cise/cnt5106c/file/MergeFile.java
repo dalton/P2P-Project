@@ -20,7 +20,7 @@ public class MergeFile {
         FileInputStream fis;
         byte[] fileBytes;
         int bytesRead = 0;
-        List<File> list = new ArrayList<File>();
+        List<File> list = new ArrayList<>();
         for (int i = 0; i < 211; i++) {
             list.add(new File("parts/" + FILE_NAME + ".part" + i));
         }
