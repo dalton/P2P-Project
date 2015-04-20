@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.io.ObjectInput;
 
 /**
- * A ProtocolazibleObjectInputStream deserializes primitive data and objects
+ * A ProtocolazibleObjectInputStream de-serializes primitive data and objects
  * previously written using an ProtocolazibleObjectOutputStream.
  *
  * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
