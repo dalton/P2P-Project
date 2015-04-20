@@ -41,7 +41,7 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
         _address = address;
         _port = port;
         _hasFile = hasFile;
-        _conf = conf;
+        _conf = conf;    
         _fileMgr = new FileManager(_peerId, _conf);
         ArrayList<RemotePeerInfo> remotePeers = new ArrayList<>(peerInfo);
         for (RemotePeerInfo ri : remotePeers) {
@@ -51,8 +51,9 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
                 break;
             }
         }
-        _peerMgr = new PeerManager(remotePeers, _conf);
+        _peerMgr = new PeerManager(remotePeers, _fileMgr.getBitmapSize(), _conf);
         _eventLogger = new EventLogger(peerId);
+        _fileCompleted.set(_hasFile);
     }
 
     void init() {
@@ -133,6 +134,7 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
         if (_fileCompleted.get() && _peersFileCompleted.get()) {
             // The process can quit
             _terminate.set(true);
+            System.exit(0);
         }
     }
 
@@ -144,6 +146,7 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
         if (_fileCompleted.get() && _peersFileCompleted.get()) {
             // The process can quit
             _terminate.set(true);
+            System.exit(0);
         }
     }
 
