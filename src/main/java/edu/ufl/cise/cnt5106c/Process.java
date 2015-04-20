@@ -175,7 +175,7 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
             }
 
         } else {
-            LogHelper.getLogger().severe("Peer " + connHandler.getRemotePeerId() + " is trying to connect but a connection already exists");
+            LogHelper.getLogger().debug("Peer " + connHandler.getRemotePeerId() + " is trying to connect but a connection already exists");
         }
         return true;
     }

@@ -88,7 +88,7 @@ public class PeerManager implements Runnable {
     }
 
     synchronized List<RemotePeerInfo> getInterestedPeers() {
-        ArrayList<RemotePeerInfo> interestedPeers = new ArrayList<RemotePeerInfo>();
+        ArrayList<RemotePeerInfo> interestedPeers = new ArrayList<>();
         for (RemotePeerInfo peer : _peers){
             if(peer.isInterested()){
                 interestedPeers.add(peer);
@@ -174,7 +174,7 @@ public class PeerManager implements Runnable {
             synchronized (this) {
 
                 List<RemotePeerInfo> interestedPeers = getInterestedPeers();
-                LogHelper.getLogger().severe(new StringBuilder("Interested peers: ")
+                LogHelper.getLogger().debug(new StringBuilder("Interested peers: ")
                         .append(LogHelper.getPeersAsString(interestedPeers)).toString());
 
                 if (_randomlySelectPreferred.get()) {

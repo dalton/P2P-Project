@@ -17,7 +17,7 @@ import java.util.Properties;
  */
 public class peerProcess {
 
-    public static void main (String[] args) throws IOException {
+    public static void main (String[] args) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         if (args.length != 1) {
             LogHelper.getLogger().severe("the number of arguments passed to the program is " + args.length + " while it should be 1.\nUsage: java peerProcess peerId");
         }
@@ -70,7 +70,7 @@ public class peerProcess {
         t.setName ("peerProcess-" + peerId);
         t.start();
 
-        LogHelper.getLogger().severe ("Connecting to " + peersToConnectTo.size() + " peers.");
+        LogHelper.getLogger().debug ("Connecting to " + peersToConnectTo.size() + " peers.");
         peerProc.connectToPeers (peersToConnectTo);
         try {
             Thread.sleep(5);
