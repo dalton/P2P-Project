@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -88,5 +90,36 @@ public class Destination {
     public void splitFile(int partSize){
         SplitFile sf = new SplitFile();
         sf.process(_file, partSize);
+    }
+
+    public void mergeFile(int numParts) {
+        File ofile = _file;
+        FileOutputStream fos;
+        FileInputStream fis;
+        byte[] fileBytes;
+        int bytesRead = 0;
+        List<File> list = new ArrayList<>();
+        for (int i = 0; i < numParts; i++) {
+            list.add(new File(_partsDir.getPath() + "/" + i));
+        }
+        try {
+            fos = new FileOutputStream(ofile, true);
+            for (File file : list) {
+                fis = new FileInputStream(file);
+                fileBytes = new byte[(int) file.length()];
+                bytesRead = fis.read(fileBytes, 0, (int) file.length());
+                assert (bytesRead == fileBytes.length);
+                assert (bytesRead == (int) file.length());
+                fos.write(fileBytes);
+                fos.flush();
+                fileBytes = null;
+                fis.close();
+                fis = null;
+            }
+            fos.close();
+            fos = null;
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
     }
 }
