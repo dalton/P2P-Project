@@ -35,7 +35,6 @@ public class Message implements Protocolazible  {
     @Override
     public void read (DataInputStream in) throws IOException {
         if ((_payload != null) && (_payload.length) > 0) {
-            LogHelper.getLogger().debug("Payload Length: " + (_payload == null ? 0 : _payload.length) + " _type " + _type.toString());
             in.readFully(_payload, 0, _payload.length);
         }
     }
@@ -44,7 +43,6 @@ public class Message implements Protocolazible  {
     public void write (DataOutputStream out) throws IOException {
         out.writeInt (_length);
         out.writeByte (_type.getValue());
-        LogHelper.getLogger().debug("Payoad Length: " + (_payload == null ? 0 : _payload.length) + " _type " + _type.toString());
         if ((_payload != null) && (_payload.length > 0)) {
             out.write (_payload, 0, _payload.length);
         }
