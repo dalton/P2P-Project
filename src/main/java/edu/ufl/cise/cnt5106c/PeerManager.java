@@ -57,7 +57,7 @@ public class PeerManager implements Runnable {
                     }
                 }
 
-                _eventLogger.changeOfOptimisticallyUnchokedNeighbors(LogHelper.getPeersAsString (_optmisticallyUnchokedPeers));
+                _eventLogger.changeOfOptimisticallyUnchokedNeighbors(LogHelper.getPeerIdsAsString (_optmisticallyUnchokedPeers));
                 for (PeerManagerListener listener : _listeners) {
                     listener.unchockedPeers(RemotePeerInfo.toIdSet(_optmisticallyUnchokedPeers));
                 }
@@ -86,9 +86,8 @@ public class PeerManager implements Runnable {
         _eventLogger = new EventLogger (peerId);
     }
 
-    synchronized void addInterestPeer(int _remotePeerId) {
-        RemotePeerInfo peer = searchPeer(_remotePeerId);
-        peer.set_interested(true);
+    synchronized void addInterestPeer(int remotePeerId) {
+        searchPeer(remotePeerId).setInterested();
     }
 
     synchronized List<RemotePeerInfo> getInterestedPeers() {
@@ -179,7 +178,7 @@ public class PeerManager implements Runnable {
 
                 List<RemotePeerInfo> interestedPeers = getInterestedPeers();
                 LogHelper.getLogger().debug(new StringBuilder("Interested peers: ")
-                        .append(LogHelper.getPeersAsString(interestedPeers)).toString());
+                        .append(LogHelper.getPeerIdsAsString(interestedPeers)).toString());
 
                 if (_randomlySelectPreferred.get()) {
                     // Randomly shuffle the neighbors
@@ -208,7 +207,7 @@ public class PeerManager implements Runnable {
                 _preferredPeers.clear();
                 _preferredPeers.addAll(interestedPeers.subList(0, Math.min(_numberOfPreferredNeighbors, interestedPeers.size())));
 
-                _eventLogger.changeOfPrefereedNeighbors(LogHelper.getPeersAsString (_preferredPeers));
+                _eventLogger.changeOfPrefereedNeighbors(LogHelper.getPeerIdsAsString (_preferredPeers));
 
                 Collection<RemotePeerInfo> chokedPeers = new LinkedList<>(interestedPeers);
                 chokedPeers.removeAll(_preferredPeers);
