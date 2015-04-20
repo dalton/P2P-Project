@@ -108,10 +108,10 @@ public class MessageHandler {
     }
 
     private Message requestPiece() {
-        if (_choked) {
+        if (!_choked) {
             int partId = _fileMgr.getPartToRequest(_peerMgr.getReceivedParts(_remotePeerId));
             if (partId >= 0) {
-                LogHelper.getLogger().debug("Requestion part " + partId + " to " + _remotePeerId);
+                LogHelper.getLogger().debug("Requesting part " + partId + " to " + _remotePeerId);
                 return new Request (partId);
             }
             else {
