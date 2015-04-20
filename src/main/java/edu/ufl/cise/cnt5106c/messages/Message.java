@@ -1,6 +1,7 @@
 package edu.ufl.cise.cnt5106c.messages;
 
 import edu.ufl.cise.cnt5106c.io.Protocolazible;
+import edu.ufl.cise.cnt5106c.log.LogHelper;
 import java.io.IOException;
 
 import java.io.DataInputStream;
@@ -34,9 +35,8 @@ public class Message implements Protocolazible  {
     @Override
     public void read (DataInputStream in) throws IOException {
         if ((_payload != null) && (_payload.length) > 0) {
-            if (in.read(_payload, 0, _payload.length) < _payload.length) {
-                throw new IOException("payload bytes read are less than " + _payload.length);
-            }
+            LogHelper.getLogger().debug("Payload Length: " + (_payload == null ? 0 : _payload.length) + " _type " + _type.toString());
+            in.readFully(_payload, 0, _payload.length);
         }
     }
 
@@ -44,6 +44,7 @@ public class Message implements Protocolazible  {
     public void write (DataOutputStream out) throws IOException {
         out.writeInt (_length);
         out.writeByte (_type.getValue());
+        LogHelper.getLogger().debug("Payoad Length: " + (_payload == null ? 0 : _payload.length) + " _type " + _type.toString());
         if ((_payload != null) && (_payload.length > 0)) {
             out.write (_payload, 0, _payload.length);
         }
