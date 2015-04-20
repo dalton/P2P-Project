@@ -86,7 +86,7 @@ public class FileManager {
      */
     public synchronized void setAllParts()
     {
-        for (int i = 0; i < _receivedParts.size(); i++) {
+        for (int i = 0; i < _receivedParts.length(); i++) {
             _receivedParts.set(i,true);
         }
     }
@@ -96,17 +96,6 @@ public class FileManager {
     }
 
     byte[] getPiece (int partId) {
-        // TODO: implement this: we can decide whether to load the file in memory,
-        // or whether to read it from file each time we receive a request.
-        // The first case may be faster, but for very large files it may not be
-        // suitable...  Open for discussion though, I don't think it really matters
-        // for the project, so we may as well implement the simpler strategy
-        // (which probably is loading the whole thing into a byte array...)
-
-        // FIXME: Adam says: I'm leaning towards getting it from the file.
-        // I don't think we're going to have a performance bottleneck and it
-        // simplifies the design (in my opinion)
-
         byte[] piece = _destination.getPartAsByteArray(partId);
         return piece;
     }
