@@ -24,7 +24,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class Process implements Runnable, FileManagerListener, PeerManagerListener {
     private final int _peerId;
-    private final String _address;
     private final int _port;
     private final boolean _hasFile;
     private final Properties _conf;
@@ -39,7 +38,6 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
 
     public Process(int peerId, String address, int port, boolean hasFile, Collection<RemotePeerInfo> peerInfo, Properties conf) {
         _peerId = peerId;
-        _address = address;
         _port = port;
         _hasFile = hasFile;
         _conf = conf;    
@@ -52,7 +50,7 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
                 break;
             }
         }
-        _peerMgr = new PeerManager(remotePeers, _fileMgr.getBitmapSize(), _conf);
+        _peerMgr = new PeerManager(_peerId, remotePeers, _fileMgr.getBitmapSize(), _conf);
         _eventLogger = new EventLogger(peerId);
         _fileCompleted.set(_hasFile);
     }
