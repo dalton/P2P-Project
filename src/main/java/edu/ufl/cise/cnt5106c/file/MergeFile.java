@@ -5,6 +5,7 @@ package edu.ufl.cise.cnt5106c.file;
  * Credit to Krishna at http://www.javabeat.net/java-split-merge-files/ for initial design
  */
 
+import edu.ufl.cise.cnt5106c.log.LogHelper;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MergeFile {
-    private static String FILE_NAME = "ImageFile.jpg";
+    private static final String FILE_NAME = "ImageFile.jpg";
 
     public static void main(String[] args) {
         File ofile = new File("ImageFile2.jpg");
@@ -40,8 +41,8 @@ public class MergeFile {
             }
             fos.close();
             fos = null;
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (Exception e) {
+            LogHelper.getLogger().warning(e);
         }
     }
 }

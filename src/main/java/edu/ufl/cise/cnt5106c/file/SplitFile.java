@@ -6,6 +6,7 @@ package edu.ufl.cise.cnt5106c.file;
  * Credit to Krishna at http://www.javabeat.net/java-split-merge-files/ for initial design
  */
 
+import edu.ufl.cise.cnt5106c.log.LogHelper;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -42,8 +43,8 @@ public class SplitFile {
                 filePart = null;
             }
             inputStream.close();
-        } catch (IOException exception) {
-            exception.printStackTrace();
+        } catch (IOException e) {
+            LogHelper.getLogger().warning(e);
         }
     }
 
