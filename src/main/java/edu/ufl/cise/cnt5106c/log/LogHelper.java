@@ -1,9 +1,12 @@
 package edu.ufl.cise.cnt5106c.log;
 
 import edu.ufl.cise.cnt5106c.conf.RemotePeerInfo;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.Collection;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -13,24 +16,30 @@ import java.util.logging.Logger;
  * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
  */
 public class LogHelper {
+    private static final String CONF = "/edu/ufl/cise/cnt5106c/conf/logger.properties";
     private static final LogHelper _log = new LogHelper (Logger.getLogger("CNT5106C"));
     static {
-        // FIXME: configure logger here
-        _log._l.setLevel(Level.ALL);
-        Properties _preferences=new Properties();
-//        try{
-//            FileInputStream _configFile=new FileInputStream("conf/ConfigureLogger.properties");
-//            _preferences.load(_configFile);
-//            LogManager.getLogManager().readConfiguration(_configFile);
-//        }catch (IOException _exceptionConfigure)
-//        {
-//            System.out.println("WARNING: Could not open configuration file");
-//            System.out.println("WARNING: Logging could not configure(Console Output)");
-//        }
+        InputStream in = null;
+        try{
+            in = LogHelper.class.getResourceAsStream(CONF);
+            LogManager.getLogManager().readConfiguration(in);
+        }
+        catch (IOException e) {
+            System.err.println(LogHelper.stackTraceToString(e));
+            System.exit(1);
+        }
+        finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException ex) {}
+            }
+        }
     }
+
     private final Logger _l;
 
-    LogHelper (Logger log) {
+    private LogHelper (Logger log) {
         _l = log;
         _l.setLevel(Level.ALL);
     }
