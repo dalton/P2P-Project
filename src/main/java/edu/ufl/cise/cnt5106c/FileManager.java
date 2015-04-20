@@ -117,8 +117,12 @@ public class FileManager {
     }
 
     private boolean isFileCompleted() {
-        final int nextClearIdx = _receivedParts.nextClearBit(0);
-        return ((nextClearIdx >= _bitsetSize) || (nextClearIdx < 0));
+        for (int i = 0; i < _bitsetSize; i++) {
+            if (!_receivedParts.get(i)) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }
