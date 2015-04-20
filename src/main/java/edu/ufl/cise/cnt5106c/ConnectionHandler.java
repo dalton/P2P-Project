@@ -4,12 +4,12 @@ import edu.ufl.cise.cnt5106c.log.LogHelper;
 import edu.ufl.cise.cnt5106c.io.ProtocolazibleObjectInputStream;
 import edu.ufl.cise.cnt5106c.io.ProtocolazibleObjectOutputStream;
 import edu.ufl.cise.cnt5106c.log.EventLogger;
-import edu.ufl.cise.cnt5106c.messages.Choke;
 import edu.ufl.cise.cnt5106c.messages.Handshake;
 import edu.ufl.cise.cnt5106c.messages.Message;
-import edu.ufl.cise.cnt5106c.messages.Unchoke;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  *
@@ -25,6 +25,7 @@ public class ConnectionHandler implements Runnable {
     private final boolean _isConnectingPeer;
     private final int _expectedRemotePeerId;
     private int _remotePeerId;
+    private final BlockingQueue<Message> _queue = new LinkedBlockingQueue<>();
 
     public ConnectionHandler (int localPeerId, Socket socket, FileManager fileMgr, PeerManager peerMgr)
             throws IOException {
@@ -49,6 +50,43 @@ public class ConnectionHandler implements Runnable {
 
     @Override
     public void run() {
+        new Thread () {
+
+            private boolean _isChoked = true;
+
+            @Override
+            public void run() {
+                Thread.currentThread().setName (getClass().getName() + "-" + _remotePeerId + "-sending thread");
+                while (true) {
+                    try {
+                        Message message = _queue.take();
+                        switch (message.getType()) {
+                            case Choke:
+                                if (!_isChoked) {
+                                    _isChoked = true;
+                                    sendInternal (message);
+                                }
+                                break;
+
+                            case Unchoke:
+                                if (_isChoked) {
+                                    _isChoked = false;
+                                    sendInternal (message);
+                                }
+                                break;
+
+                            default:
+                                sendInternal (message);
+                        }
+                    }
+                    catch (IOException ex) {
+                        LogHelper.getLogger().warning(ex);
+                    } catch (InterruptedException ex) {
+                    }
+                }
+            }
+        }.start();
+
         try {
             final ProtocolazibleObjectInputStream in = new ProtocolazibleObjectInputStream (_socket.getInputStream());
 
@@ -105,53 +143,13 @@ public class ConnectionHandler implements Runnable {
         return hash;
     }
 
-    public void send (final Message message) throws IOException {
-        // TODO: revision this... Spawing a new thread each time may not be
-        // very efficient
-        new Thread () {
-            @Override
-            public void run() {
-                try {
-                    sendInternal (message);
-                }
-                catch (IOException ex) {
-                    LogHelper.getLogger().warning(ex);
-                }
-            }
-        }.start();
+    public void send (final Message message) {
+        _queue.add(message);
     }
 
     private synchronized void sendInternal (Message message) throws IOException {
         if (message != null) {
             _out.writeObject (message);
         }
-    }
-
-    void choke() {
-        new Thread () {
-            @Override
-            public void run() {
-                try {
-                    sendInternal (new Choke());
-                }
-                catch (IOException ex) {
-                    LogHelper.getLogger().warning(ex);
-                }
-            }
-        }.start();
-    }
-
-    void unchoke() {
-        new Thread () {
-            @Override
-            public void run() {
-                try {
-                    sendInternal (new Unchoke());
-                }
-                catch (IOException ex) {
-                    LogHelper.getLogger().warning(ex);
-                }
-            }
-        }.start();
     }
 }

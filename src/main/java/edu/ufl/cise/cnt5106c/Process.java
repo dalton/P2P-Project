@@ -3,9 +3,10 @@ package edu.ufl.cise.cnt5106c;
 import edu.ufl.cise.cnt5106c.conf.RemotePeerInfo;
 import edu.ufl.cise.cnt5106c.log.EventLogger;
 import edu.ufl.cise.cnt5106c.log.LogHelper;
+import edu.ufl.cise.cnt5106c.messages.Choke;
 import edu.ufl.cise.cnt5106c.messages.Have;
 import edu.ufl.cise.cnt5106c.messages.NotInterested;
-import edu.ufl.cise.cnt5106c.messages.Piece;
+import edu.ufl.cise.cnt5106c.messages.Unchoke;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -153,13 +154,9 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
     @Override
     public synchronized void pieceArrived(int partIdx) {
         for (ConnectionHandler connHanlder : _connHandlers) {
-            try {
-                connHanlder.send(new Have(partIdx));
-                if (!_peerMgr.isInteresting(connHanlder.getRemotePeerId(), _fileMgr.getReceivedParts())) {
-                    connHanlder.send(new NotInterested());
-                }
-            } catch (Exception ex) {
-                LogHelper.getLogger().warning(ex);
+            connHanlder.send(new Have(partIdx));
+            if (!_peerMgr.isInteresting(connHanlder.getRemotePeerId(), _fileMgr.getReceivedParts())) {
+                connHanlder.send(new NotInterested());
             }
         }
     }
@@ -171,31 +168,32 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
             try {
                 wait(10);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                LogHelper.getLogger().warning(e);
             }
 
-        } else {
+        }
+        else {
             LogHelper.getLogger().debug("Peer " + connHandler.getRemotePeerId() + " is trying to connect but a connection already exists");
         }
         return true;
     }
 
     @Override
-    public void chockedPeers(Collection<Integer> chokedPeersIds) {
+    public synchronized void chockedPeers(Collection<Integer> chokedPeersIds) {
         for (ConnectionHandler ch : _connHandlers) {
             if (chokedPeersIds.contains(ch.getRemotePeerId())) {
                 LogHelper.getLogger().debug("Choking " + ch.getRemotePeerId());
-                ch.choke();
+                ch.send(new Choke());
             }
         }
     }
 
     @Override
-    public void unchockedPeers(Collection<Integer> unchokedPeersIds) {
+    public synchronized void unchockedPeers(Collection<Integer> unchokedPeersIds) {
         for (ConnectionHandler ch : _connHandlers) {
             if (unchokedPeersIds.contains(ch.getRemotePeerId())) {
                 LogHelper.getLogger().debug("Unchoking " + ch.getRemotePeerId());
-                ch.unchoke();
+                ch.send(new Unchoke());
             }
         }
     }
