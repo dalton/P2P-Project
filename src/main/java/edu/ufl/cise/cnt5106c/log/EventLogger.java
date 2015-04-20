@@ -22,14 +22,14 @@ public class EventLogger {
         _logHelper.info (String.format (msg, peerId));
     }
 
-    public void changeOfPrefereedNeighbors (int peerId, String preferredNeighbors) {
+    public void changeOfPrefereedNeighbors (String preferredNeighbors) {
         final String msg = getLogMsgHeader() + " Peer %d has preferred neighbors %s";
-        _logHelper.info (String.format (msg, peerId, preferredNeighbors));
+        _logHelper.info (String.format (msg, preferredNeighbors));
     }
 
-    public void changeOfOptimisticallyUnchokedNeighbors (int peerId, String preferredNeighbors) {
+    public void changeOfOptimisticallyUnchokedNeighbors (String preferredNeighbors) {
         final String msg = getLogMsgHeader() + " Peer %d has the optimistically unchoked neighbor %s";
-        _logHelper.info (String.format (msg, peerId, preferredNeighbors));
+        _logHelper.info (String.format (msg, preferredNeighbors));
     }
 
     public void chokeMessage (int peerId) {
