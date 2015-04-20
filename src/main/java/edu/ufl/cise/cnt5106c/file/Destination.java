@@ -49,7 +49,7 @@ public class Destination {
         FileOutputStream fos;
         File ofile = new File(_partsDir.getAbsolutePath() + "/" + partId);
         try {
-            fos = new FileOutputStream(ofile, true);
+            fos = new FileOutputStream(ofile);
             fos.write(part);
             fos.flush();
             fos.close();
@@ -103,7 +103,7 @@ public class Destination {
             list.add(new File(_partsDir.getPath() + "/" + i));
         }
         try {
-            fos = new FileOutputStream(ofile, true);
+            fos = new FileOutputStream(ofile);
             for (File file : list) {
                 fis = new FileInputStream(file);
                 fileBytes = new byte[(int) file.length()];
