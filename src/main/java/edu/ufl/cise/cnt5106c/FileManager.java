@@ -117,6 +117,10 @@ public class FileManager {
         return _destination.getAllPartsAsByteArrays();
     }
 
+    public int getBitmapSize() {
+        return _bitsetSize;
+    }
+
     private boolean isFileCompleted() {
         for (int i = 0; i < _bitsetSize; i++) {
             if (!_receivedParts.get(i)) {
