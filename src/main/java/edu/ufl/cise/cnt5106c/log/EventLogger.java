@@ -13,7 +13,7 @@ public class EventLogger {
     }
 
     public EventLogger (int peerId, LogHelper logHelper) {
-        _msgHeader = "%d: Peer " + peerId;
+        _msgHeader = ": Peer " + peerId;
         _logHelper = logHelper;
     }
 
@@ -58,7 +58,7 @@ public class EventLogger {
     }
 
     private String getLogMsgHeader() {
-        return (String.format (_msgHeader, System.currentTimeMillis()));
+        return (String.format (_msgHeader));
     }
 }
 

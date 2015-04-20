@@ -5,6 +5,7 @@ import edu.ufl.cise.cnt5106c.conf.PeerInfo;
 import edu.ufl.cise.cnt5106c.conf.RemotePeerInfo;
 import edu.ufl.cise.cnt5106c.log.LogHelper;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.Reader;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -16,11 +17,12 @@ import java.util.Properties;
  */
 public class peerProcess {
 
-    public static void main (String[] args) {
+    public static void main (String[] args) throws IOException {
         if (args.length != 1) {
             LogHelper.getLogger().severe("the number of arguments passed to the program is " + args.length + " while it should be 1.\nUsage: java peerProcess peerId");
         }
         final int peerId = Integer.parseInt(args[0]);
+        LogHelper.configure(peerId);
         String address = "localhost";
         int port = 6008;
         boolean hasFile = false;

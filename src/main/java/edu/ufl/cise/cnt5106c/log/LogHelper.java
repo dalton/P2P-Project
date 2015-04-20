@@ -7,6 +7,10 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Collection;
+import java.util.Properties;
+import java.util.logging.FileHandler;
+import java.util.logging.Formatter;
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -42,6 +46,17 @@ public class LogHelper {
     private LogHelper (Logger log) {
         _l = log;
         _l.setLevel(Level.ALL);
+    }
+
+    public static void configure(int peerId)
+            throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        Properties properties = new Properties();
+        properties.load(LogHelper.class.getResourceAsStream(CONF));
+        Handler handler = new FileHandler ("Peer" + peerId + ".log");
+        Formatter formatter = (Formatter) Class.forName(properties.getProperty("java.util.logging.FileHandler.formatter")).newInstance();
+        handler.setFormatter(formatter);
+        handler.setLevel(Level.parse(properties.getProperty("java.util.logging.FileHandler.level")));
+        _log._l.addHandler(handler);
     }
 
     public static LogHelper getLogger () {
