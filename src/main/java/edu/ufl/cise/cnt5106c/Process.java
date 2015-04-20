@@ -46,6 +46,7 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
         ArrayList<RemotePeerInfo> remotePeers = new ArrayList<>(peerInfo);
         for (RemotePeerInfo ri : remotePeers) {
             if (Integer.parseInt(ri._peerId) == peerId) {
+                // rmeove myself
                 remotePeers.remove(ri);
                 break;
             }
