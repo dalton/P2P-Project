@@ -65,19 +65,21 @@ public class PeerManager implements Runnable {
 
     private final int _numberOfPreferredNeighbors;
     private final int _unchokingInterval;
+    private final int _bitmapsize;
     private final List<RemotePeerInfo> _peers = new ArrayList<>();
     private final Collection<RemotePeerInfo> _preferredPeers = new HashSet<>();
     private final OptimisticUnchoker _optUnchoker;
     private final Collection<PeerManagerListener> _listeners = new LinkedList<>();
     private final AtomicBoolean _randomlySelectPreferred = new AtomicBoolean(false);
 
-    PeerManager(Collection<RemotePeerInfo> peers, Properties conf) {
+    PeerManager(Collection<RemotePeerInfo> peers, int bitmapsize, Properties conf) {
         _peers.addAll(peers);
         _numberOfPreferredNeighbors = Integer.parseInt(
                 conf.getProperty(CommonProperties.NumberOfPreferredNeighbors.toString()));
         _unchokingInterval = Integer.parseInt(
                 conf.getProperty(CommonProperties.UnchokingInterval.toString())) * 1000;
         _optUnchoker = new OptimisticUnchoker(conf);
+        _bitmapsize = bitmapsize;
     }
 
     synchronized void addInterestPeer(int _remotePeerId) {
@@ -142,8 +144,9 @@ public class PeerManager implements Runnable {
 
     synchronized private void neighborsCompletedDownload() {
         for (RemotePeerInfo peer : _peers) {
-            if (peer._receivedParts.length() > peer._receivedParts.cardinality()) {
+            if (peer._receivedParts.cardinality() < _bitmapsize) {
                 // at least one neighbor has not completed
+                LogHelper.getLogger().debug("Peer " + peer.getPeerId() + " has not completed yet");
                 return;
             }
         }
