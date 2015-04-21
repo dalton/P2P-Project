@@ -90,6 +90,8 @@ public class Destination {
     public void splitFile(int partSize){
         SplitFile sf = new SplitFile();
         sf.process(_file, partSize);
+
+        LogHelper.getLogger().info("File has been split");
     }
 
     public void mergeFile(int numParts) {

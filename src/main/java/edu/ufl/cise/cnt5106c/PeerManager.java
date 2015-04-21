@@ -56,8 +56,7 @@ public class PeerManager implements Runnable {
                                 Math.min(_numberOfOptimisticallyUnchokedNeighbors, _chokedNeighbors.size())));
                     }
                 }
-
-                _eventLogger.changeOfOptimisticallyUnchokedNeighbors(LogHelper.getPeersAsString (_optmisticallyUnchokedPeers));
+//                _eventLogger.changeOfOptimisticallyUnchokedNeighbors(LogHelper.getPeersAsString (_optmisticallyUnchokedPeers));
                 for (PeerManagerListener listener : _listeners) {
                     listener.unchockedPeers(RemotePeerInfo.toIdSet(_optmisticallyUnchokedPeers));
                 }
@@ -91,6 +90,11 @@ public class PeerManager implements Runnable {
         peer.set_interested(true);
     }
 
+    synchronized void removeInterestPeer(int _remotePeerId) {
+        RemotePeerInfo peer = searchPeer(_remotePeerId);
+        peer.set_interested(false);
+    }
+
     synchronized List<RemotePeerInfo> getInterestedPeers() {
         ArrayList<RemotePeerInfo> interestedPeers = new ArrayList<>();
         for (RemotePeerInfo peer : _peers){
@@ -102,6 +106,9 @@ public class PeerManager implements Runnable {
     }
 
     synchronized boolean isInteresting(int peerId, BitSet bitset) {
+        if (peerId == -1)
+            return false;
+
         RemotePeerInfo peer  = searchPeer(peerId);
         BitSet pBitset = (BitSet) peer._receivedParts.clone();
         pBitset.andNot(bitset);
@@ -167,7 +174,7 @@ public class PeerManager implements Runnable {
     public void run() {
         // At the beginning all the neighbors are choked, because the peer has not
         // recieved anything from anyone
-        _optUnchoker.setChokedNeighbors(_peers);
+        _optUnchoker.setChokedNeighbors(getInterestedPeers());
         _optUnchoker.start();
 
         while (true) {
@@ -208,7 +215,7 @@ public class PeerManager implements Runnable {
                 _preferredPeers.clear();
                 _preferredPeers.addAll(interestedPeers.subList(0, Math.min(_numberOfPreferredNeighbors, interestedPeers.size())));
 
-                _eventLogger.changeOfPrefereedNeighbors(LogHelper.getPeersAsString (_preferredPeers));
+//                _eventLogger.changeOfPrefereedNeighbors(LogHelper.getPeersAsString(_preferredPeers));
 
                 Collection<RemotePeerInfo> chokedPeers = new LinkedList<>(interestedPeers);
                 chokedPeers.removeAll(_preferredPeers);
