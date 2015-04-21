@@ -89,7 +89,10 @@ public class PeerManager implements Runnable {
     }
 
     synchronized void addInterestPeer(int remotePeerId) {
-        searchPeer(remotePeerId).setInterested();
+        RemotePeerInfo peer = searchPeer(remotePeerId);
+        if (peer != null) {
+            peer.setInterested();
+        }
     }
 
     synchronized List<RemotePeerInfo> getInterestedPeers() {
@@ -104,13 +107,19 @@ public class PeerManager implements Runnable {
 
     synchronized boolean isInteresting(int peerId, BitSet bitset) {
         RemotePeerInfo peer  = searchPeer(peerId);
-        BitSet pBitset = (BitSet) peer._receivedParts.clone();
-        pBitset.andNot(bitset);
-        return ! pBitset.isEmpty();
+        if (peer != null) {
+            BitSet pBitset = (BitSet) peer._receivedParts.clone();
+            pBitset.andNot(bitset);
+            return ! pBitset.isEmpty();
+        }
+        return false;
     }
 
     synchronized void receivedPart(int peerId, int size) {
-        searchPeer(peerId)._bytesDownloadedFrom += size;
+        RemotePeerInfo peer  = searchPeer(peerId);
+        if (peer != null) {
+            peer._bytesDownloadedFrom += size;
+        }
     }
 
     synchronized boolean canUploadToPeer(int peerId) {
@@ -124,18 +133,27 @@ public class PeerManager implements Runnable {
     }
 
     synchronized void bitfieldArrived(int peerId, BitSet bitfield) {
-        searchPeer(peerId)._receivedParts = bitfield;
-
+        RemotePeerInfo peer  = searchPeer(peerId);
+        if (peer != null) {
+            peer._receivedParts = bitfield;
+        }
         neighborsCompletedDownload();
     }
 
     synchronized void haveArrived(int peerId, int partId) {
-        searchPeer(peerId)._receivedParts.set(partId);
+        RemotePeerInfo peer  = searchPeer(peerId);
+        if (peer != null) {
+            peer._receivedParts.set(partId);
+        }
         neighborsCompletedDownload();
     }
 
     synchronized BitSet getReceivedParts(int peerId) {
-        return (BitSet) searchPeer(peerId)._receivedParts.clone();
+        RemotePeerInfo peer  = searchPeer(peerId);
+        if (peer != null) {
+            return (BitSet) peer._receivedParts.clone();
+        }
+        return new BitSet();  // empry bit set
     }
 
     synchronized private RemotePeerInfo searchPeer(int peerId) {
@@ -144,7 +162,8 @@ public class PeerManager implements Runnable {
                 return peer;
             }
         }
-        throw new RuntimeException("Peer " + peerId + " not found");
+        LogHelper.getLogger().severe("Peer " + peerId + " not found");
+        return null;
     }
 
     synchronized private void neighborsCompletedDownload() {
