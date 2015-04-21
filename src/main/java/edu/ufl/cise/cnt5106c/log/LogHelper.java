@@ -51,7 +51,7 @@ public class LogHelper {
             throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         Properties properties = new Properties();
         properties.load(LogHelper.class.getResourceAsStream(CONF));
-        Handler handler = new FileHandler ("Peer" + peerId + ".log");
+        Handler handler = new FileHandler ("log_peer_" + peerId + ".log");
         Formatter formatter = (Formatter) Class.forName(properties.getProperty("java.util.logging.FileHandler.formatter")).newInstance();
         handler.setFormatter(formatter);
         handler.setLevel(Level.parse(properties.getProperty("java.util.logging.FileHandler.level")));

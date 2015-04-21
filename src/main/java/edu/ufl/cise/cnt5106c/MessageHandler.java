@@ -59,6 +59,7 @@ public class MessageHandler {
             }
             case NotInterested: {
                 _eventLogger.notInterestedMessage(_remotePeerId);
+                _peerMgr.removeInterestPeer(_remotePeerId);
                 return null;
             }
             case Have: {

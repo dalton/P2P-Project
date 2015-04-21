@@ -62,6 +62,10 @@ public class RemotePeerInfo {
         _interested = true;
     }
 
+    public void setNotIterested() {
+        _interested = false;
+    }
+
     @Override
     public boolean equals (Object obj) {
         if (obj == null) {

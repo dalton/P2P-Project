@@ -17,6 +17,8 @@
         <property name="debug" value="on" />
         <property name="optimize" value="on" />
         <property name="deprecation" value="on" />
+        <property name="source.dir" location="./src/main/java"/>
+        <property name="resources.dir" location="./src/main/resources"/>
         <mkdir dir="${build.dir}"/>
         <mkdir dir="${lib.dir}"/>
     </target>
@@ -28,18 +30,28 @@
     <target name="compile" depends="init" description="Compile java files">
         <echo message="Starting compilation" />
         <javac destdir="${build.dir}" debug="${debug}" verbose="${verbose}" optimize="${optimize}" source="${ant.build.javac.source}" deprecation="${deprecation}" includeantruntime="false">
-            <src path= "./src/main/java" />
+            <src path= "${source.dir}" />
             <include name="edu/ufl/cise/cnt5106c/**/*.java" />
+            <include name="${resources.dir}/**/*.properties" />
         </javac>
     </target>
 
+    <target name="copyResources" depends="init" >
+        <copy todir="${build.dir}">
+		<fileset dir="${resources.dir}">
+			<include name="edu/ufl/cise/**/*.properties" />
+            </fileset>
+        </copy>
+    </target>
+
     <!-- Create the jar file -->
-    <target name="build" depends="compile" description="Make the JAR file">
+    <target name="build" depends="compile, copyResources" description="Make the JAR file">
         <echo message="Building JAR file" />
         <delete file="${lib.dir}/${output-jar}" failonerror="false" />
         <jar jarfile="${lib.dir}/${output-jar}">
             <fileset dir="${build.dir}">
                 <include name="edu/ufl/cise/cnt5106c/**/*.class" />
+                <include name="edu/ufl/cise/cnt5106c/**/*.properties" />
             </fileset>
         </jar>
         <echo message="JAR file created in ${lib.dir}" />
