@@ -19,8 +19,6 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
