@@ -122,3 +122,6 @@ boxes/*
 
 # Backup files
 *~
+
+# Data files
+peer_*/
