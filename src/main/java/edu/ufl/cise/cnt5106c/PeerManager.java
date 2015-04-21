@@ -203,8 +203,6 @@ public class PeerManager implements Runnable {
             synchronized (this) {
 
                 List<RemotePeerInfo> interestedPeers = getInterestedPeers();
-                LogHelper.getLogger().severe(new StringBuilder("Interested peers: ")
-                        .append(LogHelper.getPeerIdsAsString(interestedPeers)).toString());
 
                 if (_randomlySelectPreferred.get()) {
                     // Randomly shuffle the neighbors
@@ -226,6 +224,11 @@ public class PeerManager implements Runnable {
 
                 // Reset downloaded bytes
                 for (RemotePeerInfo peer : _peers) {
+                    String PREFERRED = _preferredPeers.contains(peer) ? " *" : "";
+                    LogHelper.getLogger().severe("BYTES DOWNLOADED FROM  PEER " + peer._peerId + ": "
+                            + peer._bytesDownloadedFrom + " (INTERESTED PEERS: "
+                            + interestedPeers.size()+ ": " + LogHelper.getPeerIdsAsString (interestedPeers)
+                            + ")\t" + PREFERRED);
                     peer._bytesDownloadedFrom = 0;
                 }
 
