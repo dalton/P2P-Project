@@ -9,6 +9,7 @@ import edu.ufl.cise.cnt5106c.messages.NotInterested;
 import edu.ufl.cise.cnt5106c.messages.Unchoke;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
@@ -99,19 +102,38 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
         Iterator<RemotePeerInfo> iter = peersToConnectTo.iterator();
         while (iter.hasNext()) {
             do {
+                Socket socket = null;
                 RemotePeerInfo peer = iter.next();
                 try {
 
                     LogHelper.getLogger().debug(" Connecting to peer: " + peer.getPeerId()
                             + " (" + peer._peerAddress + ":" + peer.getPort() + ")");
+                    socket = new Socket(peer._peerAddress, peer.getPort());
                     if (addConnHandler(new ConnectionHandler(_peerId, true, peer.getPeerId(),
-                            new Socket(peer._peerAddress, peer.getPort()), _fileMgr, _peerMgr))) {
+                            socket, _fileMgr, _peerMgr))) {
                         iter.remove();
                         LogHelper.getLogger().debug(" Connected to peer: " + peer.getPeerId()
                                 + " (" + peer._peerAddress + ":" + peer.getPort() + ")");
 
                     }
-                } catch (IOException ex) {
+                } 
+                catch (ConnectException ex) {
+                    LogHelper.getLogger().severe("could not connect to peer " + peer.getPeerId()
+                            + " at address " + peer._peerAddress + ":" + peer.getPort());
+                    if (socket != null) {
+                        try {
+                            socket.close();
+                        } catch (IOException ex1)
+                        {}
+                    }
+                }
+                catch (IOException ex) {
+                    if (socket != null) {
+                        try {
+                            socket.close();
+                        } catch (IOException ex1)
+                        {}
+                    }
                     LogHelper.getLogger().warning(ex);
                 }
             }
