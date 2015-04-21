@@ -57,7 +57,9 @@ public class PeerManager implements Runnable {
                     }
                 }
 
-                _eventLogger.changeOfOptimisticallyUnchokedNeighbors(LogHelper.getPeerIdsAsString (_optmisticallyUnchokedPeers));
+                if (_optmisticallyUnchokedPeers.size() > 0) {
+                    _eventLogger.changeOfOptimisticallyUnchokedNeighbors(LogHelper.getPeerIdsAsString (_optmisticallyUnchokedPeers));
+                }
                 for (PeerManagerListener listener : _listeners) {
                     listener.unchockedPeers(RemotePeerInfo.toIdSet(_optmisticallyUnchokedPeers));
                 }
@@ -206,7 +208,9 @@ public class PeerManager implements Runnable {
                 _preferredPeers.clear();
                 _preferredPeers.addAll(interestedPeers.subList(0, Math.min(_numberOfPreferredNeighbors, interestedPeers.size())));
 
-                _eventLogger.changeOfPrefereedNeighbors(LogHelper.getPeerIdsAsString (_preferredPeers));
+                if (_preferredPeers.size() > 0) {
+                    _eventLogger.changeOfPrefereedNeighbors(LogHelper.getPeerIdsAsString (_preferredPeers));
+                }
 
                 Collection<RemotePeerInfo> chokedPeers = new LinkedList<>(interestedPeers);
                 chokedPeers.removeAll(_preferredPeers);
