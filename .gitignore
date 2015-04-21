@@ -116,3 +116,9 @@ boxes/*
 /website/www/.vagrant
 /vagrant-spec.config.rb
 
+# Logs
+*.log
+*.lck
+
+# Backup files
+*~
