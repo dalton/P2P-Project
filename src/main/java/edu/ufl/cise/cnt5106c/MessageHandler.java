@@ -100,6 +100,7 @@ public class MessageHandler {
             case Piece: {
                 Piece piece = (Piece) msg;
                 _fileMgr.addPart(piece.getPieceIndex(), piece.getContent());
+                _peerMgr.receivedPart(_remotePeerId, piece.getContent().length);
                 _eventLogger.pieceDownloadedMessage(_remotePeerId, piece.getPieceIndex(), _fileMgr.getNumberOfReceivedParts());
                 return requestPiece();
             }
