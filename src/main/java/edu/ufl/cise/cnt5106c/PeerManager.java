@@ -166,7 +166,6 @@ public class PeerManager implements Runnable {
     public void run() {
         // At the beginning all the neighbors are choked, because the peer has not
         // recieved anything from anyone
-        _optUnchoker.setChokedNeighbors(_peers);
         _optUnchoker.start();
 
         while (true) {
@@ -177,7 +176,7 @@ public class PeerManager implements Runnable {
             synchronized (this) {
 
                 List<RemotePeerInfo> interestedPeers = getInterestedPeers();
-                LogHelper.getLogger().debug(new StringBuilder("Interested peers: ")
+                LogHelper.getLogger().severe(new StringBuilder("Interested peers: ")
                         .append(LogHelper.getPeerIdsAsString(interestedPeers)).toString());
 
                 if (_randomlySelectPreferred.get()) {
@@ -218,6 +217,7 @@ public class PeerManager implements Runnable {
                     listener.unchockedPeers(RemotePeerInfo.toIdSet(_preferredPeers));
                 }
 
+                
                 // Select the remaining neighbors for choking
                 if (_numberOfPreferredNeighbors >= interestedPeers.size()) {
                     _optUnchoker.setChokedNeighbors(new ArrayList<RemotePeerInfo>());
