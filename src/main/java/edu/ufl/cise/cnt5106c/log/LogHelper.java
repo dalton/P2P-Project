@@ -62,6 +62,21 @@ public class LogHelper {
         return _log;
     }
 
+    public static String getPeerIdsAsString2 (Collection<Integer> peersIDs) {
+        StringBuilder sb = new StringBuilder ("");
+        boolean isFirst = true;
+        for (Integer peerId : peersIDs) {
+            if (isFirst) {
+                isFirst = false;
+            }
+            else {
+                sb.append(", ");
+            }
+            sb.append(peerId.intValue());
+        }
+        return sb.toString();
+    }
+
     public static String getPeerIdsAsString (Collection<RemotePeerInfo> peers) {
         StringBuilder sb = new StringBuilder ("");
         boolean isFirst = true;
