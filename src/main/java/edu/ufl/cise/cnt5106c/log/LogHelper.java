@@ -117,7 +117,7 @@ public class LogHelper {
     }
 
     public synchronized void warning (Throwable e) {
-        _l.log(Level.WARNING, stackTraceToString (e));
+        _l.log(Level.SEVERE, stackTraceToString (e));
     }
 
     private static String stackTraceToString (Throwable t) {
