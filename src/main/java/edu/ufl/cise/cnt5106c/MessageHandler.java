@@ -18,14 +18,14 @@ import java.util.BitSet;
  */
 public class MessageHandler {
 
-    private boolean _choked;
+    private boolean _chokedByRemotePeer;
     private final int _remotePeerId;
     private final FileManager _fileMgr;
     private final PeerManager _peerMgr;
     private final EventLogger _eventLogger;
 
     MessageHandler(int remotePeerId, FileManager fileMgr, PeerManager peerMgr, EventLogger eventLogger) {
-        _choked = true;
+        _chokedByRemotePeer = true;
         _fileMgr = fileMgr;
         _peerMgr = peerMgr;
         _remotePeerId = remotePeerId;
@@ -43,12 +43,12 @@ public class MessageHandler {
     public Message handle(Message msg) {
         switch (msg.getType()) {
             case Choke: {
-                _choked = true;
+                _chokedByRemotePeer = true;
                 _eventLogger.chokeMessage(_remotePeerId);
                 return null;
             }
             case Unchoke: {
-                _choked = false;
+                _chokedByRemotePeer = false;
                 _eventLogger.unchokeMessage(_remotePeerId);                
                 return requestPiece();
             }
@@ -110,7 +110,7 @@ public class MessageHandler {
     }
 
     private Message requestPiece() {
-        if (!_choked) {
+        if (!_chokedByRemotePeer) {
             int partId = _fileMgr.getPartToRequest(_peerMgr.getReceivedParts(_remotePeerId));
             if (partId >= 0) {
                 LogHelper.getLogger().debug("Requesting part " + partId + " to " + _remotePeerId);
