@@ -14,15 +14,17 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class RemotePeerInfo {
     public final String _peerId;
     public final String _peerAddress;
     public final String _peerPort;
     public final boolean _hasFile;
-    public int _bytesDownloadedFrom;
+    public AtomicInteger _bytesDownloadedFrom;
     public BitSet _receivedParts;
-    private boolean _interested;
+    private final AtomicBoolean _interested;
 
     public RemotePeerInfo (int peerId) {
         this (Integer.toString (peerId), "127.0.0.1", "0", false);
@@ -33,9 +35,9 @@ public class RemotePeerInfo {
         _peerAddress = pAddress;
         _peerPort = pPort;
         _hasFile = hasFile;
-        _bytesDownloadedFrom = 0;
+        _bytesDownloadedFrom = new AtomicInteger (0);
         _receivedParts = new BitSet();
-        _interested = false;
+        _interested = new AtomicBoolean (false);
     }
 
     public int getPeerId() {
@@ -55,15 +57,15 @@ public class RemotePeerInfo {
     }
 
     public boolean isInterested() {
-        return _interested;
+        return _interested.get();
     }
 
     public void setInterested() {
-        _interested = true;
+        _interested.set (true);
     }
 
     public void setNotIterested() {
-        _interested = false;
+        _interested.set (false);
     }
 
     @Override

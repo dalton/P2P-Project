@@ -125,7 +125,7 @@ public class PeerManager implements Runnable {
     synchronized void receivedPart(int peerId, int size) {
         RemotePeerInfo peer  = searchPeer(peerId);
         if (peer != null) {
-            peer._bytesDownloadedFrom += size;
+            peer._bytesDownloadedFrom.addAndGet(size);
         }
     }
 
@@ -200,28 +200,31 @@ public class PeerManager implements Runnable {
                 Thread.sleep(_unchokingInterval);
             } catch (InterruptedException ex) {
             }
+
+            List<RemotePeerInfo> interestedPeers = getInterestedPeers();
+            if (_randomlySelectPreferred.get()) {
+                // Randomly shuffle the neighbors
+                LogHelper.getLogger().debug("selecting preferred peers randomly");
+                Collections.shuffle(interestedPeers);
+            }
+            else {
+                // Sort the peers in order of preference
+                Collections.sort(interestedPeers, new Comparator() {
+                    @Override
+                    public int compare(Object o1, Object o2) {
+                        RemotePeerInfo ri1 = (RemotePeerInfo) (o1);
+                        RemotePeerInfo ri2 = (RemotePeerInfo) (o2);
+                        // Sort in decreasing order
+                        return (ri2._bytesDownloadedFrom.get() - ri1._bytesDownloadedFrom.get());
+                    }
+                });
+            }
+
+            Collection<RemotePeerInfo> chokedPeers = new LinkedList<>();
+            Collection<RemotePeerInfo> chokedNeighbors = null;
+            Collection<RemotePeerInfo> preferredNeighborsCpy = new LinkedList<>();
+
             synchronized (this) {
-
-                List<RemotePeerInfo> interestedPeers = getInterestedPeers();
-
-                if (_randomlySelectPreferred.get()) {
-                    // Randomly shuffle the neighbors
-                    LogHelper.getLogger().debug("selecting preferred peers randomly");
-                    Collections.shuffle(interestedPeers);
-                }
-                else {
-                    // Sort the peers in order of preference
-                    Collections.sort(interestedPeers, new Comparator() {
-                        @Override
-                        public int compare(Object o1, Object o2) {
-                            RemotePeerInfo ri1 = (RemotePeerInfo) (o1);
-                            RemotePeerInfo ri2 = (RemotePeerInfo) (o2);
-                            // Sort in decreasing order
-                            return (ri2._bytesDownloadedFrom - ri1._bytesDownloadedFrom);
-                        }
-                    });
-                }
-
                 // Reset downloaded bytes
                 for (RemotePeerInfo peer : _peers) {
                     String PREFERRED = _preferredPeers.contains(peer) ? " *" : "";
@@ -229,7 +232,7 @@ public class PeerManager implements Runnable {
                             + peer._bytesDownloadedFrom + " (INTERESTED PEERS: "
                             + interestedPeers.size()+ ": " + LogHelper.getPeerIdsAsString (interestedPeers)
                             + ")\t" + PREFERRED);
-                    peer._bytesDownloadedFrom = 0;
+                    peer._bytesDownloadedFrom.set(0);
                 }
 
                 // Select the highest ranked neighbors as "preferred"
@@ -240,23 +243,30 @@ public class PeerManager implements Runnable {
                     _eventLogger.changeOfPrefereedNeighbors(LogHelper.getPeerIdsAsString (_preferredPeers));
                 }
 
-                Collection<RemotePeerInfo> chokedPeers = new LinkedList<>(_peers);
+                chokedPeers.addAll (_peers);
                 chokedPeers.removeAll(_preferredPeers);
 
-                interestedPeers.removeAll(_preferredPeers);
-                for (PeerManagerListener listener : _listeners) {
-                    listener.chockedPeers(RemotePeerInfo.toIdSet(chokedPeers));
-                    listener.unchockedPeers(RemotePeerInfo.toIdSet(_preferredPeers));
-                }
-                
-                // Select the remaining neighbors for choking
                 if (_numberOfPreferredNeighbors >= interestedPeers.size()) {
-                    _optUnchoker.setChokedNeighbors(new ArrayList<RemotePeerInfo>());
+                    chokedNeighbors = new ArrayList<>();
                 }
                 else {
-                    _optUnchoker.setChokedNeighbors(interestedPeers.subList(_numberOfPreferredNeighbors, interestedPeers.size()));
+                    chokedNeighbors = interestedPeers.subList(_numberOfPreferredNeighbors, interestedPeers.size());
                 }
+                
+                interestedPeers.removeAll(_preferredPeers);
+                preferredNeighborsCpy.addAll (_preferredPeers);
+            }
+
+            for (PeerManagerListener listener : _listeners) {
+                listener.chockedPeers(RemotePeerInfo.toIdSet(chokedPeers));
+                listener.unchockedPeers(RemotePeerInfo.toIdSet(preferredNeighborsCpy));
+            }
+
+            // Select the remaining neighbors for choking
+            if (chokedNeighbors != null) {
+                _optUnchoker.setChokedNeighbors(chokedNeighbors);
             }
         }
+        
     }
 }
