@@ -240,7 +240,7 @@ public class PeerManager implements Runnable {
                     _eventLogger.changeOfPrefereedNeighbors(LogHelper.getPeerIdsAsString (_preferredPeers));
                 }
 
-                Collection<RemotePeerInfo> chokedPeers = new LinkedList<>(interestedPeers);
+                Collection<RemotePeerInfo> chokedPeers = new LinkedList<>(_peers);
                 chokedPeers.removeAll(_preferredPeers);
 
                 interestedPeers.removeAll(_preferredPeers);
