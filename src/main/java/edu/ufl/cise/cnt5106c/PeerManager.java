@@ -10,9 +10,12 @@ import java.util.BitSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -58,6 +61,7 @@ public class PeerManager implements Runnable {
                 }
 
                 if (_optmisticallyUnchokedPeers.size() > 0) {
+                    LogHelper.getLogger().severe("STATE: OPT UNCHOKED:" + LogHelper.getPeerIdsAsString (_optmisticallyUnchokedPeers));
                     _eventLogger.changeOfOptimisticallyUnchokedNeighbors(LogHelper.getPeerIdsAsString (_optmisticallyUnchokedPeers));
                 }
                 for (PeerManagerListener listener : _listeners) {
@@ -201,6 +205,8 @@ public class PeerManager implements Runnable {
             } catch (InterruptedException ex) {
             }
 
+            // 1) GET INTERESTED PEERS AND SORT THEM BY PREFERENCE
+
             List<RemotePeerInfo> interestedPeers = getInterestedPeers();
             if (_randomlySelectPreferred.get()) {
                 // Randomly shuffle the neighbors
@@ -220,51 +226,69 @@ public class PeerManager implements Runnable {
                 });
             }
 
-            Collection<RemotePeerInfo> chokedPeers = new LinkedList<>();
-            Collection<RemotePeerInfo> chokedNeighbors = null;
-            Collection<RemotePeerInfo> preferredNeighborsCpy = new LinkedList<>();
+            Collection<RemotePeerInfo> optUnchokablePeers = null;
+
+            Collection<Integer> chokedPeersIDs = new HashSet<>();
+            Collection<Integer> preferredNeighborsIDs = new HashSet<>();
+            Map<Integer, Long> downloadedBytes = new HashMap<>();
 
             synchronized (this) {
-                // Reset downloaded bytes
+                // Reset downloaded bytes, but buffer them for debugging                  
                 for (RemotePeerInfo peer : _peers) {
-                    String PREFERRED = _preferredPeers.contains(peer) ? " *" : "";
-                    LogHelper.getLogger().severe("BYTES DOWNLOADED FROM  PEER " + peer._peerId + ": "
-                            + peer._bytesDownloadedFrom + " (INTERESTED PEERS: "
-                            + interestedPeers.size()+ ": " + LogHelper.getPeerIdsAsString (interestedPeers)
-                            + ")\t" + PREFERRED);
+                    downloadedBytes.put (peer.getPeerId(), peer._bytesDownloadedFrom.longValue());
                     peer._bytesDownloadedFrom.set(0);
                 }
+
+                // 2) SELECT THE PREFERRED PEERS BY SELECTING THE HIGHEST RANKED
 
                 // Select the highest ranked neighbors as "preferred"
                 _preferredPeers.clear();
                 _preferredPeers.addAll(interestedPeers.subList(0, Math.min(_numberOfPreferredNeighbors, interestedPeers.size())));
-
                 if (_preferredPeers.size() > 0) {
                     _eventLogger.changeOfPrefereedNeighbors(LogHelper.getPeerIdsAsString (_preferredPeers));
                 }
 
-                chokedPeers.addAll (_peers);
-                chokedPeers.removeAll(_preferredPeers);
+                // 3) SELECT ALLE THE INTERESTED AND UNINTERESTED PEERS, REMOVE THE PREFERRED. THE RESULTS ARE THE CHOKED PEERS
 
+                Collection<RemotePeerInfo> chokedPeers = new LinkedList<>(_peers);
+                chokedPeers.removeAll(_preferredPeers);
+                chokedPeersIDs.addAll(RemotePeerInfo.toIdSet(chokedPeers));
+
+                // 4) SELECT ALLE THE INTERESTED PEERS, REMOVE THE PREFERRED. THE RESULTS ARE THE CHOKED PEERS THAT ARE "OPTIMISTICALLY-UNCHOKABLE"
                 if (_numberOfPreferredNeighbors >= interestedPeers.size()) {
-                    chokedNeighbors = new ArrayList<>();
+                    optUnchokablePeers = new ArrayList<>();
                 }
                 else {
-                    chokedNeighbors = interestedPeers.subList(_numberOfPreferredNeighbors, interestedPeers.size());
+                    optUnchokablePeers = interestedPeers.subList(_numberOfPreferredNeighbors, interestedPeers.size());
                 }
-                
-                interestedPeers.removeAll(_preferredPeers);
-                preferredNeighborsCpy.addAll (_preferredPeers);
+
+                preferredNeighborsIDs.addAll (RemotePeerInfo.toIdSet(_preferredPeers));
             }
+
+            // debug
+            LogHelper.getLogger().severe("STATE: INTERESTED:" + LogHelper.getPeerIdsAsString (interestedPeers));
+            LogHelper.getLogger().severe("STATE: UNCHOKED:" + LogHelper.getPeerIdsAsString2 (preferredNeighborsIDs));
+            LogHelper.getLogger().severe("STATE: CHOKED:" + LogHelper.getPeerIdsAsString2 (chokedPeersIDs));
+            
+            for (Entry<Integer,Long> entry : downloadedBytes.entrySet()) {
+                String PREFERRED = preferredNeighborsIDs.contains(entry.getKey()) ? " *" : "";
+                LogHelper.getLogger().severe("BYTES DOWNLOADED FROM  PEER " + entry.getKey() + ": "
+                        + entry.getValue() + " (INTERESTED PEERS: "
+                        + interestedPeers.size()+ ": " + LogHelper.getPeerIdsAsString (interestedPeers)
+                        + ")\t" + PREFERRED);
+            }
+
+            // 5) NOTIFY PROCESS, IT WILL TAKE CARE OF SENDING CHOKE AND UNCHOKE MESSAGES
 
             for (PeerManagerListener listener : _listeners) {
-                listener.chockedPeers(RemotePeerInfo.toIdSet(chokedPeers));
-                listener.unchockedPeers(RemotePeerInfo.toIdSet(preferredNeighborsCpy));
+                listener.chockedPeers(chokedPeersIDs);
+                listener.unchockedPeers(preferredNeighborsIDs);
             }
+            
+            // 6) NOTIFY THE OPTIMISTICALLY UNCHOKER THREAD WITH THE NEW SET OF UNCHOKABLE PEERS
 
-            // Select the remaining neighbors for choking
-            if (chokedNeighbors != null) {
-                _optUnchoker.setChokedNeighbors(chokedNeighbors);
+            if (optUnchokablePeers != null) {
+                _optUnchoker.setChokedNeighbors(optUnchokablePeers);
             }
         }
         
