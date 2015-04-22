@@ -51,17 +51,19 @@ public class PeerManager implements Runnable {
                     Thread.sleep(_optimisticUnchokingInterval);
                 } catch (InterruptedException ex) {
                 }
+
                 synchronized (this) {
                     // Randomly shuffle the remaining neighbors, and select some to optimistically unchoke
                     if (!_chokedNeighbors.isEmpty()) {
                         Collections.shuffle(_chokedNeighbors);
+                        _optmisticallyUnchokedPeers.clear();
                         _optmisticallyUnchokedPeers.addAll(_chokedNeighbors.subList(0,
                                 Math.min(_numberOfOptimisticallyUnchokedNeighbors, _chokedNeighbors.size())));
                     }
                 }
 
-                if (_optmisticallyUnchokedPeers.size() > 0) {
-                    LogHelper.getLogger().severe("STATE: OPT UNCHOKED:" + LogHelper.getPeerIdsAsString (_optmisticallyUnchokedPeers));
+                if (_chokedNeighbors.size() > 0) {
+                    LogHelper.getLogger().severe("STATE: OPT UNCHOKED(" + _numberOfOptimisticallyUnchokedNeighbors + "):" + LogHelper.getPeerIdsAsString (_optmisticallyUnchokedPeers));
                     _eventLogger.changeOfOptimisticallyUnchokedNeighbors(LogHelper.getPeerIdsAsString (_optmisticallyUnchokedPeers));
                 }
                 for (PeerManagerListener listener : _listeners) {
@@ -267,7 +269,7 @@ public class PeerManager implements Runnable {
 
             // debug
             LogHelper.getLogger().severe("STATE: INTERESTED:" + LogHelper.getPeerIdsAsString (interestedPeers));
-            LogHelper.getLogger().severe("STATE: UNCHOKED:" + LogHelper.getPeerIdsAsString2 (preferredNeighborsIDs));
+            LogHelper.getLogger().severe("STATE: UNCHOKED (" + _numberOfPreferredNeighbors + "):" + LogHelper.getPeerIdsAsString2 (preferredNeighborsIDs));
             LogHelper.getLogger().severe("STATE: CHOKED:" + LogHelper.getPeerIdsAsString2 (chokedPeersIDs));
             
             for (Entry<Integer,Long> entry : downloadedBytes.entrySet()) {
