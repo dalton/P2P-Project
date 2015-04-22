@@ -10,12 +10,15 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
  * @author Giacomo Benincasa    (giacomo@cise.ufl.edu)
  */
 public class ConnectionHandler implements Runnable {
+
+    private static final int PEER_ID_UNSET = -1;
 
     private final int _localPeerId;
     private final Socket _socket;
@@ -24,7 +27,7 @@ public class ConnectionHandler implements Runnable {
     private final PeerManager _peerMgr;
     private final boolean _isConnectingPeer;
     private final int _expectedRemotePeerId;
-    private int _remotePeerId;
+    private final AtomicInteger _remotePeerId;
     private final BlockingQueue<Message> _queue = new LinkedBlockingQueue<>();
 
     public ConnectionHandler (int localPeerId, Socket socket, FileManager fileMgr, PeerManager peerMgr)
@@ -41,11 +44,11 @@ public class ConnectionHandler implements Runnable {
         _fileMgr = fileMgr;
         _peerMgr = peerMgr;
         _out = new ProtocolazibleObjectOutputStream (_socket.getOutputStream());
-        _remotePeerId = -1;
+        _remotePeerId = new AtomicInteger (PEER_ID_UNSET);
     }
 
     public int getRemotePeerId(){
-        return _remotePeerId;
+        return _remotePeerId.get();
     }
 
     @Override
@@ -60,28 +63,31 @@ public class ConnectionHandler implements Runnable {
                 while (true) {
                     try {
                         Message message = _queue.take();
-                        switch (message.getType()) {
-                            case Choke:
-                                if (!_isChoked) {
-                                    _isChoked = true;
-                                    sendInternal (message);
-                                }
-                                break;
+                        if (_remotePeerId.get() != PEER_ID_UNSET) {
+                            switch (message.getType()) {
+                                case Choke:
+                                    if (!_isChoked) {
+                                        _isChoked = true;
+                                        sendInternal (message);
+                                    }
+                                    break;
 
-                            case Unchoke:
-                                if (_isChoked) {
-                                    _isChoked = false;
-                                    sendInternal (message);
-                                }
-                                break;
+                                case Unchoke:
+                                    if (_isChoked) {
+                                        _isChoked = false;
+                                        sendInternal (message);
+                                    }
+                                    break;
 
-                            default:
-                                sendInternal (message);
+                                default:
+                                    sendInternal (message);
+                            }
                         }
                     }
                     catch (IOException ex) {
                         LogHelper.getLogger().warning(ex);
-                    } catch (InterruptedException ex) {
+                    }
+                    catch (InterruptedException ex) {
                     }
                 }
             }
@@ -95,16 +101,16 @@ public class ConnectionHandler implements Runnable {
 
             // Receive and check handshake
             Handshake rcvdHandshake = (Handshake) in.readObject();
-            _remotePeerId = rcvdHandshake.getPeerId();
-            Thread.currentThread().setName (getClass().getName() + "-" + _remotePeerId);
+            _remotePeerId.set (rcvdHandshake.getPeerId());
+            Thread.currentThread().setName (getClass().getName() + "-" + _remotePeerId.get());
             final EventLogger eventLogger = new EventLogger (_localPeerId);
-            final MessageHandler msgHandler = new MessageHandler (_remotePeerId, _fileMgr, _peerMgr, eventLogger);
-            if (_isConnectingPeer && (_remotePeerId != _expectedRemotePeerId)) {
+            final MessageHandler msgHandler = new MessageHandler (_remotePeerId.get(), _fileMgr, _peerMgr, eventLogger);
+            if (_isConnectingPeer && (_remotePeerId.get() != _expectedRemotePeerId)) {
                 throw new Exception ("Remote peer id " + _remotePeerId + " does not match with the expected id: " + _expectedRemotePeerId);
             }
 
             // Handshake successful
-            eventLogger.peerConnection(_remotePeerId, _isConnectingPeer);
+            eventLogger.peerConnection(_remotePeerId.get(), _isConnectingPeer);
 
             sendInternal(msgHandler.handle(rcvdHandshake));
             while (true) {
