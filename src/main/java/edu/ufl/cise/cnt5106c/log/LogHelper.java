@@ -97,11 +97,11 @@ public class LogHelper {
     }
 
     public synchronized void debug (String msg) {
-        _l.log(Level.FINE, msg);
+        _l.log(Level.SEVERE, msg);
     }
 
     public synchronized void info (String msg) {
-        _l.log (Level.INFO, msg);
+        _l.log (Level.SEVERE, msg);
     }
 
     public synchronized void severe (String msg) {
@@ -109,7 +109,7 @@ public class LogHelper {
     }
 
     public synchronized void warning (String msg) {
-        _l.log(Level.WARNING, msg);
+        _l.log(Level.SEVERE, msg);
     }
 
     public synchronized void severe (Throwable e) {
