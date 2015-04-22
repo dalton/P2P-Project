@@ -33,7 +33,7 @@ public class EventLogger {
     }
 
     public void chokeMessage (int peerId) {
-        final String msg = getLogMsgHeader() + " is unchoked by %d.";
+        final String msg = getLogMsgHeader() + " is choked by %d.";
         _logHelper.info (String.format (msg, peerId));
     }
 
