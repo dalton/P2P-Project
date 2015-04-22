@@ -55,7 +55,7 @@ public class ConnectionHandler implements Runnable {
     public void run() {
         new Thread () {
 
-            private boolean _isChoked = true;
+            private boolean _remotePeerIsChoked = true;
 
             @Override
             public void run() {
@@ -65,23 +65,29 @@ public class ConnectionHandler implements Runnable {
                         Message message = _queue.take();
                         if (_remotePeerId.get() != PEER_ID_UNSET) {
                             switch (message.getType()) {
-                                case Choke:
-                                    if (!_isChoked) {
-                                        _isChoked = true;
+                                case Choke: {
+                                    if (!_remotePeerIsChoked) {
+                                        _remotePeerIsChoked = true;
                                         sendInternal (message);
                                     }
                                     break;
+                                }
 
-                                case Unchoke:
-                                    if (_isChoked) {
-                                        _isChoked = false;
+                                case Unchoke: {
+                                    if (_remotePeerIsChoked) {
+                                        _remotePeerIsChoked = false;
                                         sendInternal (message);
                                     }
                                     break;
+                                }
 
                                 default:
                                     sendInternal (message);
                             }
+                        }
+                        else {
+                            LogHelper.getLogger().debug("cannot send message of type "
+                                    + message.getType() + " because the remote peer has not handshaked yet.");
                         }
                     }
                     catch (IOException ex) {
