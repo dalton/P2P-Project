@@ -85,6 +85,10 @@ public class FileManager {
         return (BitSet) _receivedParts.clone();
     }
 
+    synchronized public boolean hasPart(int pieceIndex) {
+        return _receivedParts.get(pieceIndex);
+    }
+
     /**
      * Set all parts as received.
      */
@@ -129,5 +133,4 @@ public class FileManager {
         }
         return true;
     }
-
 }
