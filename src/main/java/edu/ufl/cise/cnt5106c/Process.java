@@ -103,7 +103,6 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
                 Socket socket = null;
                 RemotePeerInfo peer = iter.next();
                 try {
-
                     LogHelper.getLogger().debug(" Connecting to peer: " + peer.getPeerId()
                             + " (" + peer._peerAddress + ":" + peer.getPort() + ")");
                     socket = new Socket(peer._peerAddress, peer.getPort());
@@ -114,9 +113,9 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
                                 + " (" + peer._peerAddress + ":" + peer.getPort() + ")");
 
                     }
-                } 
+                }
                 catch (ConnectException ex) {
-                    LogHelper.getLogger().severe("could not connect to peer " + peer.getPeerId()
+                    LogHelper.getLogger().warning("could not connect to peer " + peer.getPeerId()
                             + " at address " + peer._peerAddress + ":" + peer.getPort());
                     if (socket != null) {
                         try {
