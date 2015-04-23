@@ -6,6 +6,7 @@ import edu.ufl.cise.cnt5106c.io.ProtocolazibleObjectOutputStream;
 import edu.ufl.cise.cnt5106c.log.EventLogger;
 import edu.ufl.cise.cnt5106c.messages.Handshake;
 import edu.ufl.cise.cnt5106c.messages.Message;
+import edu.ufl.cise.cnt5106c.messages.Request;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
@@ -62,7 +63,7 @@ public class ConnectionHandler implements Runnable {
                 Thread.currentThread().setName (getClass().getName() + "-" + _remotePeerId + "-sending thread");
                 while (true) {
                     try {
-                        Message message = _queue.take();
+                        final Message message = _queue.take();
                         if (_remotePeerId.get() != PEER_ID_UNSET) {
                             switch (message.getType()) {
                                 case Choke: {
@@ -79,6 +80,22 @@ public class ConnectionHandler implements Runnable {
                                         sendInternal (message);
                                     }
                                     break;
+                                }
+
+                                case Request: {
+                                    // Re-request again in _timeoutInMillis, if necessary
+                                    new java.util.Timer().schedule(
+                                        new java.util.TimerTask() {
+                                            @Override
+                                            public void run() {
+                                                Request req = (Request) message;
+                                                if (!_fileMgr.hasPart(req.getPieceIndex())) {
+                                                    _queue.add(req);
+                                                }
+                                            }
+                                        }, 
+                                        _peerMgr.getUnchokingInterval()
+                                    );
                                 }
 
                                 default:
