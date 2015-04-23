@@ -147,7 +147,7 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
 
     @Override
     public void neighborsCompletedDownload() {
-        LogHelper.getLogger().debug("all peers compleated download");
+        LogHelper.getLogger().debug("all peers completed download");
         _peersFileCompleted.set(true);
         if (_fileCompleted.get() && _peersFileCompleted.get()) {
             // The process can quit
@@ -158,7 +158,7 @@ public class Process implements Runnable, FileManagerListener, PeerManagerListen
 
     @Override
     public synchronized void fileCompleted() {
-        LogHelper.getLogger().debug("local peer compleated download");
+        LogHelper.getLogger().debug("local peer completed download");
         _eventLogger.fileDownloadedMessage();
         _fileCompleted.set(true);
         if (_fileCompleted.get() && _peersFileCompleted.get()) {
