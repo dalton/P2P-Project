@@ -63,7 +63,7 @@ public class PeerManager implements Runnable {
                 }
 
                 if (_chokedNeighbors.size() > 0) {
-                    LogHelper.getLogger().severe("STATE: OPT UNCHOKED(" + _numberOfOptimisticallyUnchokedNeighbors + "):" + LogHelper.getPeerIdsAsString (_optmisticallyUnchokedPeers));
+                    LogHelper.getLogger().debug("STATE: OPT UNCHOKED(" + _numberOfOptimisticallyUnchokedNeighbors + "):" + LogHelper.getPeerIdsAsString (_optmisticallyUnchokedPeers));
                     _eventLogger.changeOfOptimisticallyUnchokedNeighbors(LogHelper.getPeerIdsAsString (_optmisticallyUnchokedPeers));
                 }
                 for (PeerManagerListener listener : _listeners) {
@@ -179,7 +179,7 @@ public class PeerManager implements Runnable {
                 return peer;
             }
         }
-        LogHelper.getLogger().severe("Peer " + peerId + " not found");
+        LogHelper.getLogger().warning("Peer " + peerId + " not found");
         return null;
     }
 
@@ -272,13 +272,13 @@ public class PeerManager implements Runnable {
             }
 
             // debug
-            LogHelper.getLogger().severe("STATE: INTERESTED:" + LogHelper.getPeerIdsAsString (interestedPeers));
-            LogHelper.getLogger().severe("STATE: UNCHOKED (" + _numberOfPreferredNeighbors + "):" + LogHelper.getPeerIdsAsString2 (preferredNeighborsIDs));
-            LogHelper.getLogger().severe("STATE: CHOKED:" + LogHelper.getPeerIdsAsString2 (chokedPeersIDs));
+            LogHelper.getLogger().debug("STATE: INTERESTED:" + LogHelper.getPeerIdsAsString (interestedPeers));
+            LogHelper.getLogger().debug("STATE: UNCHOKED (" + _numberOfPreferredNeighbors + "):" + LogHelper.getPeerIdsAsString2 (preferredNeighborsIDs));
+            LogHelper.getLogger().debug("STATE: CHOKED:" + LogHelper.getPeerIdsAsString2 (chokedPeersIDs));
             
             for (Entry<Integer,Long> entry : downloadedBytes.entrySet()) {
                 String PREFERRED = preferredNeighborsIDs.contains(entry.getKey()) ? " *" : "";
-                LogHelper.getLogger().severe("BYTES DOWNLOADED FROM  PEER " + entry.getKey() + ": "
+                LogHelper.getLogger().debug("BYTES DOWNLOADED FROM  PEER " + entry.getKey() + ": "
                         + entry.getValue() + " (INTERESTED PEERS: "
                         + interestedPeers.size()+ ": " + LogHelper.getPeerIdsAsString (interestedPeers)
                         + ")\t" + PREFERRED);
