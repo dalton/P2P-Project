@@ -1,5 +1,6 @@
 package edu.ufl.cise.cnt5106c;
 
+import edu.ufl.cise.cnt5106c.log.LogHelper;
 import java.util.BitSet;
 
 /**
@@ -28,12 +29,13 @@ public class RequestedParts {
             _requestedParts.set(partId);
 
             // Make the part requestable again in _timeoutInMillis
-            new java.util.Timer().schedule( 
+            new java.util.Timer().schedule(
                 new java.util.TimerTask() {
                     @Override
                     public void run() {
                         synchronized (_requestedParts) {
                             _requestedParts.clear(partId);
+                            LogHelper.getLogger().debug("clearing requested parts for pert " + partId);
                         }
                     }
                 }, 

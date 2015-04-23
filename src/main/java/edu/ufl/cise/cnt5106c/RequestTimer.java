@@ -27,9 +27,10 @@ public class RequestTimer extends TimerTask {
     @Override
     public void run() {
         if (!_fileMgr.hasPart(_request.getPieceIndex())) {
-            _queue.add(_request);
-            LogHelper.getLogger().debug("Re-requested piece " + _request.getPieceIndex()
+            LogHelper.getLogger().debug("Rerequesting piece " + _request.getPieceIndex()
                     + " to peer " + _remotePeerId);
+            _queue.add(_request);
+            
         }
     }
 }
