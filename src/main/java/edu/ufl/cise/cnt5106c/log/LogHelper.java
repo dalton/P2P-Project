@@ -97,11 +97,11 @@ public class LogHelper {
     }
 
     public synchronized void debug (String msg) {
-        _l.log(Level.SEVERE, msg);
+        _l.log(Level.FINE, msg);
     }
 
     public synchronized void info (String msg) {
-        _l.log (Level.SEVERE, msg);
+        _l.log (Level.INFO, msg);
     }
 
     public synchronized void severe (String msg) {
@@ -109,7 +109,7 @@ public class LogHelper {
     }
 
     public synchronized void warning (String msg) {
-        _l.log(Level.SEVERE, msg);
+        _l.log(Level.WARNING, msg);
     }
 
     public synchronized void severe (Throwable e) {
@@ -117,7 +117,7 @@ public class LogHelper {
     }
 
     public synchronized void warning (Throwable e) {
-        _l.log(Level.SEVERE, stackTraceToString (e));
+        _l.log(Level.WARNING, stackTraceToString (e));
     }
 
     private static String stackTraceToString (Throwable t) {
