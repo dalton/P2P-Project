@@ -101,6 +101,10 @@ public class PeerManager implements Runnable {
         }
     }
 
+    long getUnchokingInterval() {
+        return _unchokingInterval;
+    }
+
     synchronized void removeInterestPeer(int remotePeerId) {
         RemotePeerInfo peer = searchPeer(remotePeerId);
         if (peer != null) {
