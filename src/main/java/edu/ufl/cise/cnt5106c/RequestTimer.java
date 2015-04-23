@@ -26,7 +26,11 @@ public class RequestTimer extends TimerTask {
 
     @Override
     public void run() {
-        if (!_fileMgr.hasPart(_request.getPieceIndex())) {
+        if (_fileMgr.hasPart(_request.getPieceIndex())) {
+            LogHelper.getLogger().debug("Not rerequesting piece " + _request.getPieceIndex()
+                    + " to peer " + _remotePeerId);
+        }
+        else {
             LogHelper.getLogger().debug("Rerequesting piece " + _request.getPieceIndex()
                     + " to peer " + _remotePeerId);
             _queue.add(_request);
