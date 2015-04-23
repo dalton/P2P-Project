@@ -113,13 +113,13 @@ public class MessageHandler {
         if (!_chokedByRemotePeer) {
             int partId = _fileMgr.getPartToRequest(_peerMgr.getReceivedParts(_remotePeerId));
             if (partId >= 0) {
-                LogHelper.getLogger().severe("Requesting part " + partId + " to " + _remotePeerId);
+                LogHelper.getLogger().debug("Requesting part " + partId + " to " + _remotePeerId);
                 return new Request (partId);
             }
             else {
-                LogHelper.getLogger().severe("No parts can be requested to " + _remotePeerId);
+                LogHelper.getLogger().debug("No parts can be requested to " + _remotePeerId);
             }
-        }
+        } 
         return null;
     }
 }
