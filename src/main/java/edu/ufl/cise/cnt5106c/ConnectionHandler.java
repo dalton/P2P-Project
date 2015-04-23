@@ -85,16 +85,8 @@ public class ConnectionHandler implements Runnable {
                                 case Request: {
                                     // Re-request again in _timeoutInMillis, if necessary
                                     new java.util.Timer().schedule(
-                                        new java.util.TimerTask() {
-                                            @Override
-                                            public void run() {
-                                                Request req = (Request) message;
-                                                if (!_fileMgr.hasPart(req.getPieceIndex())) {
-                                                    _queue.add(req);
-                                                }
-                                            }
-                                        }, 
-                                        _peerMgr.getUnchokingInterval()
+                                        new RequestTimer ((Request) message, _fileMgr, _queue), 
+                                        _peerMgr.getUnchokingInterval() * 2
                                     );
                                 }
 
