@@ -64,6 +64,9 @@ public class ConnectionHandler implements Runnable {
                 while (true) {
                     try {
                         final Message message = _queue.take();
+                        if (message == null) {
+                            continue;
+                        }
                         if (_remotePeerId.get() != PEER_ID_UNSET) {
                             switch (message.getType()) {
                                 case Choke: {
@@ -79,16 +82,6 @@ public class ConnectionHandler implements Runnable {
                                         _remotePeerIsChoked = false;
                                         sendInternal (message);
                                     }
-                                    break;
-                                }
-
-                                case Request: {
-                                    // Re-request again in _timeoutInMillis, if necessary
-                                    sendInternal (message);
-                                    new java.util.Timer().schedule(
-                                        new RequestTimer ((Request) message, _fileMgr, _queue, _remotePeerId.get()), 
-                                        5000 * 2
-                                    );
                                     break;
                                 }
 
@@ -174,5 +167,13 @@ public class ConnectionHandler implements Runnable {
         if (message != null) {
             _out.writeObject (message);
         }
+        switch (message.getType()) {
+            case Request: {
+                new java.util.Timer().schedule(
+                    new RequestTimer ((Request) message, _fileMgr, _queue, _remotePeerId.get()), 
+                    _peerMgr.getUnchokingInterval() * 2
+                );
+            }
+        }        
     }
 }
