@@ -165,7 +165,7 @@ public class ConnectionHandler implements Runnable {
             switch (message.getType()) {
                 case Request: {
                     new java.util.Timer().schedule(
-                            new RequestTimer((Request) message, _fileMgr, _queue, _remotePeerId.get()),
+                            new RequestTimer((Request) message, _fileMgr, _out, message, _remotePeerId.get()),
                             _peerMgr.getUnchokingInterval() * 2
                     );
                 }

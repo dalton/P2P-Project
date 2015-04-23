@@ -1,8 +1,11 @@
 package edu.ufl.cise.cnt5106c;
 
+import edu.ufl.cise.cnt5106c.io.ProtocolazibleObjectOutputStream;
 import edu.ufl.cise.cnt5106c.log.LogHelper;
 import edu.ufl.cise.cnt5106c.messages.Message;
 import edu.ufl.cise.cnt5106c.messages.Request;
+
+import java.io.IOException;
 import java.util.Collection;
 import java.util.TimerTask;
 
@@ -13,15 +16,17 @@ import java.util.TimerTask;
 public class RequestTimer extends TimerTask {
     private final Request _request;
     private final FileManager _fileMgr;
-    private final Collection<Message> _queue;
+    private final  ProtocolazibleObjectOutputStream _out;
     private final int _remotePeerId;
+    private final Message _message;
 
-    RequestTimer (Request request, FileManager fileMgr, Collection<Message> queue, int remotePeerId) {
+    RequestTimer (Request request, FileManager fileMgr, ProtocolazibleObjectOutputStream out, Message message, int remotePeerId) {
         super();
         _request = request;
         _fileMgr = fileMgr;
-        _queue = queue;
+        _out = out;
         _remotePeerId = remotePeerId;
+        _message = message;
     }
 
     @Override
@@ -33,8 +38,12 @@ public class RequestTimer extends TimerTask {
         else {
             LogHelper.getLogger().debug("Rerequesting piece " + _request.getPieceIndex()
                     + " to peer " + _remotePeerId);
-            _queue.add(_request);
-            
+            try {
+                _out.writeObject(_message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 }
