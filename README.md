@@ -1,4 +1,4 @@
-# cnt5106c
+# P2P Project
 
 Code implemented for the 2015 Computer Networks (CNT5106C) class project at UF.
 
